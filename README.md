@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gatherlynx - 新歓・イベント運営アプリ
 
-## Getting Started
+## 目的・ねらい
 
-First, run the development server:
+- 新歓運営の情報連携と対応の自動化により、運営者の負担を軽減します。 
+- 会計や出席情報を一元管理し、運営の混乱を防止します。 
+- 専用アプリの組み合わせによる導線設計で、新入生の参加ハードルを下げます。 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 機能一覧（ユーザー別）
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 新入生向け（アプリ / メール）
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- イベント等の申し込み受付（Zoom新歓、対面新歓、学生委員登録など） 
+- 申し込み後のメール送信
+- イベント前日などのリマインドメールを自動送信 
+- キャンセル・問い合わせ機能
+- QRコードによる現地出席の簡易記録
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 運営メンバー向け（アプリ）
 
-## Learn More
+#### 会計管理
 
-To learn more about Next.js, take a look at the following resources:
+- 参加者ごとの支払記録管理（支払済/未払い、方法、金額） 
+- 管理画面でのチェック・修正機能 
+- イベント別の集計表示（合計金額、未払い人数など）
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### 参加者管理
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- イベントごとの申込者リスト 
+- 新規申込・キャンセル・問い合わせがメール or Discordで来る
+- 出席・支払状況およびメモの閲覧・編集 
+- 出席管理用QRコード生成
 
-## Deploy on Vercel
+### リーダー/幹部向け（管理者権限）
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- 権限設定によるアクセス制御（一般運営者の編集制限） 
+- 全データに対する管理画面
+- 
+## 技術的基盤と方針
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+|項目|方針|
+|----|---|
+|データ管理|Firestore|
+|リマインド通知|メール|
+|運営者用通知|メール or Discord|
+|出席認証|QRコードに一時トークン付与|
+|決済|システムでは払ったかにチェックを入れるだけ|
+
+## データベース設計（Firestore）
+
+- users：ユーザー情報（所属 / 管理者かどうか の項目もある）
+- events：イベント情報（イベントの告知内容はすべてここにまとめる）
+- participants：イベント参加者情報（運営ロールの管理 / 出席 / 会計）
+
+## 画面遷移図（概要）
+
+### 1. イベント参加者
+
+- Googleログイン → ホーム
+ ├─ イベント申込フォーム
+ ├─ イベント一覧（表示 / キャンセルページリンク / 問い合わせフォームリンク / 出席操作） 
+ ├─ キャンセルページ → キャンセル操作 → メールで完了通知 / イベント運営者にメールが届く
+ ├─ 問い合わせフォーム → 送信 → メールで完了通知 / イベント運営者にメールが届く
+ └─ 出席操作 → QRコード読み取り → 出席記録完了メッセージ(表示だけ)
+
+- メール
+ ├─ キャンセル完了メール
+ ├─ 問い合わせ完了メール
+ └─ イベントリマインド通知（自動配信）
+
+
+### 2. イベント運営者（アプリ）
+
+- Googleログイン → ホーム 
+ ├─ 参加者一覧（イベント別） 
+ ├─ 参加者詳細（出席管理 / 会計管理） 
+ ├─ 出席管理（QRコード生成 / 履歴確認）
+ ├─ 会計管理（柔軟な支払い入力 / 支払い一覧） 
+ └─ 問い合わせ回答 → 送信 → メールで完了通知 / 参加者にメールが届く
+
+- メール
+ ├─ キャンセル通知メール → メールで対応
+ └─  問い合わせ通知メール → メールで問い合わせ回答
+
+### 3. 管理者（上位権限）
+
+- Googleログイン → ホーム
+ ├─ ユーザー管理画面
+ ├─ イベント管理画面
+ └─  参加者管理画面
+
+## 技術構成
+
+### Next.js
+ - SSR/SPA フロントエンド 
+
+### Firebase
+ - Firebase Authentication（認証） 
+ - Firestore（データベース） 
+ - Firebase Functions（複雑ロジック） 
+ - Firebase App Hosting（Next.js ホスティング） 
+
