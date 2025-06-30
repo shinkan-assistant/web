@@ -1,5 +1,5 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/common/header/Header";
 
 export const metadata = {
   title: "Gatherlynx",
@@ -10,6 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ja">
       <body>
+        <Header />
         {children}
       </body>
     </html>
