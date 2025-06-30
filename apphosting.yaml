@@ -17,4 +17,4 @@ env:
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
     secret: $FIREBASE_APP_ID
   - variable: NODE_ENV
-    secret: production
+    value: production
