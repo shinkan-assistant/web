@@ -1,5 +1,5 @@
 export default function Home() {
   return (
-    <div>Gatherlynx</div>
+    <div></div>
   );
 }
