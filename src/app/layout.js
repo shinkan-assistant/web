@@ -1,7 +1,7 @@
 import "./globals.css";
 import Header from "@/components/common/Header";
 import NavMenu from "@/components/common/NavMenu";
-import { UserProvider } from "@/contexts/user";
+import { UserProvider, useUser } from "@/contexts/user";
 
 export const metadata = {
   title: "Gatherlynx",

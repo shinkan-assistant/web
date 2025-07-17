@@ -1,11 +1,10 @@
 'use client';
 
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { useUser } from "@/contexts/user";
 
 export default function ProtectedLayout({ children }) {
   const user = useUser();
-
   if (user) {
     return (
       <>
@@ -14,6 +13,6 @@ export default function ProtectedLayout({ children }) {
     )
   }
   else {
-    redirect('/');
+    notFound();
   }
 }

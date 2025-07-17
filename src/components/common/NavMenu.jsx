@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@/contexts/user';
 
 function NavLink ({ href, children }) {
   const router = useRouter();
@@ -26,7 +27,9 @@ function NavLink ({ href, children }) {
 }
 
 export default function NavMenu() {
-  return (
+  const user = useUser();
+  
+  return (user) ? (
     <nav className="border-b border-gray-200 bg-white"> {/* navで囲み、下部に薄い線を追加 */}
       <ul className="flex gap-x-4">
         <li>
@@ -40,5 +43,5 @@ export default function NavMenu() {
         </li>
       </ul>
     </nav>
-  );
+  ) : (<></>);
 }
