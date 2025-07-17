@@ -1,5 +1,6 @@
 import "./globals.css";
 import Header from "@/components/common/header/Header";
+import NavMenu from "@/components/common/nav/Menu";
 
 export const metadata = {
   title: "Gatherlynx",
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="ja">
       <body>
         <Header title={metadata.title}/>
+        <NavMenu />
         {children}
       </body>
     </html>
