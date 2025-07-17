@@ -106,12 +106,12 @@ function UnAuthorizedHeader() {
   );
 }
 
-export default function Header({ initialUser }) {
+export default function Header({initialUser, title}) {
   const user = useUserSession(initialUser);
 
   return (
     <header className="bg-sky-600 px-4 py-4 flex items-center justify-center">
-      <div className="flex-initial text-4xl text-white font-semibold pl-4">Gatherlynx</div>
+      <div className="flex-initial text-4xl text-white font-semibold pl-4">{title}</div>
       <div className="flex-1"></div>
       <div className="flex-initial">
         {user ? (

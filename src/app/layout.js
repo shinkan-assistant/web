@@ -10,7 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ja">
       <body>
-        <Header />
+        <Header title={metadata.title}/>
         {children}
       </body>
     </html>
