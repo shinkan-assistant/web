@@ -1,0 +1,20 @@
+runConfig:
+  maxInstances: 10
+scripts: 
+  buildCommand: |
+    npm install --include=dev 
+    next build
+  runCommand: next start
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    secret: projects/gatherlynxstaging/secrets/FIREBASE_API_KEY/versions/latest
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    secret: projects/gatherlynxstaging/secrets/FIREBASE_AUTH_DOMAIN/versions/latest
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    secret: projects/gatherlynxstaging/secrets/FIREBASE_PROJECT_ID/versions/latest
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    secret: projects/gatherlynxstaging/secrets/FIREBASE_STORAGE_BUCKET/versions/latest
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    secret: projects/gatherlynxstaging/secrets/FIREBASE_MESSAGING_SENDER_ID/versions/latest
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    secret: projects/gatherlynxstaging/secrets/FIREBASE_APP_ID/versions/latest
