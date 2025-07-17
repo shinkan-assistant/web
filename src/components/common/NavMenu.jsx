@@ -3,11 +3,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function NavLink ({ href, children }) {
+function NavLink ({ href, children }) {
   const router = useRouter();
   // 現在のパスとhrefが一致するか、または現在のパスがhrefで始まる場合にアクティブとみなす
   // 例: /users と /users/profile など
-  console.log(router.pathname, href)
   const isActive = router.pathname === href || router.pathname?.startsWith(`${href}/`);
 
   return (
@@ -23,5 +22,23 @@ export default function NavLink ({ href, children }) {
     >
       {children}
     </Link>
+  );
+}
+
+export default function NavMenu() {
+  return (
+    <nav className="border-b border-gray-200 bg-white"> {/* navで囲み、下部に薄い線を追加 */}
+      <ul className="flex gap-x-4">
+        <li>
+          <NavLink href="/events">イベント</NavLink>
+        </li>
+        <li>
+          <NavLink href="/participants">参加者</NavLink>
+        </li>
+        <li>
+          <NavLink href="/users">ユーザー</NavLink>
+        </li>
+      </ul>
+    </nav>
   );
 }

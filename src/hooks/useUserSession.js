@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
 import {
@@ -6,7 +6,7 @@ import {
 } from "@/lib/firebase/auth";
 import { setCookie, deleteCookie } from "cookies-next";
 
-export default function useUserSession(initialUser) {
+export default function useUserSession (initialUser) {
   const [user, setUser] = useState(initialUser);
 
   useEffect(() => {
@@ -23,4 +23,4 @@ export default function useUserSession(initialUser) {
   }, []);
 
   return user;
-}
+};

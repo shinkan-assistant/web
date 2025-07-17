@@ -1,12 +1,12 @@
 "use client";
-import Image from "next/image";
 
+import Image from "next/image";
 import {
   signInWithGoogle,
   signOut,
 } from "@/lib/firebase/auth";
-import useUserSession from "./UserSession";
 import { useEffect, useRef, useState } from "react";
+import { useUser } from "@/contexts/user";
 
 function AuthorizedHeader({user}) {
   const [isOpen, setIsOpen] = useState(false);
@@ -106,8 +106,8 @@ function UnAuthorizedHeader() {
   );
 }
 
-export default function Header({initialUser, title}) {
-  const user = useUserSession(initialUser);
+export default function Header({title}) {
+  const user = useUser();
 
   return (
     <header className="bg-sky-600 px-4 py-4 flex items-center justify-center">
