@@ -2,19 +2,17 @@
 
 import { redirect } from "next/navigation";
 import { useUser } from "@/contexts/user";
-import NavMenu from "@/components/common/NavMenu";
 
-export default function ProtectedLayout({ children }) {
+export default function UnprotectedLayout({ children }) {
   const user = useUser();
-  if (user) {
+  if (!user) {
     return (
       <>
-        <NavMenu />
         {children}
       </>
     )
   }
   else {
-    redirect('/');
+    redirect('/events');
   }
 }
