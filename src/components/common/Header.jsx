@@ -29,7 +29,6 @@ function AuthorizedHeader({user}) {
   const handleSignOut = (e) => {
     e.preventDefault();
     signOut();
-    setIsOpen(false);
   };
 
   // メニューのオンオフを切り替える
