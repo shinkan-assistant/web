@@ -14,11 +14,10 @@ function NavLink ({ href, children }) {
     <Link
       href={href}
       className={`
-        relative px-2 py-2 text-sm font-medium
+        relative px-4 py-3 text-base font-semibold transition-all duration-300 ease-in-out
         ${isActive
-          ? 'text-indigo-600 border-b-2 border-indigo-600' // アクティブな場合
-          : 'text-gray-700 border-b-2 border-gray-300 hover:border-gray-50 hover:text-gray-900'} // 非アクティブな場合
-        focus:outline-none transition-colors duration-200
+          ? 'text-sky-600 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-full after:h-0.5 after:bg-sky-600 after:rounded-full after:scale-x-100' // アクティブな場合、下線が伸びるエフェクト
+          : 'text-gray-600 hover:text-sky-600 hover:bg-gray-50 focus:outline-none after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-sky-600 after:rounded-full after:transition-all after:duration-300 hover:after:w-full'} // 非アクティブな場合、ホバーで下線が伸びる
       `}
     >
       {children}
@@ -30,18 +29,24 @@ export default function NavMenu() {
   const user = useUser();
   
   return (user) ? (
-    <nav className="border-b border-gray-200 bg-white"> {/* navで囲み、下部に薄い線を追加 */}
-      <ul className="flex gap-x-4">
-        <li>
-          <NavLink href="/events">イベント</NavLink>
-        </li>
-        <li>
-          <NavLink href="/participants">参加者</NavLink>
-        </li>
-        <li>
-          <NavLink href="/users">ユーザー</NavLink>
-        </li>
-      </ul>
+    <nav className="relative bg-white shadow-sm"> {/* ナビゲーション全体に影を追加 */}
+      <div className="container mx-8 px-4 sm:px-6 lg:px-8"> {/* 中央揃えとパディング */}
+        <div className="flex h-16"> {/* ナビゲーションの高さ */}
+          <div className="flex">
+            <ul className="flex items-center space-x-12"> {/* リンク間のスペースを増やす */}
+              <li>
+                <NavLink href="/events">イベント</NavLink>
+              </li>
+              <li>
+                <NavLink href="/participants">参加者</NavLink>
+              </li>
+              <li>
+                <NavLink href="/users">ユーザー</NavLink>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </nav>
   ) : (<></>);
 }
