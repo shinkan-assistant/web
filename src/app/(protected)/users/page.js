@@ -1,5 +1,9 @@
+import Dashboard from "@/components/templates/Dashboard";
+
 export default function Users() {
   return (
-    <div></div>
+    <Dashboard>
+      <div>users</div>
+    </Dashboard>
   );
 }

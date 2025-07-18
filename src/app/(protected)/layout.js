@@ -2,14 +2,12 @@
 
 import { redirect } from "next/navigation";
 import { useUser } from "@/contexts/user";
-import NavMenu from "@/components/common/NavMenu";
 
 export default function ProtectedLayout({ children }) {
   const user = useUser();
   if (user) {
     return (
       <>
-        <NavMenu />
         {children}
       </>
     )

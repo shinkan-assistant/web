@@ -1,5 +1,9 @@
+import Dashboard from "@/components/templates/Dashboard";
+
 export default function Participants() {
   return (
-    <div></div>
+    <Dashboard>
+      <div>participants</div>
+    </Dashboard>
   );
 }

@@ -1,5 +1,9 @@
+import Dashboard from "@/components/templates/Dashboard";
+
 export default function Events() {
   return (
-    <div></div>
+    <Dashboard>
+      <div>events</div>
+    </Dashboard>
   );
 }
