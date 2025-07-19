@@ -2,27 +2,34 @@ const testData = {
   events: [
     {
       title: "対面新歓①", 
-      date: "2025-3-29", 
-      join_type: "対面",
-      main_location: {
-        name: "池袋駅周辺",
-        is_public_detail: false,
+      type: "対面",
+      // date: "2025-3-29", 
+      rough_location_name: "池袋駅",
+      is_public_detail_location: false,
+      contact_group: {
+        platform: "Lineオープンチャット", 
+        url: "https://line.me/ti/g2/AbCdEfGhIjK_lMnOpQrStUvWxYz",
       },
-      line_open_chat_url: "https://line.me/ti/g2/AbCdEfGhIjK_lMnOpQrStUvWxYz",
       schedules: [
         {
-          type: "集合",
-          start_time: "14:15",
+          title: "集合",
+          time_range: {
+            start_at: "2025-03-29T14:45:00Z",
+          },
           location: {
             name: "池袋駅"
-          }
+          },
         },
         {
           type: "イベント",
           title: "説明会＆交流会",
           description: "サークルの説明を行った後、サークルメンバーとの交流会を行います。",
-          start_time: "15:00",
-          end_time: "17:30",
+          time_range: {
+            // start_time: "15:00",
+            // end_time: "17:30",
+            start_at: "2025-03-29T15:00:00Z",
+            end_at: "2025-03-29T17:30:00Z",
+          },
           location: {
             name: "レンタルスペース池袋No.1",
             address: "東京都豊島区池袋0丁目0-1",
@@ -38,8 +45,12 @@ const testData = {
           type: "イベント",
           title: "夕食会",
           description: "希望者で夕食会に行ってさらに仲を深めます。",
-          start_at: "18:00",
-          end_at: "20:00",
+          time_range: {
+            // start_time: "18:00",
+            // end_time: "20:00",
+            start_at: "2025-03-29T18:00:00Z",
+            end_at: "2025-03-29T20:00:00Z",
+          },
           location: {
             name: "ピザざんまい池袋店",
             address: "東京都豊島区池袋0丁目0-2",
@@ -55,15 +66,20 @@ const testData = {
     },
     {
       title: "Zoom新歓①", 
-      description: "団体説明や質疑応答を行います。",
-      date: "2025-3-31",
-      start_time: "21:00",
-      ebd_time: "21:00",
-      join_type: "オンライン",
+      type: "オンライン",
+      schedules: [
+        {
+          type: "イベント",
+          title: "団体説明&質問会",
+          description: "サークルの説明を行った後、質問会を行います。",
+          time_range: {
+            start_at: "2025-03-31T21:00:00Z",
+            end_at: "2025-03-31T22:00:00Z",
+          },
+        },
+      ],
       online_meeting_info: {
-        platform: "zoom",
-        meeting_id: "9876543210",
-        password: "AbcdefGhijklMnopQrstuVwxyZ01234567",
+        platform: "Zoom",
         meeting_url: "https://zoom.us/j/9876543210?pwd=AbcdefGhijklMnopQrstuVwxyZ01234567",
         comment: "",
       },
