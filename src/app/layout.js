@@ -1,6 +1,6 @@
 import "./globals.css";
 import Header from "@/components/common/Header";
-import { UserProvider } from "@/contexts/user";
+import { UserProvider } from "@/components/contexts/user";
 
 export const metadata = {
   title: "Gatherlynx",
