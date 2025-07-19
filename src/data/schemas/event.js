@@ -1,4 +1,4 @@
-import z from "./zod";
+import z from "@/lib/zod";
 import { BelongEnum } from "../enums/user";
 import { ContactGroupPlatformEnum, EventTypeEnum, FeeTypeEnum, OnlineMeetingPlatformEnum } from "../enums/event";
 
