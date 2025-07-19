@@ -1,4 +1,5 @@
 import z from "./zod";
+import { BelongEnum } from "../enums/user";
 import { ContactGroupPlatformEnum, EventTypeEnum, FeeTypeEnum, OnlineMeetingPlatformEnum } from "../enums/event";
 
 const LocationSchema = z.object({
@@ -7,7 +8,8 @@ const LocationSchema = z.object({
   map_url: z.string().url().optional(),
 });
 
-const FeeSchema = z.object({
+const FeeByBelongSchema = z.object({
+  belong: z.enum(Object.values(BelongEnum)),
   type: z.enum(Object.values(FeeTypeEnum)),
   fixed: z.number().int().nonnegative().optional(),
   comments: z.string().optional(),
@@ -20,10 +22,8 @@ const FeeSchema = z.object({
         path: ["fixed"],
       })
 }).transform((data) => {
-  if (data => data.type !== FeeTypeEnum.fixed && data.fixed !== undefined) {
-    const {fixed, ...rest} = data;
-    return rest;
-  }
+  if (data => data.type !== FeeTypeEnum.fixed && data.fixed !== undefined) 
+    delete data.fixed;
   return data;
 });
 
@@ -52,11 +52,8 @@ const BaseScheduleSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().optional(),
   time_range: TimeRangeSchema,
-  // fees_by_belong は所属IDをキーとするオブジェクト
-  fees_by_belong: z.record(z.string(), FeeSchema) // キーは文字列（belong_id）、値はFeeConfigスキーマ
-    .default({}),
+  fees_by_belong: z.array(FeeByBelongSchema).default([]),
 });
-// TODO fees_by_belong の UUID が belongs テーブルに存在するか確認
 
 const InPersonScheduleSchema = BaseScheduleSchema.extend({
   location: LocationSchema,
