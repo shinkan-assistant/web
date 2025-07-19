@@ -1,10 +1,10 @@
 import Dashboard from "@/components/templates/Dashboard";
-import testData from "@/data/test_data";
+import mockEvents from "@/data/mock/event";
 import EventSchema from "@/data/schemas/event";
 
 export default function Events() {
   try {
-    for (let event of testData.events) {
+    for (let event of mockEvents) {
       EventSchema.parse(event);
     }
     console.log("バリデーション成功")
