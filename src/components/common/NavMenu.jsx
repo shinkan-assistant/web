@@ -29,7 +29,7 @@ export default function NavMenu() {
   const user = useUser();
   
   return (user) ? (
-    <nav className="relative bg-white shadow-sm"> {/* ナビゲーション全体に影を追加 */}
+    <nav className="relative bg-white shadow-md"> {/* ナビゲーション全体に影を追加 */}
       <div className="container mx-8 px-4 sm:px-6 lg:px-8"> {/* 中央揃えとパディング */}
         <div className="flex h-16"> {/* ナビゲーションの高さ */}
           <div className="flex">

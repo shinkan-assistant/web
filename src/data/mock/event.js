@@ -1,3 +1,5 @@
+import { addUuidToRecords } from "../utils";
+
 const mockEvents = [
   {
     title: "対面新歓①", 
@@ -12,7 +14,7 @@ const mockEvents = [
       {
         title: "集合",
         time_range: {
-          start_at: "2025-03-29T14:45:00Z",
+          start_at: "2025-03-29T14:45:00",
         },
         location: {
           name: "池袋駅"
@@ -23,8 +25,8 @@ const mockEvents = [
         title: "説明会＆交流会",
         description: "サークルの説明を行った後、サークルメンバーとの交流会を行います。",
         time_range: {
-          start_at: "2025-03-29T15:00:00Z",
-          end_at: "2025-03-29T17:30:00Z",
+          start_at: "2025-03-29T15:00:00",
+          end_at: "2025-03-29T17:30:00",
         },
         location: {
           name: "レンタルスペース池袋No.1",
@@ -41,8 +43,8 @@ const mockEvents = [
         title: "夕食会",
         description: "希望者で夕食会に行ってさらに仲を深めます。",
         time_range: {
-          start_at: "2025-03-29T18:00:00Z",
-          end_at: "2025-03-29T20:00:00Z",
+          start_at: "2025-03-29T18:00:00",
+          end_at: "2025-03-29T20:00:00",
         },
         location: {
           name: "ピザざんまい池袋店",
@@ -65,8 +67,8 @@ const mockEvents = [
         title: "団体説明&質問会",
         description: "サークルの説明を行った後、質問会を行います。",
         time_range: {
-          start_at: "2025-03-31T21:00:00Z",
-          end_at: "2025-03-31T22:00:00Z",
+          start_at: "2025-03-31T21:00:00",
+          end_at: "2025-03-31T22:00:00",
         },
       },
     ],
@@ -78,4 +80,4 @@ const mockEvents = [
   },
 ];
 
-export default mockEvents;
+export default addUuidToRecords(mockEvents);

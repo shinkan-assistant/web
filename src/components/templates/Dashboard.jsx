@@ -1,6 +1,6 @@
 import NavMenu from "@/components/common/NavMenu";
 
-export default function Dashboard({ children }) {
+export default function DashboardFrame({ children }) {
   return (
     <>
       <NavMenu />
