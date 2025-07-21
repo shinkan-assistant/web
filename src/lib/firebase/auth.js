@@ -21,7 +21,14 @@ export async function signInWithGoogle() {
   try {
     await signInWithPopup(auth, provider);
   } catch (error) {
-    console.error("Error signing in with Google", error);
+    // ユーザーがポップアップを閉じた、またはキャンセルされた場合はエラーを無視する
+    switch (error.code) {
+      case "auth/popup-closed-by-user":
+      case "auth/cancelled-popup-request":
+        break;
+      default:
+        console.error("Googleによる認証に失敗しました", error);
+    }
   }
 }
 
