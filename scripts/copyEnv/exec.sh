@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 対応表ファイルのパス
-MAP_FILE="./scripts/copy_env__branch_env_map.txt"
+MAP_FILE="./scripts/copyEnv/branchEnvMap.txt"
 # 環境変数ファイルが置かれているディレクトリのパス
 ENVS_DIR="./.envs"
 # コピー先の環境変数ファイル名

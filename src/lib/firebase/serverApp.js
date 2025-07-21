@@ -2,6 +2,7 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { initializeServerApp, initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
 import { getAuth } from "firebase/auth";
 import { firebaseConfig } from "./config";
@@ -17,4 +18,9 @@ export async function getAuthenticatedAppForUser() {
   await auth.authStateReady();
 
   return { firebaseServerApp, currentUser: auth.currentUser };
+}
+
+export async function getAuthenticatedDb() {
+  const { firebaseServerApp } = await getAuthenticatedAppForUser();
+  return getFirestore(firebaseServerApp);
 }
