@@ -21,7 +21,6 @@ const mockEvents = [
         },
       },
       {
-        type: "イベント",
         title: "説明会＆交流会",
         description: "サークルの説明を行った後、サークルメンバーとの交流会を行います。",
         time_range: {
@@ -39,7 +38,6 @@ const mockEvents = [
         ],
       },
       {
-        type: "イベント",
         title: "夕食会",
         description: "希望者で夕食会に行ってさらに仲を深めます。",
         time_range: {
@@ -75,6 +73,8 @@ const mockEvents = [
     online_meeting_info: {
       platform: "Zoom",
       meeting_url: "https://zoom.us/j/9876543210?pwd=AbcdefGhijklMnopQrstuVwxyZ01234567",
+      meeting_id: "9876543210",
+      password: "AbcdefGhijklMnopQrstuVwxyZ01234567",
       comment: "",
     },
   },
