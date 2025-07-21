@@ -1,4 +1,4 @@
-import {FeeTypeEnum} from "@/data/enums/event";
+import {FeeTypeEnum} from "../../../../../data/enums/event.mjs";
 import { BlankLink } from "@/components/ui/link";
 import { EventItemIcon } from "../ui";
 

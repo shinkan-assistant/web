@@ -1,6 +1,6 @@
 import z from "@/lib/zod";
-import { BelongEnum } from "../enums/user";
-import { ContactGroupPlatformEnum, EventTypeEnum, FeeTypeEnum, OnlineMeetingPlatformEnum } from "../enums/event";
+import { BelongEnum } from "@/../data/enums/user.mjs";
+import { ContactGroupPlatformEnum, EventTypeEnum, FeeTypeEnum, OnlineMeetingPlatformEnum } from "../../../data/enums/event.mjs";
 
 const LocationSchema = z.object({
   name: z.string().min(1),

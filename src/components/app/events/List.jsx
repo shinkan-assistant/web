@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { EventTypeEnum } from "@/data/enums/event";
+import { EventTypeEnum } from "../../../../data/enums/event.mjs";
 import { EventBadgeList, EventItemIcon } from "./ui";
 
 function EventHeader({event, roleName}) {

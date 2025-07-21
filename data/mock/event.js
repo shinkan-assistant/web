@@ -1,4 +1,4 @@
-[
+const mockEvents = [
   {
     "id": "69d37355-98c7-4db8-afd6-635bed805d39",
     "title": "対面新歓①",
@@ -96,4 +96,6 @@
       "comment": ""
     }
   }
-]
+];
+
+export default mockEvents;

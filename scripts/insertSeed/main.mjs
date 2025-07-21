@@ -1,7 +1,9 @@
-const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
-const path = require('path');
-require('dotenv/config');
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+import path from 'path';
+import fs from 'fs';
+import 'dotenv/config';
+import usersSeedData from "../../data/seed/user.mjs";
 
 console.log('--- Firestore シーディングスクリプトを開始します ---');
 
@@ -10,7 +12,8 @@ const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 let serviceAccount;
 try {
   const absoluteServiceAccountPath = path.resolve(serviceAccountPath);
-  serviceAccount = require(absoluteServiceAccountPath);
+  const serviceAccountFile = fs.readFileSync(absoluteServiceAccountPath, 'utf8');
+  serviceAccount = JSON.parse(serviceAccountFile);
   console.log(`サービスアカウントキーをロードしました: ${absoluteServiceAccountPath}`);
 } catch (error) {
   console.error('エラー: サービスアカウントキーの読み込みに失敗しました。');
@@ -33,25 +36,16 @@ try {
 
 const db = getFirestore();
 
-const usersSeedData = require('./data/user.js');
-
 const usersCollection = db.collection('users');
 
-async function seedUsers() {
+try {
   for (const user of usersSeedData) {
-    try {
-      await usersCollection.add(user);
-      console.log(`Successfully added user: ${user.email}`);
-    } catch (error) {
-      console.error(`Error adding user: ${user.email}`, error);
-    }
+    await usersCollection.add(user);
+    console.log(`Successfully added user: ${user.email}`);
   }
-}
-
-seedUsers().then(() => {
   console.log('All users have been seeded.');
   process.exit(0);
-}).catch(error => {
+} catch (error) {
   console.error('Seeding failed:', error);
   process.exit(1);
-});
+}

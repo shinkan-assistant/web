@@ -1,9 +1,9 @@
 'use client';
 
 import { EventDetail } from "@/components/app/events/Detail";
-import { RoleEnum } from "@/data/enums/participant";
-import { BelongEnum } from "@/data/enums/user";
-import mockEvents from "@/data/mock/event";
+import { RoleEnum } from "../../../../../data/enums/participant.mjs";
+import { BelongEnum } from "@/../data/enums/user.mjs";
+import mockEvents from "@/../data/mock/event";
 import React from "react";
 
 export default function EventItem({ params }) {
