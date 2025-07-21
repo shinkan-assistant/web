@@ -12,8 +12,13 @@ export default function RootLayout({ children }) {
     <html lang="ja">
       <body>
         <UserProvider>
-          <Header title={metadata.title}/>
-          {children}
+          <div className="fixed top-0 left-0 right-0 z-50">
+            <Header title={metadata.title}/>
+          </div>
+
+          <div className="pt-[74px]">
+            {children}
+          </div>
         </UserProvider>
       </body>
     </html>
