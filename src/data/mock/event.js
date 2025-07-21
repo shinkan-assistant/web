@@ -1,7 +1,6 @@
-import { addUuidToRecords } from "../utils";
-
 const mockEvents = [
   {
+    id: "69d37355-98c7-4db8-afd6-635bed805d39",
     title: "対面新歓①", 
     type: "対面",
     rough_location_name: "池袋駅",
@@ -50,13 +49,14 @@ const mockEvents = [
           map_url: "https://maps.app.goo.gl/ABCDEFGHIJKL00d001",
         },
         fees_by_belong: [
-          {belong: "先輩", type: "固定", fixed: 2000, comment: ""},
-          {belong: "新入生", type: "固定", fixed: 1000, comment: ""}
+          {belong: "先輩", type: "固定", fixed: 2000, comment: "変更の可能性があります"},
+          {belong: "新入生", type: "固定", fixed: 1000, comment: "変更の可能性があります"}
         ],
       }
     ],
   },
   {
+    id: "a9c3aaa9-da6e-4650-b7e5-f9dcbf62793d",
     title: "Zoom新歓①", 
     type: "オンライン",
     schedules: [
@@ -80,4 +80,4 @@ const mockEvents = [
   },
 ];
 
-export default addUuidToRecords(mockEvents);
+export default mockEvents;
