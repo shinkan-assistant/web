@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/components/contexts/user';
+import { useUser } from '@/contexts/user';
 
 function NavLink ({ href, children }) {
   const router = useRouter();

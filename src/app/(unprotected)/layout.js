@@ -1,7 +1,7 @@
 'use client';
 
 import { redirect } from "next/navigation";
-import { useUser } from "@/components/contexts/user";
+import { useUser } from "@/contexts/user";
 
 export default function UnprotectedLayout({ children }) {
   const user = useUser();

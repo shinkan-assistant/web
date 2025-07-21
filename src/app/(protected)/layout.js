@@ -1,7 +1,7 @@
 'use client';
 
 import { redirect } from "next/navigation";
-import { useUser } from "@/components/contexts/user";
+import { useUser } from "@/contexts/user";
 import NavMenu from "@/components/common/NavMenu";
 
 export default function ProtectedLayout({ children }) {
