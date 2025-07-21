@@ -1,7 +1,7 @@
 import {notFound} from "next/navigation";
-import { getEventItemIcon, getEventTypeBadgeStyle } from "./style";
 import { BlankLink } from "@/components/ui/link";
 import { ScheduleList } from "./schedules/List";
+import { EventBadgeList, EventItemIcon } from "./ui";
 
 
 function formatEventDate(isoString) {
@@ -10,16 +10,20 @@ function formatEventDate(isoString) {
   const month = date.getMonth() + 1; // 月は0から始まるため+1
   const day = date.getDate();
   return `${year}年${month}月${day}日`;
-};
+}
 
-function EventHeader({event}) {
-  const typeBadgeStyle = getEventTypeBadgeStyle(event.type);
+
+function EventHeader({event, roleName}) {
   return (
-    <div className="flex items-center mb-4">
-      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${typeBadgeStyle.bgColor} ${typeBadgeStyle.textColor}`}>
-        {event.type}
-      </span>
-      <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 ml-3">{event.title}</h1>
+    <div>
+      <div className="mb-3">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900">
+          {event.title}
+        </h1>
+      </div>
+      <div className="mb-4">
+        <EventBadgeList event={event} roleName={roleName} textSizeClass="text-sm" />
+      </div>
     </div>
   );
 }
@@ -28,7 +32,7 @@ function EventDate({event}) {
   const eventDate = formatEventDate(event.schedules[0].time_range.start_at);
   return (
     <div className="flex items-center text-gray-700 text-lg">
-      {getEventItemIcon.date({className: "w-6 h-6 inline-flex items-center mr-2"})}
+      {EventItemIcon.date({className: "w-6 h-6 inline-flex items-center mr-2"})}
       <p><span className="font-semibold">開催日:</span> {eventDate}</p>
     </div>
   );
@@ -37,7 +41,7 @@ function EventDate({event}) {
 function EventLocation({event}) {
   return (
     <div className="flex items-start text-gray-700 text-lg">
-      {getEventItemIcon.location({className: "w-6 h-6 inline-flex items-center mr-2 mt-0.5"})}
+      {EventItemIcon.location({className: "w-6 h-6 inline-flex items-center mr-2 mt-0.5"})}
       <p><span className="font-semibold">場所:</span> {event.type === '対面' ? event.rough_location_name : "オンライン開催"}</p>
     </div>
   );
@@ -139,7 +143,7 @@ function EventContactGroup({contact_group}) {
 
 function EventSummary({event}) {
   return (
-    <div className="bg-gray-50 p-6 rounded-lg shadow-md mb-8">
+    <div className="bg-gray-50 p-6 rounded-lg shadow-md">
       <div className="mb-4 border-b pb-2 border-gray-200">
         <h3 className="font-bold text-xl text-gray-800">概要情報</h3>
       </div>
@@ -155,7 +159,7 @@ function EventSummary({event}) {
 }
 
 // イベント詳細表示コンポーネント
-export function EventDetail({ event, belongName, rollName }) {
+export function EventDetail({ event, belongName, roleName }) {
   if (event == undefined) {
     notFound();
   }
@@ -164,8 +168,14 @@ export function EventDetail({ event, belongName, rollName }) {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:p-6 lg:p-8 font-inter text-gray-800">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="p-6 sm:p-8">
-          <EventHeader event={event} />
-          <EventSummary event={event} />
+          <div className="ml-3">
+            <EventHeader event={event} roleName={roleName} />
+          </div>
+
+          <div className="mb-8">
+            <EventSummary event={event} />
+          </div>
+
           <ScheduleList schedules={event.schedules} belongName={belongName} />
         </div>
       </div>

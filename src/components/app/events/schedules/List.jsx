@@ -1,7 +1,6 @@
 import {FeeTypeEnum} from "@/data/enums/event";
-import { getEventItemIcon } from "../style";
 import { BlankLink } from "@/components/ui/link";
-
+import { EventItemIcon } from "../ui";
 
 function ScheduleTimeRange({timeRange}) {
   function formatScheduleTime(isoString) {
@@ -19,7 +18,7 @@ function ScheduleTimeRange({timeRange}) {
   return (
     <div className="flex items-center text-gray-700 text-sm">
       {/* 開始時間のアイコンを色付きに */}
-      {getEventItemIcon.time({className: "w-5 h-5 mr-2"})}
+      {EventItemIcon.time({className: "w-5 h-5 mr-2"})}
       <p>
         {existsEndAt && (<span className="font-semibold">開始:</span>)} {startAtStr}
       </p>
@@ -39,7 +38,7 @@ function ScheduleLocation({location}) {
   return (
     <div className="flex items-start text-gray-700 text-sm">
       {/* 場所のアイコンを色付きに */}
-      {getEventItemIcon.location({className: "w-5 h-5 mr-2 flex-shrink-0 mt-0.5"})}
+      {EventItemIcon.location({className: "w-5 h-5 mr-2 flex-shrink-0 mt-0.5"})}
       <div>
         <p><span className="font-semibold">場所:</span> {location.name}</p>
         {location.address && (
@@ -74,7 +73,7 @@ function ScheduleFee({feesByBelong, belongName}) {
   return (
     <div className="flex items-start text-gray-700 text-sm">
       {/* 参加費のアイコンを色付きに */}
-      {getEventItemIcon.fee({className: "w-5 h-5 mr-2 flex-shrink-0 mt-0.5"})}
+      {EventItemIcon.fee({className: "w-5 h-5 mr-2 flex-shrink-0 mt-0.5"})}
       <div>
         <h4 className="font-semibold inline-block mr-1">参加費:</h4> {/* inline-blockとmr-1で調整 */}
         {/* すべてのbelongについてのfeeを表示 */}
@@ -93,7 +92,7 @@ function ScheduleFee({feesByBelong, belongName}) {
 export function ScheduleList({schedules, belongName}) {
   return (
     <div>
-    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
       <div className="space-y-6">
         {schedules.map((schedule, index) => {
           return (
