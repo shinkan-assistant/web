@@ -10,7 +10,7 @@ export default function useUserSession (initialUser) {
   const [user, setUser] = useState(initialUser);
 
   useEffect(() => {
-    return onIdTokenChanged(async (latestUser) => {
+    const unsubscribe = onIdTokenChanged(async (latestUser) => {
       if (latestUser) {
         const idToken = await latestUser.getIdToken();
         await setCookie("__session", idToken);
@@ -20,7 +20,9 @@ export default function useUserSession (initialUser) {
 
       setUser(latestUser)
     });
-  }, []);
+
+    return () => unsubscribe(undefined);
+  }, [user]);
 
   return user;
 };
