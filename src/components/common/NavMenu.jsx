@@ -35,9 +35,6 @@ export default function NavMenu() {
           <div className="flex">
             <ul className="flex items-center space-x-12"> {/* リンク間のスペースを増やす */}
               <li>
-                <NavLink href="/events">イベント</NavLink>
-              </li>
-              <li>
                 <NavLink href="/participants">参加者</NavLink>
               </li>
               <li>
