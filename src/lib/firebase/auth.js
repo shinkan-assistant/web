@@ -7,7 +7,9 @@ import {
 
 import { auth, db } from "./clientApp";
 import { collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
-import { BelongEnum, RoleEnum } from "@/../data/enums/user.mjs";
+import { BelongEnum, RoleEnum } from "@/data/enums/user.js";
+import { SetUserSchema } from "@/data/schemas/user";
+import { updateLoginUser } from "@/data/functions/user";
 
 export function onAuthStateChanged(cb) {
   return _onAuthStateChanged(auth, cb);
@@ -36,50 +38,9 @@ export async function signInWithGoogle() {
   }
 
   try {
-    const currentDate = new Date();
-
-    const usersRef = collection(db, "users");
-    const querySnapshot = await getDocs(
-      query(usersRef, where("email", "==", user.email))
-    );
-
-    async function setNewUser({id, data}) {
-      const ref = doc(db, "users", id);
-      data.last_login_at = currentDate;
-      await setDoc(ref, data);
-    }
-    
-    // 初回ログイン時の処理
-    if (querySnapshot.empty) {
-      const data = {
-        email: user.email,
-        name: user.displayName,
-        created_at: currentDate,
-        role: RoleEnum.normal,
-        belong: BelongEnum.freshman,
-      };
-      await setNewUser({id: user.uid, data: data});
-      return;
-    }
-
-    const existingDoc = querySnapshot.docs[0];
-    const existingDocRef = doc(db, "users", existingDoc.id);
-    
-    // 管理者としてユーザーを追加した場合の処理
-    if (existingDoc.id !== user.uid) {
-      await deleteDoc(existingDocRef);
-      
-      const data = existingDoc.data();
-      data.name = user.displayName;
-
-      await setNewUser({id: user.uid, data: existingDoc.data()});
-      return;
-    }
-    
-    // 通常ログイン時の処理
-    await updateDoc(existingDocRef, {last_login_at: new Date()});
+    await updateLoginUser(db, user);
   } catch (error) {
-    console.error("ユーザー状態の更新に失敗しました", error);
+    console.error("ユーザーデータの更新に失敗しました", error);
     signOut();
   }
 }
@@ -88,6 +49,6 @@ export async function signOut() {
   try {
     return auth.signOut();
   } catch (error) {
-    console.error("Error signing out with Google", error);
+    console.error("サインアウトに失敗しました。", error);
   }
 }

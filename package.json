@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "seed:db": "./scripts/copyEnv/exec.sh & node ./scripts/insertSeed/main.mjs",
+    "seed:db": "./scripts/copyEnv/exec.sh & node ./scripts/seed/insert.mjs",
     "dev": "./scripts/copyEnv/exec.sh & next dev",
     "build": "next build",
     "start": "next start",

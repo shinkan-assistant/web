@@ -3,7 +3,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 import path from 'path';
 import fs from 'fs';
 import 'dotenv/config';
-import usersSeedData from "../../data/seed/user.mjs";
+import seedUsers from './data/user.mjs';
 
 console.log('--- Firestore シーディングスクリプトを開始します ---');
 
@@ -39,7 +39,7 @@ const db = getFirestore();
 const usersCollection = db.collection('users');
 
 try {
-  for (const user of usersSeedData) {
+  for (const user of seedUsers) {
     await usersCollection.add(user);
     console.log(`Successfully added user: ${user.email}`);
   }

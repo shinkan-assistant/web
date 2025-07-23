@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { RoleEnum } from "../../../../data/enums/participant.mjs";
+import { RoleEnum } from "@/data/enums/participant.js";
 
 export function EventBadgeList({event, roleName, textSizeClass}) {
   const badgeInfos = [];

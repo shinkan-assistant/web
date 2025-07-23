@@ -1,21 +1,20 @@
 import fs from 'fs';
-import { BelongEnum, RoleEnum } from "../enums/user.mjs";
 
 const rawSeedUsers = [
   {
     "email": "",
-    "role": RoleEnum.admin,
-    "belong": BelongEnum.upperclassman,
+    "role": "管理者",
+    "belong": "先輩",
   },
   {
     "email": "",
-    "role": RoleEnum.normal,
-    "belong": BelongEnum.upperclassman,
+    "role": "一般ユーザー",
+    "belong": "先輩",
   },
   {
     "email": "",
-    "role": RoleEnum.normal,
-    "belong": BelongEnum.freshman,
+    "role": "一般ユーザー",
+    "belong": "新入生",
   },
 ];
 
