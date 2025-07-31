@@ -1,18 +1,24 @@
 'use client';
 
 import { useEffect } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation"; // redirect の代わりに useRouter をインポート
 import { useUser } from "@/contexts/user";
 import NavMenu from "@/components/common/NavMenu";
 
 export default function ProtectedLayout({ children }) {
   const user = useUser();
+  const router = useRouter(); // useRouter を使用
 
   useEffect(() => {
-    if (!user && window.location.pathname !== '/') {
-      redirect('/');
+    if (!user) {
+      router.push('/'); // redirect('/') の代わりに router.push('/') を使用
     }
-  }, [user]);
+  }, [user, router]); // router を依存配列に追加
+
+  // ユーザーがいない場合は何も表示しない（リダイレクトが実行されるまでの間）
+  if (!user) {
+    return null;
+  }
 
   return (
     <>

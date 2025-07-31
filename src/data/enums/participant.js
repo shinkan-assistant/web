@@ -3,3 +3,5 @@ export const RoleEnum = Object.freeze({
   organizer: "運営者",
   admin: "管理者",
 });
+
+

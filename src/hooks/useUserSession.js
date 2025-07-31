@@ -22,7 +22,7 @@ export default function useUserSession (initialUser) {
     });
 
     return () => unsubscribe(undefined);
-  }, [user]);
+  }, []);
 
   return user;
 };
