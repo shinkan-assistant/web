@@ -79,6 +79,7 @@ const mockEvents = [
     "type": "オンライン",
     "schedules": [
       {
+        "type": "イベント",
         "title": "団体説明&質問会",
         "description": "サークルの説明を行った後、質問会を行います。",
         "time_range": {
@@ -96,5 +97,5 @@ const mockEvents = [
     }
   }
 ];
-
+  
 export default mockEvents;
