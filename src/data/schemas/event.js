@@ -120,4 +120,6 @@ const EventSchema = z.discriminatedUnion("type", [
   OnlineEventSchema,
 ]);
 
+// TODO CreateSchema で重複しないようにする（事前に重複しないことを確認する）
+
 export default EventSchema;

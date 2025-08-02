@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 
 export async function createRecord(db, tableName, {Schema, record}) {
   const {id, ...data} = Schema.parse(record);
@@ -33,12 +33,10 @@ export async function getRecords(db, tableName, {wheres}) {
 }
 
 export async function getRecord(db, tableName, {wheres}) {
-  const records = await getRecords(db, tableName, {wheres})
-
-  // delete for unique (if needed)
-  for (let record of records.slice(1)) {
-    const docRef = doc(db, tableName, record.id);
-    await deleteDoc(docRef);
+  const records = await getRecords(db, tableName, {wheres});
+  
+  if (records.length > 1) {
+    throw new Error(`ユニーク制約が守られていません（テーブル名：${tableName}）`);
   }
 
   return records[0] ?? null;
