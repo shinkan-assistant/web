@@ -24,8 +24,8 @@ export async function getParticipantsByEvent(db, {loginUser, eventId}) {
   if (myParticipant?.role === ParticipantRoleEnum.organizer) 
     return participants;
 
-  const user = await getUserByEmail(db, {email: loginUser.email});
-  if (user.role === UserRoleEnum.admin)
+  const myUser = await getUserByEmail(db, {email: loginUser.email});
+  if (myUser.role === UserRoleEnum.admin)
     return participants;
 
   return [];

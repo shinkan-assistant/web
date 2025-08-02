@@ -56,14 +56,14 @@ function ScheduleLocation({location}) {
   );
 }
 
-function ScheduleFee({feesByBelong, belongName}) {
+function ScheduleFee({feesByBelong, belong}) {
   let feeInfo;
   if (feesByBelong == undefined || feesByBelong.length === 0) {
     feeInfo = {type: FeeTypeEnum.free};
   }
   else {
     for (let feeInfoTmp of feesByBelong) {
-      if (feeInfoTmp.belong === belongName) {
+      if (feeInfoTmp.belong === belong) {
         feeInfo = feeInfoTmp;
         break;
       }
@@ -89,7 +89,7 @@ function ScheduleFee({feesByBelong, belongName}) {
   );
 }
 
-export function ScheduleList({schedules, belongName}) {
+export function ScheduleList({schedules, belong}) {
   return (
     <div>
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
@@ -118,7 +118,7 @@ export function ScheduleList({schedules, belongName}) {
                   <ScheduleLocation location={schedule.location} />
                 }
 
-                <ScheduleFee feesByBelong={schedule.fees_by_belong} belongName={belongName} />
+                <ScheduleFee feesByBelong={schedule.fees_by_belong} belong={belong} />
               </div>
             </div>
           );

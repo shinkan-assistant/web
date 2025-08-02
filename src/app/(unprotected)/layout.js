@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
-import { useUser } from "@/contexts/user";
+import { useLoginUser } from "@/contexts/loginUser";
 
 export default function UnprotectedLayout({ children }) {
-  const user = useUser();
+  const user = useLoginUser();
 
   useEffect(() => {
     if (user && window.location.pathname !== '/events') {

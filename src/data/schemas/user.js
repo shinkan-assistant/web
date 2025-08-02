@@ -1,6 +1,6 @@
 import z from "@/lib/zod";
 import { RoleEnum, BelongEnum } from "@/data/enums/user.js";
-import { transformForCreate } from "./base";
+import { transformForCreate, transformForUpdate } from "./base";
 
 const UserSchema = z.object({
   id: z.string().min(1).optional(),
@@ -12,3 +12,8 @@ const UserSchema = z.object({
 
 export const CreateUserSchema = UserSchema
   .transform(transformForCreate);
+
+export const UpdateUserSchema = UserSchema
+  .pick({name: true, role: true, belong: true})
+  .partial()
+  .transform(transformForUpdate);

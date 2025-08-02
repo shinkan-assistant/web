@@ -2,7 +2,7 @@ import Link from "next/link";
 import { EventTypeEnum } from "@/data/enums/event.js";
 import { EventBadgeList, EventItemIcon } from "./ui";
 
-function EventHeader({event, roleName}) {
+function EventHeader({event}) {
   return (
     <div>
       <div className="mb-2">
@@ -10,7 +10,7 @@ function EventHeader({event, roleName}) {
           {event.title}
         </h1>
       </div>
-      <EventBadgeList event={event} roleName={roleName} textSizeClass="text-xs" />
+      <EventBadgeList event={event} myRole={event.myRole} textSizeClass="text-xs" />
     </div>
   );
 }
@@ -59,7 +59,7 @@ function EventDetailLink({event}) {
   );
 }
 
-export default function EventList({events, mockRoleName}) {
+export default function EventList({events}) {
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
       {events.map((event) => (
@@ -68,7 +68,7 @@ export default function EventList({events, mockRoleName}) {
           className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 p-6"
         >
           <div className="mb-4">
-            <EventHeader event={event} roleName={mockRoleName} />
+            <EventHeader event={event} />
           </div>
           
           <div className="mb-2">

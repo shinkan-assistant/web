@@ -1,27 +1,26 @@
-'use client';
-
 import { EventDetail } from "@/components/app/events/Detail";
-import { useUser } from "@/contexts/user";
-import { RoleEnum } from "@/data/enums/participant.js";
-import { BelongEnum } from "@/data/enums/user.js";
-import mockEvents from "@/data/mock/event";
-import mockParticipants from "@/data/mock/participant";
+import { getEventByLoginUser } from "@/data/functions/event";
+import { getUserByEmail } from "@/data/functions/user";
+import { getAuthenticatedAppForUser, getAuthenticatedDb } from "@/lib/firebase/serverApp";
+import { notFound } from "next/navigation";
 import React from "react";
 
-export default function EventItem({ params }) {
-  const resolvedParams = React.use(params);
-  const { id } = resolvedParams;
+export default async function EventItem({ params }) {
+  const { id } = await params;
 
-  const event = mockEvents.find((event) => id === event.id)
+  const {firebaseServerApp, loginUser} = await getAuthenticatedAppForUser();
+  const db = getAuthenticatedDb(firebaseServerApp)
 
-  const user = useUser();
-  const participant = mockParticipants.find(p => p.user_email === user.email && p.event_id === event.id);
-  console.log(user, user.email, event.id)
+  const [myUser, event] = await Promise.all([
+    getUserByEmail(db, {email: loginUser.email}),
+    getEventByLoginUser(db, {id: id, loginUser: loginUser}),
+  ]);
 
-  const belongName = BelongEnum.freshman;
-  const roleName = RoleEnum.organizer;
+  if (event === null) {
+    notFound();
+  }
 
   return (
-    <EventDetail event = {event} belongName={belongName} roleName={roleName} />
+    <EventDetail event = {event} myUser = {myUser} />
   );
 }

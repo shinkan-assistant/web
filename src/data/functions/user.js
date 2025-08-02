@@ -1,6 +1,6 @@
 import { where } from "firebase/firestore";
-import { createRecord, getRecord } from './base';
-import { CreateUserSchema } from "../schemas/user";
+import { createRecord, getRecord, updateRecord } from './base';
+import { CreateUserSchema, UpdateUserSchema } from "../schemas/user";
 import { BelongEnum, RoleEnum } from "@/data/enums/user.js";
 
 export async function getUserByEmail(db, {email}) {
@@ -11,12 +11,15 @@ export async function getUserByEmail(db, {email}) {
   });
 }
 
+// TODO ユーザー情報を常に保持しておく + ユーザー情報が変わったら自動更新するようにする（onSnapShot）
+// TODO ユーザーの useUserSession や useContextを見直す（サーバーコンポーネントと同じ設計にする）
+
 export async function updateLoginUser(db, loginUser) {
   if (!loginUser) return;
 
-  const user = await getUserByEmail(db, {email: loginUser.email});
+  const myUser = await getUserByEmail(db, {email: loginUser.email});
   
-  if (user === null) {
+  if (myUser === null) 
     await createRecord(db, "users", {
       Schema: CreateUserSchema,
       record: {
@@ -26,5 +29,12 @@ export async function updateLoginUser(db, loginUser) {
         belong: BelongEnum.freshman,
       }, 
     });
-  }
+  else (!Boolean(myUser?.name))
+    await updateRecord(db, "users", {
+      Schema: UpdateUserSchema,
+      id: myUser.id,
+      rawData: {
+        name: loginUser.displayName,
+      }, 
+    });
 }

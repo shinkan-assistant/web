@@ -6,7 +6,7 @@ import {
   signOut,
 } from "@/lib/firebase/auth";
 import { useEffect, useRef, useState } from "react";
-import { useUser } from "@/contexts/user";
+import { useLoginUser } from "@/contexts/loginUser";
 
 function AuthorizedHeader({user}) {
   const [isOpen, setIsOpen] = useState(false);
@@ -106,7 +106,7 @@ function UnAuthorizedHeader() {
 }
 
 export default function Header({title}) {
-  const user = useUser();
+  const user = useLoginUser();
 
   return (
     <header className="bg-sky-600 px-4 py-4 flex items-center justify-center">

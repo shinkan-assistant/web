@@ -2,7 +2,7 @@ const mockParticipants = [
   {
     "user_email": "jumpei141107@gmail.com",
     "event_id": "69d37355-98c7-4db8-afd6-635bed805d39", // 対面新歓①
-    "is_organizer": false,
+    "role": "運営者",
     "attendance": {
       "status": "出席",
       "attend_at" :"",
@@ -15,7 +15,7 @@ const mockParticipants = [
   {
     "user_email": "career.jumpei@gmail.com",
     "event_id": "69d37355-98c7-4db8-afd6-635bed805d39", // 対面新歓①
-    "is_organizer": true,
+    "role": "参加者",
     "attendance": {
       "status": "出席",
       "attend_at" :"",
@@ -27,7 +27,7 @@ const mockParticipants = [
   {
     "user_email": "jumpei141107@gmail.com",
     "event_id": "a9c3aaa9-da6e-4650-b7e5-f9dcbf62793d", // Zoom新歓①
-    "is_organizer": false,
+    "role": "運営者",
     "attendance": {
       "status": "未出席",
       "canceled_at" :"",
@@ -36,7 +36,7 @@ const mockParticipants = [
   {
     "user_email": "career.jumpei@gmail.com",
     "event_id": "a9c3aaa9-da6e-4650-b7e5-f9dcbf62793d", // Zoom新歓①
-    "is_organizer": true,
+    "role": "参加者",
     "attendance": {
       "status": "キャンセル",
       "canceled_at" :"",

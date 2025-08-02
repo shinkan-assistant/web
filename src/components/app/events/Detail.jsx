@@ -1,3 +1,5 @@
+'use client';
+
 import {notFound} from "next/navigation";
 import { BlankLink } from "@/components/ui/link";
 import { ScheduleList } from "./schedules/List";
@@ -13,7 +15,7 @@ function formatEventDate(isoString) {
 }
 
 
-function EventHeader({event, roleName}) {
+function EventHeader({event}) {
   return (
     <div>
       <div className="mb-3">
@@ -22,7 +24,7 @@ function EventHeader({event, roleName}) {
         </h1>
       </div>
       <div className="mb-4">
-        <EventBadgeList event={event} roleName={roleName} textSizeClass="text-sm" />
+        <EventBadgeList event={event} textSizeClass="text-sm" />
       </div>
     </div>
   );
@@ -159,7 +161,7 @@ function EventSummary({event}) {
 }
 
 // イベント詳細表示コンポーネント
-export function EventDetail({ event, belongName, roleName }) {
+export function EventDetail({ event, myUser }) {
   if (event == undefined) {
     notFound();
   }
@@ -169,14 +171,14 @@ export function EventDetail({ event, belongName, roleName }) {
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="p-6 sm:p-8">
           <div className="ml-3">
-            <EventHeader event={event} roleName={roleName} />
+            <EventHeader event={event} />
           </div>
 
           <div className="mb-8">
             <EventSummary event={event} />
           </div>
 
-          <ScheduleList schedules={event.schedules} belongName={belongName} />
+          <ScheduleList schedules={event.schedules} belong={myUser.belong} />
         </div>
       </div>
     </div>

@@ -16,11 +16,11 @@ export async function getAuthenticatedAppForUser() {
 
   const auth = getAuth(firebaseServerApp);
   await auth.authStateReady();
+  const loginUser = auth.currentUser;
 
-  return { firebaseServerApp, currentUser: auth.currentUser };
+  return { firebaseServerApp, loginUser };
 }
 
-export async function getAuthenticatedDb() {
-  const { firebaseServerApp } = await getAuthenticatedAppForUser();
+export function getAuthenticatedDb(firebaseServerApp) {
   return getFirestore(firebaseServerApp);
 }

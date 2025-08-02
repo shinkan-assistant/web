@@ -1,9 +1,20 @@
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc, query, updateDoc } from "firebase/firestore";
 
 export async function createRecord(db, tableName, {Schema, record}) {
   const {id, ...data} = Schema.parse(record);
   const docRef = doc(db, tableName, id);
   await setDoc(docRef, data);
+}
+
+export async function updateRecord(db, tableName, {Schema, id, rawData}) {
+  if (!id) {
+    throw new Error('Record ID is required for update operation.');
+  }
+
+  const data = Schema.parse(rawData);
+
+  const docRef = doc(db, tableName, id);
+  await updateDoc(docRef, data);
 }
 
 function toRecord(docSnapshot) {

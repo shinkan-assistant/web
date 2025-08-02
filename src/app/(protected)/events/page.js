@@ -1,12 +1,14 @@
-'use client';
-
 import EventList from "@/components/app/events/List";
-import { RoleEnum } from "@/data/enums/participant.js";
-import mockEvents from "@/data/mock/event";
+import { getEventsByLoginUser } from "@/data/functions/event";
+import { getAuthenticatedAppForUser, getAuthenticatedDb } from "@/lib/firebase/serverApp";
 
-export default function Events() {
-  const roleName = RoleEnum.organizer;
+export default async function Events() {
+  const {firebaseServerApp, loginUser} = await getAuthenticatedAppForUser();
+  const db = getAuthenticatedDb(firebaseServerApp)
+
+  const events = await getEventsByLoginUser(db, {loginUser: loginUser});
+  
   return (
-    <EventList events={mockEvents} mockRoleName={roleName} />
+    <EventList events={events} />
   );
 }

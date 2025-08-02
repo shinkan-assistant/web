@@ -1,15 +1,16 @@
 import { Badge } from "@/components/ui/badge";
-import { RoleEnum } from "@/data/enums/participant.js";
+import { RoleEnum as ParticipantRoleEnum } from "@/data/enums/participant";
 
-export function EventBadgeList({event, roleName, textSizeClass}) {
+export function EventBadgeList({event, textSizeClass}) {
   const badgeInfos = [];
 
-  if (roleName == RoleEnum.organizer) {
+  if (event.myRole !== null) {
+    const isOrganizer = event.myRole === ParticipantRoleEnum.organizer;
     badgeInfos.push({
       key: "participant-role",
-      text: roleName === RoleEnum.organizer ? RoleEnum.organizer : RoleEnum.participant,
-      bgColorClass: "bg-red-100",
-      textColorClass: "text-red-800",
+      text: event.myRole,
+      bgColorClass: (isOrganizer ? "bg-red-100" : "bg-gray-100"),
+      textColorClass: (isOrganizer ? "text-red-800" : "text-gray-800"),
     });
   }
 

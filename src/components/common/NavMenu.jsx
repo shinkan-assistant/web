@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/contexts/user';
+import { useLoginUser } from '@/contexts/loginUser';
 
 function NavLink ({ href, children }) {
   const router = useRouter();
@@ -26,7 +26,7 @@ function NavLink ({ href, children }) {
 }
 
 export default function NavMenu() {
-  const user = useUser();
+  const user = useLoginUser();
   
   return (user) ? (
     <nav className="relative bg-white shadow-md"> {/* ナビゲーション全体に影を追加 */}

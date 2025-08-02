@@ -77,8 +77,18 @@ async function insertDocs(tableName, dataArray) {
     
     // ドキュメントIDを事前に生成し、バッチにセット
     for (const item of dataArray) {
-      const docRef = collectionRef.doc(); // 新しいドキュメントIDを生成
-      batch.set(docRef, item);
+      // 既存のIDがあればそのIDを使い、なければ新しいIDを生成
+      const docId = item.id || collectionRef.doc().id;
+      
+      // IDをデータから削除（Firestoreのデータ自体にIDを含めないため）
+      const { id, ...dataWithoutId } = item;
+      
+      const nowDateStr = new Date().toString();
+      dataWithoutId['created_at'] = nowDateStr;
+      dataWithoutId['updated_at'] = nowDateStr;
+      
+      const docRef = collectionRef.doc(docId);
+      batch.set(docRef, dataWithoutId);
     }
     
     await batch.commit(); // バッチ処理を実行

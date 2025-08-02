@@ -62,7 +62,6 @@ z.setErrorMap((issue, ctx) => {
 
     case ZodIssueCode.invalid_enum_value:
       // issue.options には許可された値の配列が含まれる
-      console.log(issue.options)
       return {message: `選択できる値は ${issue.options.map(o => `'${String(o)}'`).join(', ')} のいずれかです`};
 
     case ZodIssueCode.custom:
