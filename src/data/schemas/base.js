@@ -1,6 +1,8 @@
+import { v4 as uuidV4 } from 'uuid';
+
 export function transformForCreate(data) {
   const nowDateStr = new Date().toString();
-  data.id = data?.id ?? uuidV4();
+  data.id = uuidV4();
   data.updated_at = nowDateStr
   data.created_at = nowDateStr;
   return data;

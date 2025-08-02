@@ -41,9 +41,9 @@ try {
 const db = getFirestore();
 
 // --- 既存のDBデータの削除
-async function deleteAllDocs(collectionName) {
+async function deleteAllDocs(tableName) {
   try {
-    const collectionRef = db.collection(collectionName);
+    const collectionRef = db.collection(tableName);
     const snapshot = await collectionRef.get();
     
     const batch = db.batch();
@@ -52,7 +52,7 @@ async function deleteAllDocs(collectionName) {
     });
     
     await batch.commit();
-    console.log(`Successfully deleted all documents from ${collectionName}`);
+    console.log(`Successfully deleted all documents from ${tableName}`);
   } catch (error) {
     console.error('Deleting data (before initializing) failed:', error);
     process.exit(1);
@@ -66,14 +66,14 @@ deleteAllDocs('participants');
 // --- DBの初期データの追加 ---
 /**
  * 指定されたコレクションにデータを一括で追加します。
- * @param {string} collectionName - 対象のコレクション名
+ * @param {string} tableName - 対象のコレクション名
  * @param {Array<Object>} dataArray - 追加するデータの配列
  * @param {(item: Object) => string} logMessageFunc - 各アイテムの追加成功時にログに出力するメッセージを生成する関数
  */
-async function insertDocs(collectionName, dataArray) {
+async function insertDocs(tableName, dataArray) {
   try {
     const batch = db.batch(); // バッチ処理を開始
-    const collectionRef = db.collection(collectionName);
+    const collectionRef = db.collection(tableName);
     
     // ドキュメントIDを事前に生成し、バッチにセット
     for (const item of dataArray) {
@@ -83,7 +83,7 @@ async function insertDocs(collectionName, dataArray) {
     
     await batch.commit(); // バッチ処理を実行
     
-    console.log(`Successfully added all documents to ${collectionName}`);
+    console.log(`Successfully added all documents to ${tableName}`);
   } catch (error) {
     console.error('Initializing data failed:', error);
     process.exit(1);

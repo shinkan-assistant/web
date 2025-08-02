@@ -6,9 +6,6 @@ import {
 } from "firebase/auth";
 
 import { auth, db } from "./clientApp";
-import { collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
-import { BelongEnum, RoleEnum } from "@/data/enums/user.js";
-import { SetUserSchema } from "@/data/schemas/user";
 import { updateLoginUser } from "@/data/functions/user";
 
 export function onAuthStateChanged(cb) {
@@ -22,7 +19,7 @@ export function onIdTokenChanged(cb) {
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
 
-  let user;
+  let user = null;
   try {
     const result = await signInWithPopup(auth, provider);
     user = result.user;
