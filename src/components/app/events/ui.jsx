@@ -1,14 +1,13 @@
 import { Badge } from "@/components/ui/badge";
-import { RoleEnum as ParticipantRoleEnum } from "@/data/enums/participant";
 
 export function EventBadgeList({event, textSizeClass}) {
   const badgeInfos = [];
 
-  if (event.myRole !== null) {
-    const isOrganizer = event.myRole === ParticipantRoleEnum.organizer;
+  if (event["is_organizer"] !== null) {
+    const isOrganizer = event["is_organizer"];
     badgeInfos.push({
       key: "participant-role",
-      text: event.myRole,
+      text: isOrganizer ? "運営者" : "参加者",
       bgColorClass: (isOrganizer ? "bg-red-100" : "bg-gray-100"),
       textColorClass: (isOrganizer ? "text-red-800" : "text-gray-800"),
     });

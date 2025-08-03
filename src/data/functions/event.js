@@ -1,6 +1,5 @@
 import { where } from "firebase/firestore";
 import { getRecord, getRecordById, getRecords } from "./base";
-import { RoleEnum as UserRoleEnum } from "../enums/user";
 import { getUserByEmail } from "./user";
 
 export async function judgeOrganizerOrAdmin(db, {eventId, loginUser}) {
@@ -11,11 +10,11 @@ export async function judgeOrganizerOrAdmin(db, {eventId, loginUser}) {
     ]
   });
   
-  if (myParticipant?.role === ParticipantRoleEnum.organizer) 
+  if (myParticipant?.["is_organizer"]) 
     return true;
 
-  const user = await getUserByEmail(db, {email: loginUser.email});
-  if (user.role === UserRoleEnum.admin)
+  const myUser = await getUserByEmail(db, {email: loginUser.email});
+  if (myUser["is_admin"])
     return true;
 
   return false;
@@ -33,7 +32,7 @@ export async function judgeParticipateOrAdmin(db, {eventId, loginUser}) {
     return true;
 
   const myUser = await getUserByEmail(db, {email: loginUser.email});
-  if (myUser.role === UserRoleEnum.admin)
+  if (myUser["is_admin"])
     return true;
 
   return false;
@@ -43,22 +42,21 @@ function toEventRecord({raw, myParticipant}) {
   if (raw === null) return null;
   
   return {
-    myRole: myParticipant?.role ?? null,
+    "is_organizer": myParticipant?.is_organizer ?? null,
     ...raw,
   }
 }
 
 export async function getEventByLoginUser(db, {id, loginUser}) {
+  const myUser = await getUserByEmail(db, {email: loginUser.email});
+
   const myParticipant = await getRecord(db, "participants", {
     wheres: [
       where("event_id", "==", id),
       where("user_email", "==", loginUser.email),
     ]
   });
-
-  const myUser = await getUserByEmail(db, {email: loginUser.email});
-
-  if (!(myParticipant || myUser?.role === UserRoleEnum.admin)) return null;
+  if (!(myUser["is_admin"] || myParticipant)) return null;
 
   return toEventRecord({
     raw: await getRecordById(db, "events", {id: id}),
@@ -76,7 +74,10 @@ export async function getEventsByLoginUser(db, {loginUser}) {
 
   const myUser = await getUserByEmail(db, {email: loginUser.email});
 
-  const wheres = (myUser.role !== UserRoleEnum.admin) ? [where("__name__", "in", eventIds)] : []
+  let wheres;
+  if (myUser["is_admin"]) wheres = [];
+  else if(eventIds.length > 0) wheres = [where("__name__", "in", eventIds)]
+  else return [];
   const events = await getRecords(db, "events", {wheres: wheres});
 
   return events.map(event => {

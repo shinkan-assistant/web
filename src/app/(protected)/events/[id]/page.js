@@ -9,6 +9,8 @@ export default async function EventItem({ params }) {
   const { id } = await params;
 
   const {firebaseServerApp, loginUser} = await getAuthenticatedAppForUser();
+  if (loginUser === null) redirect('/');
+
   const db = getAuthenticatedDb(firebaseServerApp)
 
   const [myUser, event] = await Promise.all([

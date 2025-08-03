@@ -3,18 +3,18 @@ import fs from 'fs';
 const rawSeedUsers = [
   {
     "email": "",
-    "role": "管理者",
-    "belong": "先輩",
+    "is_admin": true,
+    "belong": {"is_member": true},
   },
   {
     "email": "",
-    "role": "一般ユーザー",
-    "belong": "先輩",
+    "is_admin": false,
+    "belong": {"is_member": true},
   },
   {
     "email": "",
-    "role": "一般ユーザー",
-    "belong": "新入生",
+    "is_admin": false,
+    "belong": {"is_member": false},
   },
 ];
 

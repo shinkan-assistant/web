@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLoginUser } from '@/contexts/loginUser';
+import { useEffect, useState } from 'react';
+import { getUserByEmail } from '@/data/functions/user';
+import { db } from '@/lib/firebase/clientApp';
 
 function NavLink ({ href, children }) {
   const router = useRouter();
@@ -26,24 +29,59 @@ function NavLink ({ href, children }) {
 }
 
 export default function NavMenu() {
-  const user = useLoginUser();
+  const loginUser = useLoginUser();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isMember, setIsMember] = useState(false);
+
+  useEffect(() => {
+    // ログインユーザーが存在しない場合は処理を終了
+    if (!loginUser) {
+      return;
+    }
+
+    // ログインユーザーのメールアドレスを使って管理者情報を取得
+    const fetchUserInfo = async () => {
+      const user = await getUserByEmail(db, { email: loginUser.email });
+      if (user) {
+        if (user['is_admin']) 
+          setIsAdmin(true);
+        if (user['belong']['is_member'])
+          setIsMember(true);
+      }
+    };
+
+    fetchUserInfo();
+  }, [loginUser]); // loginUserが変更されたときに再実行
+
+  const navLinkInfos = [
+    {href: "/events", title: "参加予定", isOnlyForAdmin: false, isOnlyForMember: false},
+    {href: "/events", title: "申込可能", isOnlyForAdmin: false, isOnlyForMember: false},
+    {href: "/events", title: "イベント管理", isOnlyForAdmin: false, isOnlyForMember: true},
+    {href: "/users", title: "ユーザー管理", isOnlyForAdmin: true},
+  ].filter(info => {
+    if (info.isOnlyForAdmin && !isAdmin) return false;
+    if (info.isOnlyForMember && !isMember) return false;
+    return true;
+  });
+
+  if (!(loginUser && navLinkInfos.length > 1))
+    return (<></>);
   
-  return (user) ? (
+  return (
     <nav className="relative bg-white shadow-md"> {/* ナビゲーション全体に影を追加 */}
       <div className="container mx-8 px-4 sm:px-6 lg:px-8"> {/* 中央揃えとパディング */}
         <div className="flex h-16"> {/* ナビゲーションの高さ */}
           <div className="flex">
             <ul className="flex items-center space-x-12"> {/* リンク間のスペースを増やす */}
-              <li>
-                <NavLink href="/events">イベント</NavLink>
-              </li>
-              <li>
-                <NavLink href="/users">ユーザー</NavLink>
-              </li>
+              {navLinkInfos.map(info => (
+                <li key={info.title}>
+                  <NavLink href={info.href}>{info.title}</NavLink>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
       </div>
     </nav>
-  ) : (<></>);
+  );
 }

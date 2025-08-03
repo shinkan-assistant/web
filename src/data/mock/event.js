@@ -33,12 +33,12 @@ const mockEvents = [
         },
         "fees_by_belong": [
           {
-            "belong": "先輩",
+            "belong": {"is_member": true},
             "type": "割り勘",
             "comment": ""
           },
           {
-            "belong": "新入生",
+            "belong": {"is_member": false},
             "type": "無料",
             "comment": ""
           }
@@ -58,13 +58,13 @@ const mockEvents = [
         },
         "fees_by_belong": [
           {
-            "belong": "先輩",
+            "belong": {"is_member": true},
             "type": "固定",
             "fixed": 2000,
             "comment": "変更の可能性があります"
           },
           {
-            "belong": "新入生",
+            "belong": {"is_member": false},
             "type": "固定",
             "fixed": 1000,
             "comment": "変更の可能性があります"

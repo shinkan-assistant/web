@@ -178,7 +178,7 @@ export function EventDetail({ event, myUser }) {
             <EventSummary event={event} />
           </div>
 
-          <ScheduleList schedules={event.schedules} belong={myUser.belong} />
+          <ScheduleList schedules={event.schedules} belong={myUser["belong"]} />
         </div>
       </div>
     </div>

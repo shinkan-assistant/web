@@ -58,12 +58,12 @@ function ScheduleLocation({location}) {
 
 function ScheduleFee({feesByBelong, belong}) {
   let feeInfo;
-  if (feesByBelong == undefined || feesByBelong.length === 0) {
+  if (feesByBelong === undefined || feesByBelong.length === 0) {
     feeInfo = {type: FeeTypeEnum.free};
   }
   else {
     for (let feeInfoTmp of feesByBelong) {
-      if (feeInfoTmp.belong === belong) {
+      if (JSON.stringify(feeInfoTmp.belong) === JSON.stringify(belong)) {
         feeInfo = feeInfoTmp;
         break;
       }

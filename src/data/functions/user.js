@@ -1,7 +1,6 @@
 import { where } from "firebase/firestore";
 import { createRecord, getRecord, updateRecord } from './base';
 import { CreateUserSchema, UpdateUserSchema } from "../schemas/user";
-import { BelongEnum, RoleEnum } from "@/data/enums/user.js";
 
 export async function getUserByEmail(db, {email}) {
   return getRecord(db, "users", {
@@ -23,10 +22,8 @@ export async function updateLoginUser(db, loginUser) {
     await createRecord(db, "users", {
       Schema: CreateUserSchema,
       record: {
-        email: loginUser.email,
-        name: loginUser.displayName,
-        role: RoleEnum.normal,
-        belong: BelongEnum.freshman,
+        "email": loginUser.email,
+        "name": loginUser.displayName,
       }, 
     });
   else (!Boolean(myUser?.name))
@@ -34,7 +31,7 @@ export async function updateLoginUser(db, loginUser) {
       Schema: UpdateUserSchema,
       id: myUser.id,
       rawData: {
-        name: loginUser.displayName,
+        "name": loginUser.displayName,
       }, 
     });
 }
