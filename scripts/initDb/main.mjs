@@ -8,9 +8,6 @@ import seedUsers from './seed/user.mjs';
 import mockEvents from './mock/event.mjs';
 import mockParticipants from './mock/participant.mjs';
 
-const useMock = process.argv.length >= 3 & process.argv[2] === "mock";
-
-// --- DBの初期化 ---
 const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 let serviceAccount;
@@ -59,10 +56,6 @@ async function deleteAllDocs(tableName) {
   }
 }
 
-deleteAllDocs('users');
-deleteAllDocs('events');
-deleteAllDocs('participants');
-
 // --- DBの初期データの追加 ---
 /**
  * 指定されたコレクションにデータを一括で追加します。
@@ -100,8 +93,20 @@ async function insertDocs(tableName, dataArray) {
   }
 }
 
-insertDocs('users', seedUsers);
-if (useMock) {
-  insertDocs('events', mockEvents);
-  insertDocs('participants', mockParticipants);
+const useMock = process.argv.length >= 3 & process.argv[2] === "mock";
+
+async function initializeData() {
+  await Promise.all([
+    deleteAllDocs('users'),
+    deleteAllDocs('events'),
+    deleteAllDocs('participants'),
+  ]);
+
+  await Promise.all([
+    () => insertDocs('users', seedUsers),
+    useMock ? () => insertDocs('events', mockEvents) : null,
+    useMock ? () => insertDocs('participants', mockParticipants) : null,
+  ].filter(fn => fn !== null).map(fn => fn()));
 }
+
+initializeData();
