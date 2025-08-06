@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLoginUser } from '@/client/contexts/loginUser';
 import { useEffect, useState } from 'react';
-import { getUserByEmail } from '@/server/data/functions/user';
+import { getUserByEmail } from '@/data/functions/user';
 import { db } from '@/lib/firebase/clientApp';
 
 function NavLink ({ href, children }) {
