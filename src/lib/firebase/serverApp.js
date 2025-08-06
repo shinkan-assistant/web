@@ -16,9 +16,9 @@ export async function getAuthenticatedAppForUser() {
 
   const auth = getAuth(firebaseServerApp);
   await auth.authStateReady();
-  const loginUser = auth.currentUser;
+  const authUser = auth.currentUser;
 
-  return { firebaseServerApp, loginUser };
+  return { firebaseServerApp, authUser };
 }
 
 export function getAuthenticatedDb(firebaseServerApp) {

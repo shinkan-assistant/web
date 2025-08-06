@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 
 import { auth, db } from "./clientApp";
-import { updateLoginUser } from "@/data/functions/user";
+import { updateUserMetadata } from "@/data/functions/user";
 
 export function onAuthStateChanged(cb) {
   return _onAuthStateChanged(auth, cb);
@@ -19,10 +19,10 @@ export function onIdTokenChanged(cb) {
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
 
-  let user = null;
+  let authUser = null;
   try {
     const result = await signInWithPopup(auth, provider);
-    user = result.user;
+    authUser = result.user;
   } catch (error) {
     // ユーザーがポップアップを閉じた、またはキャンセルされた場合はエラーを無視する
     switch (error.code) {
@@ -35,7 +35,7 @@ export async function signInWithGoogle() {
   }
 
   try {
-    await updateLoginUser(db, user);
+    await updateUserMetadata(db, authUser);
   } catch (error) {
     console.error("ユーザーデータの更新に失敗しました", error);
     signOut();

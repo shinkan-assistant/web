@@ -6,23 +6,24 @@ import {
 } from "@/lib/firebase/auth";
 import { setCookie, deleteCookie } from "cookies-next";
 
-export default function useUserSession (initialUser) {
-  const [user, setUser] = useState(initialUser);
+export default function useUserSession (initialAuthUser) {
+  const [authUser, setAuthUser] = useState(initialAuthUser);
 
   useEffect(() => {
-    const unsubscribe = onIdTokenChanged(async (latestUser) => {
-      if (latestUser) {
-        const idToken = await latestUser.getIdToken();
+    const unsubscribeAuth = onIdTokenChanged(async (latestAuthUser) => {
+      if (latestAuthUser) {
+        const idToken = await latestAuthUser.getIdToken();
         await setCookie("__session", idToken);
       } else {
         await deleteCookie("__session");
       }
-
-      setUser(latestUser)
+      setAuthUser(latestAuthUser)
     });
 
-    return () => unsubscribe(undefined);
+    return () => {
+      unsubscribeAuth(null);
+    }
   }, []);
 
-  return user;
+  return { authUser };
 };

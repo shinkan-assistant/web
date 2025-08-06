@@ -2,7 +2,7 @@ import { where } from "firebase/firestore";
 import { createRecord, getRecord, updateRecord } from './base';
 import { CreateUserSchema, UpdateUserSchema } from "../schemas/user";
 
-export async function getUserByEmail(db, {email}) {
+export async function getUserMetadataByEmail(db, {email}) {
   return getRecord(db, "users", {
     wheres: [
       where("email", "==", email)
@@ -10,28 +10,25 @@ export async function getUserByEmail(db, {email}) {
   });
 }
 
-// TODO ユーザー情報を常に保持しておく + ユーザー情報が変わったら自動更新するようにする（onSnapShot）
-// TODO ユーザーの useUserSession や useContextを見直す（サーバーコンポーネントと同じ設計にする）
+export async function updateUserMetadata(db, authUser) {
+  if (!authUser) return;
 
-export async function updateLoginUser(db, loginUser) {
-  if (!loginUser) return;
-
-  const myUser = await getUserByEmail(db, {email: loginUser.email});
+  const myUserMetadata = await getUserMetadataByEmail(db, {email: authUser.email});
   
-  if (myUser === null) 
+  if (myUserMetadata === null) 
     await createRecord(db, "users", {
       Schema: CreateUserSchema,
       record: {
-        "email": loginUser.email,
-        "name": loginUser.displayName,
+        "email": authUser.email,
+        "name": authUser.displayName,
       }, 
     });
-  else (!Boolean(myUser?.name))
+  else (!Boolean(myUserMetadata?.name))
     await updateRecord(db, "users", {
       Schema: UpdateUserSchema,
-      id: myUser.id,
+      id: myUserMetadata.id,
       rawData: {
-        "name": loginUser.displayName,
+        "name": authUser.displayName,
       }, 
     });
 }

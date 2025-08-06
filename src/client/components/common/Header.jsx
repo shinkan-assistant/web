@@ -6,9 +6,9 @@ import {
   signOut,
 } from "@/lib/firebase/auth";
 import { useEffect, useRef, useState } from "react";
-import { useLoginUser } from "@/client/contexts/loginUser";
+import { useAuthUser } from "@/client/contexts/user";
 
-function AuthorizedHeader({user}) {
+function AuthorizedHeader({authUser}) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -46,15 +46,15 @@ function AuthorizedHeader({user}) {
         <div className="gsi-material-button-content-wrapper flex items-center">
           <div className="gsi-material-button-icon">
             <Image
-              src={user.photoURL}
-              alt={user.email}
+              src={authUser.photoURL}
+              alt={authUser.email}
               width={28}
               height={28}
               className="block rounded-full"
             />
           </div>
           <span className="gsi-material-button-contents ml-2 tracking-widest">
-            {user.displayName}
+            {authUser.displayName}
           </span>
         </div>
       </button>
@@ -106,15 +106,15 @@ function UnAuthorizedHeader() {
 }
 
 export default function Header({title}) {
-  const user = useLoginUser();
+  const authUser = useAuthUser();
 
   return (
     <header className="bg-sky-600 px-4 py-4 flex items-center justify-center">
       <div className="flex-initial text-4xl text-white font-semibold pl-4">{title}</div>
       <div className="flex-1"></div>
       <div className="flex-initial">
-        {user ? (
-          <AuthorizedHeader user = {user} />
+        {authUser ? (
+          <AuthorizedHeader authUser = {authUser} />
         ) : (
           <UnAuthorizedHeader />
         )}

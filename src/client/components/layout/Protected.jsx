@@ -2,20 +2,20 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useLoginUser } from "@/client/contexts/loginUser";
+import { useAuthUser } from "@/client/contexts/user";
 import NavMenu from "@/client/components/common/NavMenu";
 
 export default function ProtectedLayout({ children }) {
-  const loginUser = useLoginUser();
+  const authUser = useAuthUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loginUser) {
+    if (!authUser) {
       router.push('/');
     }
-  }, [loginUser, router]); 
+  }, [authUser, router]); 
 
-  if (!loginUser) {
+  if (!authUser) {
     return null;
   }
 

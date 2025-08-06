@@ -1,6 +1,6 @@
 import { EventDetail } from "@/server/components/app/events/Detail";
-import { getEventByLoginUser } from "@/data/functions/event";
-import { getUserByEmail } from "@/data/functions/user";
+import { getEventByAuthUser } from "@/data/functions/event";
+import { getUserMetadataByEmail } from "@/data/functions/user";
 import { getAuthenticatedAppForUser, getAuthenticatedDb } from "@/lib/firebase/serverApp";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -8,14 +8,14 @@ import React from "react";
 export default async function EventItem({ params }) {
   const { id } = await params;
 
-  const {firebaseServerApp, loginUser} = await getAuthenticatedAppForUser();
-  if (loginUser === null) redirect('/');
+  const {firebaseServerApp, authUser} = await getAuthenticatedAppForUser();
+  if (authUser === null) redirect('/');
 
   const db = getAuthenticatedDb(firebaseServerApp)
 
-  const [myUser, event] = await Promise.all([
-    getUserByEmail(db, {email: loginUser.email}),
-    getEventByLoginUser(db, {id: id, loginUser: loginUser}),
+  const [myUserMetadata, event] = await Promise.all([
+    getUserMetadataByEmail(db, {email: authUser.email}),
+    getEventByAuthUser(db, {id: id, authUser: authUser}),
   ]);
 
   if (event === null) {
@@ -23,6 +23,6 @@ export default async function EventItem({ params }) {
   }
 
   return (
-    <EventDetail event = {event} myUser = {myUser} />
+    <EventDetail event = {event} myUserMetadata = {myUserMetadata} />
   );
 }

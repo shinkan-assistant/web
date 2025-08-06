@@ -135,7 +135,7 @@ function EventSummary({event}) {
 }
 
 // イベント詳細表示コンポーネント
-export function EventDetail({ event, myUser }) {
+export function EventDetail({ event, myUserMetadata }) {
   if (event == undefined) {
     notFound();
   }
@@ -152,7 +152,7 @@ export function EventDetail({ event, myUser }) {
             <EventSummary event={event} />
           </div>
 
-          <ScheduleList schedules={event.schedules} belong={myUser["belong"]} />
+          <ScheduleList schedules={event.schedules} belong={myUserMetadata["belong"]} />
         </div>
       </div>
     </div>

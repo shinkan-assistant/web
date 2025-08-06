@@ -17,7 +17,7 @@ export async function updateRecord(db, tableName, {Schema, id, rawData}) {
   await updateDoc(docRef, data);
 }
 
-function toRecord(docSnapshot) {
+export function toRecord(docSnapshot) {
   return {
     id: docSnapshot.id,
     ...docSnapshot.data()
