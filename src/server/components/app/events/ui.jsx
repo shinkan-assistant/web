@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/server/components/ui/badge";
 
 export function EventBadgeList({event, textSizeClass}) {
   const badgeInfos = [];

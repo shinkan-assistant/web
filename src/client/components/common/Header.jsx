@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Image from "next/image";
 import {
@@ -6,7 +6,7 @@ import {
   signOut,
 } from "@/lib/firebase/auth";
 import { useEffect, useRef, useState } from "react";
-import { useLoginUser } from "@/contexts/loginUser";
+import { useLoginUser } from "@/client/contexts/loginUser";
 
 function AuthorizedHeader({user}) {
   const [isOpen, setIsOpen] = useState(false);

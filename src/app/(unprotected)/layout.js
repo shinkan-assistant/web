@@ -1,21 +1,7 @@
-'use client';
+import UnprotectedLayout from "@/client/components/layout/Unprotected";
 
-import { useEffect } from "react";
-import { redirect } from "next/navigation";
-import { useLoginUser } from "@/contexts/loginUser";
-
-export default function UnprotectedLayout({ children }) {
-  const user = useLoginUser();
-
-  useEffect(() => {
-    if (user && window.location.pathname !== '/events') {
-      redirect('/events');
-    }
-  }, [user]);
-
+export default function ({ children }) {
   return (
-    <>
-      {children}
-    </>
-  );
+    <UnprotectedLayout children={children} />
+  )
 }

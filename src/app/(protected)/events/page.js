@@ -1,5 +1,5 @@
-import EventList from "@/components/app/events/List";
-import { getEventsByLoginUser } from "@/data/functions/event";
+import EventList from "@/server/components/app/events/List";
+import { getEventsByLoginUser } from "@/server/data/functions/event";
 import { getAuthenticatedAppForUser, getAuthenticatedDb } from "@/lib/firebase/serverApp";
 import { redirect } from "next/dist/server/api-utils";
 

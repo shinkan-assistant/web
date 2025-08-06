@@ -1,7 +1,5 @@
-'use client';
-
 import {notFound} from "next/navigation";
-import { BlankLink } from "@/components/ui/link";
+import { BlankLink } from "@/server/components/ui/link";
 import { ScheduleList } from "./schedules/List";
 import { EventBadgeList, EventItemIcon } from "./ui";
 
@@ -62,34 +60,10 @@ function EventOnlineMeetingPlatform({platform}) {
 }
 
 function EventOnlineMeetingTextItem({label, text}) {
-  function copyToClipboard (text) {
-    // `document.execCommand('copy')` は非推奨ですが、
-    // iframe環境で`navigator.clipboard.writeText`が動作しない場合があるため使用します。
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    try {
-      document.execCommand('copy');
-    } catch (err) {
-      console.error('コピーに失敗しました:', err);
-      alert('コピーに失敗しました。手動でコピーしてください。');
-    }
-    document.body.removeChild(textarea);
-  }
-
   return (
-    <div className="flex items-center">
-      <p className="text-gray-600">
-        <span className="font-medium">{label}:</span> <span className="font-semibold text-gray-800">{text}</span>
-      </p>
-      <button 
-        onClick={() => copyToClipboard(text)}
-        className="ml-2 p-1 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50"
-      >
-        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1.5M9 3l2-2 2 2M10 4.5V1H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V9h-3.586a1 1 0 00-.707.293l-1.414 1.414a1 1 0 01-.707.293H12a2 2 0 01-2-2V4.5z"></path></svg>
-      </button>
-    </div>
+    <p className="text-gray-600">
+      <span className="font-medium">{label}:</span> <span className="font-semibold text-gray-800">{text}</span>
+    </p>
   );
 }
 

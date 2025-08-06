@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import useUserSession from '@/hooks/useUserSession';
+import useUserSession from '@/client/hooks/useUserSession';
 
 const LoginUserContext = createContext(undefined);
 

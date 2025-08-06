@@ -1,5 +1,5 @@
-import {FeeTypeEnum} from "@/data/enums/event.js";
-import { BlankLink } from "@/components/ui/link";
+import {FeeTypeEnum} from "@/server/data/enums/event.js";
+import { BlankLink } from "@/server/components/ui/link";
 import { EventItemIcon } from "../ui";
 
 function ScheduleTimeRange({timeRange}) {

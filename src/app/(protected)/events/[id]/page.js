@@ -1,6 +1,6 @@
-import { EventDetail } from "@/components/app/events/Detail";
-import { getEventByLoginUser } from "@/data/functions/event";
-import { getUserByEmail } from "@/data/functions/user";
+import { EventDetail } from "@/server/components/app/events/Detail";
+import { getEventByLoginUser } from "@/server/data/functions/event";
+import { getUserByEmail } from "@/server/data/functions/user";
 import { getAuthenticatedAppForUser, getAuthenticatedDb } from "@/lib/firebase/serverApp";
 import { notFound } from "next/navigation";
 import React from "react";

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { EventTypeEnum } from "@/data/enums/event.js";
+import { EventTypeEnum } from "@/server/data/enums/event.js";
 import { EventBadgeList, EventItemIcon } from "./ui";
 
 function EventHeader({event}) {
