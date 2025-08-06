@@ -1,5 +1,5 @@
 import Header from "@/client/components/common/Header";
-import { UserProvider } from "@/client/contexts/user";
+import { UserProvider } from "@/client/contexts/authUser";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 
 export default async function RootLayout({ children, metadata }) {

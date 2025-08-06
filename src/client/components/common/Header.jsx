@@ -6,7 +6,7 @@ import {
   signOut,
 } from "@/lib/firebase/auth";
 import { useEffect, useRef, useState } from "react";
-import { useAuthUser } from "@/client/contexts/user";
+import { useAuthUser } from "@/client/contexts/authUser";
 
 function AuthorizedHeader({authUser}) {
   const [isOpen, setIsOpen] = useState(false);

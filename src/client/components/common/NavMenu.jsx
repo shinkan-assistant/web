@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useAuthUser } from '@/client/contexts/user';
+import { useAuthUser } from '@/client/contexts/authUser';
 import { useEffect, useState } from 'react';
 import { getUserMetadataByEmail } from '@/data/functions/user';
 import { db } from '@/lib/firebase/clientApp';

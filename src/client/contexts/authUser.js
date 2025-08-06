@@ -1,13 +1,12 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import useUserSession from '@/client/hooks/useUserSession';
+import useAuthUserSession from '@/client/hooks/useAuthUserSession';
 
 const AuthUserContext = createContext(null);
-const UserMetadataContext = createContext(null);
 
 function UserProvider({ initialAuthUser, children }) {
-  const { authUser, userMetadata } = useUserSession(initialAuthUser);
+  const authUser = useAuthUserSession(initialAuthUser);
 
   return (
     <AuthUserContext.Provider value={authUser}>
