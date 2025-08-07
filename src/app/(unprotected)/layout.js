@@ -1,7 +1,7 @@
-import UnprotectedLayout from "@/client/components/layout/Unprotected";
+import _UnprotectedLayout from "@/client/components/layout/Unprotected";
 
-export default function ({ children }) {
+export default function UnprotectedLayout ({ children }) {
   return (
-    <UnprotectedLayout children={children} />
+    <_UnprotectedLayout children={children} />
   )
 }

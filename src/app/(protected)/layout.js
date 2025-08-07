@@ -1,7 +1,7 @@
-import ProtectedLayout from "@/client/components/layout/Protected";
+import _ProtectedLayout from "@/client/components/layout/Protected";
 
-export default function ({ children }) {
+export default function ProtectedLayout ({ children }) {
   return (
-    <ProtectedLayout children={children} />
+    <_ProtectedLayout children={children} />
   )
 }
