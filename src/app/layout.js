@@ -8,6 +8,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <_RootLayout children={children} metadata={metadata} />
+    <_RootLayout metadata={metadata}>
+      {children}
+    </_RootLayout>
   )
 }
