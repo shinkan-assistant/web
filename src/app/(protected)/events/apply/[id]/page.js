@@ -1,7 +1,7 @@
-import EventDetail from "@/server/components/app/events/Detail";
 import { getEventByAuthUser } from "@/data/functions/event";
 import { getUserMetadataByEmail } from "@/data/functions/user";
 import { getAuthenticatedAppForUser, getAuthenticatedDb } from "@/lib/firebase/serverApp";
+import EventApplyForm from "@/server/components/app/events/ApplyForm";
 import { notFound } from "next/navigation";
 
 export default async function EventItem({ params }) {
@@ -22,6 +22,6 @@ export default async function EventItem({ params }) {
   }
 
   return (
-    <EventDetail event = {event} myUserMetadata = {myUserMetadata} />
+    <EventApplyForm event = {event} myUserMetadata = {myUserMetadata} />
   );
 }

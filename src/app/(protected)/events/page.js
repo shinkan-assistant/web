@@ -1,7 +1,7 @@
 import EventList from "@/server/components/app/events/List";
 import { getOrganizerEvents, getParticipatingEvents, getRegistrableEvents } from "@/data/functions/event";
 import { getAuthenticatedAppForUser, getAuthenticatedDb } from "@/lib/firebase/serverApp";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { EventFilterEnum } from "@/data/enums/event";
 
 export default async function Events({ searchParams }) {

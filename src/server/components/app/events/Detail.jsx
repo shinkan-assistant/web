@@ -2,6 +2,7 @@ import {notFound} from "next/navigation";
 import { BlankLink } from "@/server/components/ui/link";
 import { ScheduleList } from "./schedules/List";
 import { EventBadgeList, EventItemIcon } from "./ui";
+import ItemContainer from "../../container/item";
 
 
 function formatEventDate(isoString) {
@@ -126,7 +127,7 @@ function EventSummary({event}) {
 
       <div className="space-y-4"> {/* 各情報ブロック間のスペースを統一 */}
         <EventDate event={event} />
-        {event.location && <EventLocation event={event} />}
+        {event.rough_location_name && <EventLocation event={event} />}
         {event.contact_group && <EventContactGroup contact_group={event.contact_group} />}
         {event.online_meeting_info && <EventOnlineMeetingInfo online_meeting_info={event.online_meeting_info} />}
       </div> {/* End of space-y-4 */}
@@ -135,26 +136,22 @@ function EventSummary({event}) {
 }
 
 // イベント詳細表示コンポーネント
-export function EventDetail({ event, myUserMetadata }) {
-  if (event == undefined) {
+export default function EventDetail({ event, myUserMetadata }) {
+  if (event == null) {
     notFound();
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:p-6 lg:p-8 font-inter text-gray-800">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="p-6 sm:p-8">
-          <div className="ml-3">
-            <EventHeader event={event} />
-          </div>
-
-          <div className="mb-8">
-            <EventSummary event={event} />
-          </div>
-
-          <ScheduleList schedules={event.schedules} belong={myUserMetadata["belong"]} />
-        </div>
+    <ItemContainer>
+      <div className="ml-3">
+        <EventHeader event={event} />
       </div>
-    </div>
+
+      <div className="mb-8">
+        <EventSummary event={event} />
+      </div>
+
+      <ScheduleList schedules={event.schedules} belong={myUserMetadata["belong"]} publicLocation={true} />
+    </ItemContainer>
   );
 };

@@ -89,7 +89,7 @@ function ScheduleFee({feesByBelong, belong}) {
   );
 }
 
-export function ScheduleList({schedules, belong}) {
+export function ScheduleList({schedules, belong, publicLocation}) {
   return (
     <div>
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
@@ -114,7 +114,7 @@ export function ScheduleList({schedules, belong}) {
               <div className="mt-4 space-y-2">
                 <ScheduleTimeRange timeRange={schedule.time_range} />
 
-                {schedule.location && 
+                {(schedule.location && publicLocation) && 
                   <ScheduleLocation location={schedule.location} />
                 }
 
