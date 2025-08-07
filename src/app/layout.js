@@ -1,5 +1,5 @@
 import "./globals.css";
-import _RootLayout from "@/server/components/layout/Root";
+import _RootLayout from "@/server/components/layout/app/Root";
 
 export const metadata = {
   title: "Gatherlynx",

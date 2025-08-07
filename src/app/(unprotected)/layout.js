@@ -1,4 +1,4 @@
-import _UnprotectedLayout from "@/client/components/layout/Unprotected";
+import _UnprotectedLayout from "@/client/components/layout/app/Unprotected";
 
 export default function UnprotectedLayout ({ children }) {
   return (
