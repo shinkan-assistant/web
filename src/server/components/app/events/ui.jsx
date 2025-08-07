@@ -3,13 +3,12 @@ import { Badge } from "@/server/components/ui/badge";
 export function EventBadgeList({event, textSizeClass}) {
   const badgeInfos = [];
 
-  if (event["is_organizer"] !== null) {
-    const isOrganizer = event["is_organizer"];
+  if (event["is_organizer"]) {
     badgeInfos.push({
-      key: "participant-role",
-      text: isOrganizer ? "運営者" : "参加者",
-      bgColorClass: (isOrganizer ? "bg-red-100" : "bg-gray-100"),
-      textColorClass: (isOrganizer ? "text-red-800" : "text-gray-800"),
+      key: "organizer",
+      text: "運営者",
+      bgColorClass: "bg-red-100",
+      textColorClass: "text-red-800",
     });
   }
 

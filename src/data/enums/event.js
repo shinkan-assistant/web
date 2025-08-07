@@ -3,6 +3,12 @@ export const EventTypeEnum = Object.freeze({
   online: "オンライン",
 });
 
+export const EventFilterEnum = Object.freeze({
+  participating: "participating",
+  registrable: "registrable",
+  organizer: "organizer",
+});
+
 export const FeeTypeEnum = Object.freeze({
   fixed: "固定",
   split_bill: "割り勘",

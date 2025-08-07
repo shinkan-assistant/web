@@ -6,6 +6,7 @@ import { useAuthUser } from '@/client/contexts/authUser';
 import { useEffect, useState } from 'react';
 import { getUserMetadataByEmail } from '@/data/functions/user';
 import { db } from '@/lib/firebase/clientApp';
+import { EventFilterEnum } from '@/data/enums/event';
 
 function NavLink ({ href, children }) {
   const router = useRouter();
@@ -33,6 +34,7 @@ export default function NavMenu() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isMember, setIsMember] = useState(false);
 
+  // TODO ユーザーメタデータをサーバー側で変更しても、すぐに反映されない、、
   useEffect(() => {
     // ログインユーザーが存在しない場合は処理を終了
     if (!authUser) {
@@ -54,10 +56,26 @@ export default function NavMenu() {
   }, [authUser]); // authUserが変更されたときに再実行
 
   const navLinkInfos = [
-    {href: "/events", title: "参加予定", isOnlyForAdmin: false, isOnlyForMember: false},
-    {href: "/events", title: "申込可能", isOnlyForAdmin: false, isOnlyForMember: false},
-    {href: "/events", title: "イベント管理", isOnlyForAdmin: false, isOnlyForMember: true},
-    {href: "/users", title: "ユーザー管理", isOnlyForAdmin: true},
+    {
+      href: `/events?filter=${EventFilterEnum.participating}`, 
+      title: "参加予定", 
+      isOnlyForAdmin: false, isOnlyForMember: false
+    },
+    {
+      href: `/events?filter=${EventFilterEnum.registrable}`, 
+      title: "申込可能", 
+      isOnlyForAdmin: false, isOnlyForMember: false
+    },
+    {
+      href: `/events?filter=${EventFilterEnum.organizer}`, 
+      title: "イベント管理", 
+      isOnlyForAdmin: false, isOnlyForMember: true
+    },
+    {
+      href: "/users", 
+      title: "ユーザー管理", 
+      isOnlyForAdmin: true
+    },
   ].filter(info => {
     if (info.isOnlyForAdmin && !isAdmin) return false;
     if (info.isOnlyForMember && !isMember) return false;

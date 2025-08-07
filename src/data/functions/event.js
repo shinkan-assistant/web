@@ -38,13 +38,22 @@ export async function judgeParticipateOrAdmin(db, {eventId, authUser}) {
   return false;
 }
 
-function toEventRecord({raw, myParticipant}) {
-  if (raw === null) return null;
+function toEventRecord({rawEvent, myParticipant}) {
+  if (rawEvent === null) return null;
   
   return {
     "is_organizer": myParticipant?.is_organizer ?? null,
-    ...raw,
+    ...rawEvent,
   }
+}
+
+function toEventRecords({rawEvents, myParticipants}) {
+  return rawEvents.map(rawEvent => {
+    return toEventRecord({
+      rawEvent: rawEvent, 
+      myParticipant: myParticipants.find(p => p["event_id"] === rawEvent["id"])
+    });
+  })
 }
 
 export async function getEventByAuthUser(db, {id, authUser}) {
@@ -59,31 +68,82 @@ export async function getEventByAuthUser(db, {id, authUser}) {
   if (!(myUserMetadata["is_admin"] || myParticipant)) return null;
 
   return toEventRecord({
-    raw: await getRecordById(db, "events", {id: id}),
+    rawEvent: await getRecordById(db, "events", {id: id}),
     myParticipant: myParticipant
   });
 }
 
-export async function getEventsByAuthUser(db, {authUser}) {
+export async function getParticipatingEvents(db, {authUser}) {
   const myParticipants = await getRecords(db, "participants", {
     wheres: [
       where("user_email", "==", authUser.email),
     ]
   });
-  const eventIds = myParticipants.map(p => p["event_id"]);
+  const participatingEventIds = myParticipants.map(p => p["event_id"]);
 
-  const myUserMetadata = await getUserMetadataByEmail(db, {email: authUser.email});
-
-  let wheres;
-  if (myUserMetadata["is_admin"]) wheres = [];
-  else if(eventIds.length > 0) wheres = [where("__name__", "in", eventIds)]
-  else return [];
-  const events = await getRecords(db, "events", {wheres: wheres});
-
-  return events.map(event => {
-    return toEventRecord({
-      raw: event, 
-      myParticipant: myParticipants.find(p => p["event_id"] === event["id"])
+  let events;
+  if(participatingEventIds.length > 0) {
+    events = await getRecords(db, "events", {
+      wheres: [where("__name__", "in", participatingEventIds)]
     });
-  })
+  }
+  else {
+    events = [];
+  }
+
+  return toEventRecords({
+    rawEvents: events,
+    myParticipants: myParticipants
+  });
+}
+
+export async function getRegistrableEvents(db, {authUser}) {
+  const myParticipants = await getRecords(db, "participants", {
+    wheres: [
+      where("user_email", "==", authUser.email),
+    ]
+  });
+  const participatingEventIds = myParticipants.map(p => p["event_id"]);
+
+  let events = await getRecords(db, "events", {wheres: []});
+  if(participatingEventIds.length > 0) 
+    events = events.filter(event => !participatingEventIds.includes(event.id));
+
+  return toEventRecords({
+    rawEvents: events,
+    myParticipants: [],
+  });
+}
+
+export async function getOrganizerEvents(db, {authUser}) {
+  const myUserMetadata = await getUserMetadataByEmail(db, {email: authUser.email});
+  if (!myUserMetadata["belong"]["is_member"]) return null;
+  
+  const myOrganizers = await getRecords(db, "participants", {
+    wheres: [
+      where("user_email", "==", authUser.email),
+      where("is_organizer", "==", true),
+    ]
+  });
+
+  let events = [];
+  if (myUserMetadata["is_admin"]) {
+    events = await getRecords(db, "events", {wheres: []});
+  }
+  else {
+    const organizedEventIds = myOrganizers.map(p => p["event_id"]);
+    if (organizedEventIds.length == 0) {
+      events = [];
+    }
+    else {
+      events = await getRecords(db, "events", {
+        wheres: [where("__name__", "in", organizedEventIds)]
+      });
+    }
+  }
+
+  return toEventRecords({
+    rawEvents: events,
+    myParticipants: myOrganizers
+  });
 }

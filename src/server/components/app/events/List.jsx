@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { EventTypeEnum } from "@/data/enums/event.js";
+import { EventFilterEnum, EventTypeEnum } from "@/data/enums/event.js";
 import { EventBadgeList, EventItemIcon } from "./ui";
 
 function EventHeader({event}) {
@@ -45,9 +45,20 @@ function EventLocation({event}) {
   );
 }
 
-function EventDetailLink({event}) {
-  const url = `/events/${event.id}`;
-  const text = "詳細を見る";
+function EventItemLink({event, filter}) {
+  let url, text;
+  if (filter === EventFilterEnum.participating) {
+    url = `/events/detail/${event.id}`;
+    text = "詳細を見る";
+  }
+  else if (filter === EventFilterEnum.registrable) {
+    url = `/events/apply/${event.id}`;
+    text = "申し込む";
+  }
+  else if (filter === EventFilterEnum.organizer) {
+    url = `/events/manage/${event.id}`;
+    text = "管理する";
+  }
 
   return (
     <Link 
@@ -59,7 +70,7 @@ function EventDetailLink({event}) {
   );
 }
 
-export default function EventList({events}) {
+export default function EventList({events, filter}) {
   return (
     <div className="container mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
       {events.map((event) => (
@@ -80,7 +91,7 @@ export default function EventList({events}) {
           </div>
 
           <div>
-            <EventDetailLink event={event} />
+            <EventItemLink event={event} filter={filter} />
           </div>
         </div>
       ))}
