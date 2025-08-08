@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 
 import { auth, db } from "./clientApp";
-import { updateUserMetadata } from "@/data/functions/user";
+import { updateUserMetadata } from "@/features/user/api/update";
 
 export function onAuthStateChanged(cb) {
   return _onAuthStateChanged(auth, cb);
