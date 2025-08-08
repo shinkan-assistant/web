@@ -1,5 +1,5 @@
 import { createRecord } from "@/base/api/create";
-import { CreateUserSchema } from "../schemas/object";
+import { CreateUserSchema } from "../schemas/api";
 
 export async function createUserMetadata(db, authUser) {
   if (!authUser) return;

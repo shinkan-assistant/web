@@ -1,5 +1,5 @@
 import { getUserMetadataByEmail } from "./get";
-import { UpdateUserSchema } from "../schemas/object";
+import { UpdateUserSchema } from "../schemas/api";
 import { createUserMetadata } from "./create";
 import { updateRecord } from "@/base/api/update";
 
