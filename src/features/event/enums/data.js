@@ -17,8 +17,3 @@ export const ContactGroupPlatformEnum = Object.freeze({
 export const OnlineMeetingPlatformEnum = Object.freeze({
   zoom: "Zoom",
 });
-
-export const ScheduleTypeEnum = Object.freeze({
-  gathering: "集合",
-  event: "イベント",
-});

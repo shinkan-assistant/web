@@ -11,16 +11,6 @@ const mockEvents = [
     },
     "schedules": [
       {
-        "id": "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
-        "type": "集合",
-        "time_range": {
-          "start_at": "2025-03-29T14:45:00"
-        },
-        "location": {
-          "name": "池袋駅"
-        }
-      },
-      {
         "id": "b3484f0e-36c1-4039-9d7a-1f81d113426e",
         "type": "イベント",
         "title": "説明会＆交流会",

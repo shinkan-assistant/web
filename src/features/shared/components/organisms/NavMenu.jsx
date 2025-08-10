@@ -1,38 +1,46 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useAuthUser } from '@/features/user/stores/authUser';
 import { useEffect, useState } from 'react';
 import { getUserMetadataByEmail } from '@/features/user/api/get';
 import { db } from '@/lib/firebase/clientApp';
 import { EventFilterEnum } from "@/features/event/enums/page";
 
-function NavLink ({ href, children }) {
-  const router = useRouter();
+function NavLink({ href, children }) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  
+  // フルパスを正しく取得
+  const fullPath = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+  
   // 現在のパスとhrefが一致するか、または現在のパスがhrefで始まる場合にアクティブとみなす
-  // 例: /users と /users/profile など
-  const isActive = router.pathname === href || router.pathname?.startsWith(`${href}/`);
+  const isActive = fullPath === href || fullPath?.startsWith(`${href}`);
+
+  const commonClassName = "relative px-4 py-3 text-base font-semibold transition-all duration-300 ease-in-out"
 
   return (
-    <Link
-      href={href}
-      className={`
-        relative px-4 py-3 text-base font-semibold transition-all duration-300 ease-in-out
-        ${isActive
-          ? 'text-sky-600 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-full after:h-0.5 after:bg-sky-600 after:rounded-full after:scale-x-100' // アクティブな場合、下線が伸びるエフェクト
-          : 'text-gray-600 hover:text-sky-600 hover:bg-gray-50 focus:outline-none after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-sky-600 after:rounded-full after:transition-all after:duration-300 hover:after:w-full'} // 非アクティブな場合、ホバーで下線が伸びる
-      `}
-    >
-      {children}
-    </Link>
+    <>
+      {isActive ? 
+        <div className={`${commonClassName} text-sky-600 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-full after:h-0.5 after:bg-sky-600 after:rounded-full after:scale-x-100`}>
+          {children}
+        </div>
+      :
+        <Link
+          href={href}
+          className={`${commonClassName} text-gray-600 hover:text-sky-600 hover:bg-gray-50 focus:outline-none after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-sky-600 after:rounded-full after:transition-all after:duration-300 hover:after:w-full`}
+        >
+          {children}
+        </Link>
+      }
+    </>    
   );
 }
 
 export default function NavMenu() {
   const authUser = useAuthUser();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isMember, setIsMember] = useState(false);
+  const [navLinkInfos, setNavLinkInfos] = useState([]);
 
   // TODO ユーザーメタデータをサーバー側で変更しても、すぐに反映されない、、
   useEffect(() => {
@@ -45,44 +53,41 @@ export default function NavMenu() {
     const fetchUserInfo = async () => {
       const userMetadata = await getUserMetadataByEmail(db, { email: authUser.email });
       if (userMetadata) {
-        if (userMetadata['is_admin']) 
-          setIsAdmin(true);
-        if (userMetadata['belong']['is_member'])
-          setIsMember(true);
+        const isAdmin = userMetadata["is_admin"];
+        const isMember = userMetadata["belong"]["is_member"];
+        setNavLinkInfos([
+          {
+            href: `/events?filter=${EventFilterEnum.participating}`, 
+            title: "参加予定", 
+            isOnlyForAdmin: false, isOnlyForMember: false
+          },
+          {
+            href: `/events?filter=${EventFilterEnum.registrable}`, 
+            title: "申込可能", 
+            isOnlyForAdmin: false, isOnlyForMember: false
+          },
+          {
+            href: `/events?filter=${EventFilterEnum.organizer}`, 
+            title: "イベント管理", 
+            isOnlyForAdmin: false, isOnlyForMember: true
+          },
+          {
+            href: "/users", 
+            title: "ユーザー管理", 
+            isOnlyForAdmin: true
+          },
+        ].filter(info => {
+          if (info.isOnlyForAdmin && !isAdmin) return false;
+          if (info.isOnlyForMember && !isMember) return false;
+          return true;
+        }));
       }
     };
 
     fetchUserInfo();
   }, [authUser]); // authUserが変更されたときに再実行
 
-  const navLinkInfos = [
-    {
-      href: `/events?filter=${EventFilterEnum.participating}`, 
-      title: "参加予定", 
-      isOnlyForAdmin: false, isOnlyForMember: false
-    },
-    {
-      href: `/events?filter=${EventFilterEnum.registrable}`, 
-      title: "申込可能", 
-      isOnlyForAdmin: false, isOnlyForMember: false
-    },
-    {
-      href: `/events?filter=${EventFilterEnum.organizer}`, 
-      title: "イベント管理", 
-      isOnlyForAdmin: false, isOnlyForMember: true
-    },
-    {
-      href: "/users", 
-      title: "ユーザー管理", 
-      isOnlyForAdmin: true
-    },
-  ].filter(info => {
-    if (info.isOnlyForAdmin && !isAdmin) return false;
-    if (info.isOnlyForMember && !isMember) return false;
-    return true;
-  });
-
-  if (!(authUser && navLinkInfos.length > 1))
+  if (!authUser)
     return (<></>);
   
   return (

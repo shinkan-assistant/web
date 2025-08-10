@@ -6,7 +6,7 @@ function toEventRecord({rawEvent, myParticipant}) {
   if (rawEvent === null) return null;
   
   return {
-    "is_organizer": myParticipant?.is_organizer ?? null,
+    myParticipant: myParticipant,
     ...rawEvent,
   }
 }

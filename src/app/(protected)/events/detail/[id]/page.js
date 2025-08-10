@@ -21,6 +21,8 @@ export default async function EventDetail({ params }) {
     notFound();
   }
 
+  console.log("e", event)
+
   return (
     <EventDetailTemplate event={event} myUserMetadata={myUserMetadata} />
   );

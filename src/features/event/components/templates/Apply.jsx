@@ -2,26 +2,22 @@
 
 import EventHeader from "@/features/event/components/organisms/Header";
 import EventSummary from "@/features/event/components/organisms/Summary";
-import { ScheduleList } from "@/features/event/components/organisms/ScheduleList";
+import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import ItemContainer from "@/base/components/containers/Item";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
 import useOnSubmitForPost from "@/base/hooks/useOnSubmit";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { db } from "@/lib/firebase/clientApp";
 import { createNormalParticipant } from "@/features/participant/api/create";
 import useCanSubmit from "@/base/hooks/useCanSubmit";
-import { ScheduleTypeEnum } from "../../enums/data";
 import { useRouter } from "next/navigation";
 
 export default function EventApplyTemplate({ event, myUserMetadata }) {
   console.log('reload');
   const router = useRouter();
-  
-  const eventSchedules = event.schedules
-    .filter(schedule => schedule["type"] === ScheduleTypeEnum.event);
 
-  const inputElementRefs = eventSchedules
+  const inputElementRefs = event.schedules
     .reduce((elements, schedule) => {
       return {
         ...elements,
@@ -31,7 +27,7 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
 
   const { canSubmit, updateCanSubmit } = useCanSubmit(
     function () {
-      return eventSchedules.some(schedule => 
+      return event.schedules.some(schedule => 
         inputElementRefs[schedule["id"]].current.checked,
       );
     }
@@ -39,7 +35,7 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
 
   const { onSubmit, isProcessing, errors } = useOnSubmitForPost({
     postData: async function (e) {
-      const checkedScheduleIds = eventSchedules
+      const checkedScheduleIds = event.schedules
         .filter(schedule => inputElementRefs[schedule["id"]].current.checked)
         .map(schedule => schedule["id"]);
       await createNormalParticipant(db, {
@@ -63,9 +59,9 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
           <EventSummary pageType={EventPageTypeEnum.apply} event={event} />
         </div>
 
-        <ScheduleList 
+        <EventScheduleList 
           pageType={EventPageTypeEnum.apply} 
-          schedules={event.schedules}
+          event={event}
           belong={myUserMetadata["belong"]}
           publicLocation={false}
           schedule2InputNameFunc={schedule => `is_participating-${schedule["id"]}`}

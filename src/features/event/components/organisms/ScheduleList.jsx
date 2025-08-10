@@ -1,4 +1,4 @@
-import {FeeTypeEnum, ScheduleTypeEnum} from "@/features/event/enums/data.js";
+import {FeeTypeEnum} from "@/features/event/enums/data.js";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventItemIcon } from "../atoms/TextItemIcon";
 import Checkbox from "@/base/components/atoms/FormCheckbox";
@@ -91,12 +91,16 @@ function ScheduleFee({feesByBelong, belong}) {
   );
 }
 
-export function ScheduleItem({pageType, schedule, belong, publicLocation, inputName, inputElementRef, updateCanSubmit}) {
+export function ScheduleItem({pageType, schedule, myParticipant, belong, publicLocation, inputName, inputElementRef, updateCanSubmit}) {
+  // 詳細ページで、参加しないイベントをグレーにする
+  const isNotParticipate = myParticipant && !myParticipant?.schedules.find(s=>schedule["id"] === s["id"]);
+
+  console.log(myParticipant);
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-xl">
+    <div className={`${!isNotParticipate ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
       <div className="mb-2">
         <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
-          {schedule.type === ScheduleTypeEnum.event ? schedule.title : schedule.type}
+          {schedule.title}
         </h3>
       </div>
       
@@ -118,25 +122,24 @@ export function ScheduleItem({pageType, schedule, belong, publicLocation, inputN
         <ScheduleFee feesByBelong={schedule.fees_by_belong} belong={belong} />
       </div>
       
-      {pageType === EventPageTypeEnum.apply && 
-        <>
-          {schedule.type === ScheduleTypeEnum.event &&
-            <div className="mt-4">
-              <Checkbox 
-                name={inputName}
-                label="参加しますか？"
-                ref={inputElementRef}
-                onChange={(e) => updateCanSubmit()}
-              />
-            </div>
-          }
-        </>
+      {pageType === EventPageTypeEnum.apply  &&
+        <div className="mt-4">
+          <Checkbox 
+            name={inputName}
+            label="参加しますか？"
+            ref={inputElementRef}
+            onChange={(e) => updateCanSubmit()}
+          />
+        </div>
       }
     </div>
   );
 }
 
-export function ScheduleList({pageType, schedules, belong, publicLocation, schedule2InputNameFunc, inputElementRefs, updateCanSubmit}) {
+export function EventScheduleList({pageType, event, belong, publicLocation, schedule2InputNameFunc, inputElementRefs, updateCanSubmit}) {
+  const schedules = event.schedules;
+  const myParticipant = event.myParticipant;
+
   return (
     <div>
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
@@ -146,6 +149,7 @@ export function ScheduleList({pageType, schedules, belong, publicLocation, sched
             key={schedule["id"]}
             pageType={pageType}
             schedule={schedule} 
+            myParticipant={myParticipant}
             belong={belong} 
             publicLocation={publicLocation}
             inputName={schedule2InputNameFunc ? schedule2InputNameFunc(schedule) : undefined}

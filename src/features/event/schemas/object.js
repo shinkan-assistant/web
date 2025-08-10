@@ -1,7 +1,7 @@
 import { v4 as uuidV4 } from 'uuid';
 import z from "@/lib/zod";
 import { BelongEnum } from "@/data/enums/user.js";
-import { ContactGroupPlatformEnum, EventTypeEnum, FeeTypeEnum, OnlineMeetingPlatformEnum, ScheduleTypeEnum } from "@/features/event/enums/data.js";
+import { ContactGroupPlatformEnum, EventTypeEnum, FeeTypeEnum, OnlineMeetingPlatformEnum } from "@/features/event/enums/data.js";
 
 const LocationSchema = z.object({
   name: z.string().min(1),
@@ -49,37 +49,22 @@ const TimeRangeSchema = z.object({
       })
 });
 
-const BaseScheduleSchema = z.object({
+const ScheduleSchemaBase = z.object({
   time_range: TimeRangeSchema,
+  title: z.string().min(1).max(200).optional(),
+  description: z.string().optional(),
+  fees_by_belong: z.array(FeeByBelongSchema).default([]),
 });
 function transformForSchedule(data) {
   data["id"] = uuidV4();
   return data;
 }
 
-const GatheringScheduleSchema = BaseScheduleSchema.extend({
-  type: z.literal(ScheduleTypeEnum.gathering),
-});
+const InPersonScheduleSchema = ScheduleSchemaBase.extend({
+  location: LocationSchema,
+}).transform(transformForSchedule);
 
-const EventScheduleSchema = BaseScheduleSchema.extend({
-  type: z.literal(ScheduleTypeEnum.event),
-  title: z.string().min(1).max(200).optional(),
-  description: z.string().optional(),
-  fees_by_belong: z.array(FeeByBelongSchema).default([]),
-});
-
-const inPersonScheduleMetaObj = {location: LocationSchema}
-const InPersonGatheringScheduleSchema = GatheringScheduleSchema.extend(inPersonScheduleMetaObj);
-const InPersonEventScheduleSchema = EventScheduleSchema.extend(inPersonScheduleMetaObj);
-const InPersonScheduleSchema = z.discriminatedUnion("type", [
-  InPersonGatheringScheduleSchema,
-  InPersonEventScheduleSchema,
-]).transform(transformForSchedule);
-
-const OnlineScheduleSchema = z.discriminatedUnion("type", [
-  GatheringScheduleSchema,
-  EventScheduleSchema,
-]).transform(transformForSchedule);
+const OnlineScheduleSchema = ScheduleSchemaBase.transform(transformForSchedule);
 
 const ContactGroupSchema = z.object({
   platform: z.enum(Object.values(ContactGroupPlatformEnum)),
