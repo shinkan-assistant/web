@@ -93,11 +93,12 @@ function ScheduleFee({feesByBelong, belong}) {
 
 export function ScheduleItem({pageType, schedule, myParticipant, belong, publicLocation, inputName, inputElementRef, updateCanSubmit}) {
   // 詳細ページで、参加しないイベントをグレーにする
+  const isDetailPage = pageType === EventPageTypeEnum.detail;
   const isNotParticipate = myParticipant && !myParticipant?.schedules.find(s=>schedule["id"] === s["id"]);
 
   console.log(myParticipant);
   return (
-    <div className={`${!isNotParticipate ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
+    <div className={`${!(isDetailPage && isNotParticipate) ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
       <div className="mb-2">
         <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
           {schedule.title}

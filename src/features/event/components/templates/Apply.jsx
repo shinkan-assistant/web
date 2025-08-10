@@ -52,7 +52,7 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
     <ItemContainer>
       <FormContainer canSubmit={canSubmit} onSubmit={onSubmit} isProcessing={isProcessing} >
         <div className="ml-3 mb-4">
-          <EventHeader pageType={EventPageTypeEnum.apply} isForApply={false} event={event} />
+          <EventHeader pageType={EventPageTypeEnum.apply} isApplyPage={false} event={event} />
         </div>
 
         <div className="mb-8">
