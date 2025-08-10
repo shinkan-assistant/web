@@ -2,7 +2,7 @@ import { where } from "firebase/firestore";
 import { getRecord, getRecords } from "../../../base/api/get";
 import { getUserMetadataByEmail } from "../../user/api/get";
 
-export async function getMyParticipant(db, {authUser, eventId}) {
+export async function getMyParticipantByEvent(db, {authUser, eventId}) {
   return getRecord(db, "participants", {
     wheres: [
       where("event_id", "==", eventId),

@@ -1,6 +1,8 @@
-import {FeeTypeEnum} from "@/features/event/enums/data.js";
+import {FeeTypeEnum, ScheduleTypeEnum} from "@/features/event/enums/data.js";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventItemIcon } from "../atoms/TextItemIcon";
+import Checkbox from "@/base/components/atoms/FormCheckbox";
+import { EventPageTypeEnum } from "../../enums/page";
 
 function ScheduleTimeRange({timeRange}) {
   function formatScheduleTime(isoString) {
@@ -89,40 +91,68 @@ function ScheduleFee({feesByBelong, belong}) {
   );
 }
 
-export function ScheduleList({schedules, belong, publicLocation}) {
+export function ScheduleItem({pageType, schedule, belong, publicLocation, inputName, inputElementRef, updateCanSubmit}) {
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-xl">
+      <div className="mb-2">
+        <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
+          {schedule.type === ScheduleTypeEnum.event ? schedule.title : schedule.type}
+        </h3>
+      </div>
+      
+      {schedule.description && (
+        <div className="mt-2">
+          <p className="text-gray-700 text-base leading-relaxed">
+            {schedule.description}
+          </p>
+        </div>
+      )}
+
+      <div className="mt-4 space-y-2">
+        <ScheduleTimeRange timeRange={schedule.time_range} />
+
+        {(schedule.location && publicLocation) && 
+          <ScheduleLocation location={schedule.location} />
+        }
+
+        <ScheduleFee feesByBelong={schedule.fees_by_belong} belong={belong} />
+      </div>
+      
+      {pageType === EventPageTypeEnum.apply && 
+        <>
+          {schedule.type === ScheduleTypeEnum.event &&
+            <div className="mt-4">
+              <Checkbox 
+                name={inputName}
+                label="参加しますか？"
+                ref={inputElementRef}
+                onChange={(e) => updateCanSubmit()}
+              />
+            </div>
+          }
+        </>
+      }
+    </div>
+  );
+}
+
+export function ScheduleList({pageType, schedules, belong, publicLocation, schedule2InputNameFunc, inputElementRefs, updateCanSubmit}) {
   return (
     <div>
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
       <div className="space-y-6">
-        {schedules.map((schedule, index) => {
-          return (
-            <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 shadow-xl">
-              <div className="mb-2">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
-                  {schedule.title}
-                </h3>
-              </div>
-              
-              {schedule.description && (
-                <div className="mt-2">
-                  <p className="text-gray-700 text-base leading-relaxed">
-                    {schedule.description}
-                  </p>
-                </div>
-              )}
-
-              <div className="mt-4 space-y-2">
-                <ScheduleTimeRange timeRange={schedule.time_range} />
-
-                {(schedule.location && publicLocation) && 
-                  <ScheduleLocation location={schedule.location} />
-                }
-
-                <ScheduleFee feesByBelong={schedule.fees_by_belong} belong={belong} />
-              </div>
-            </div>
-          );
-        })}
+        {schedules.map((schedule) => (
+          <ScheduleItem 
+            key={schedule["id"]}
+            pageType={pageType}
+            schedule={schedule} 
+            belong={belong} 
+            publicLocation={publicLocation}
+            inputName={schedule2InputNameFunc ? schedule2InputNameFunc(schedule) : undefined}
+            inputElementRef={inputElementRefs?.[schedule["id"]]}
+            updateCanSubmit={updateCanSubmit}
+          />
+        ))}
       </div>
     </div>
   );

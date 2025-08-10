@@ -11,7 +11,8 @@ const mockEvents = [
     },
     "schedules": [
       {
-        "title": "集合",
+        "id": "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+        "type": "集合",
         "time_range": {
           "start_at": "2025-03-29T14:45:00"
         },
@@ -20,6 +21,8 @@ const mockEvents = [
         }
       },
       {
+        "id": "b3484f0e-36c1-4039-9d7a-1f81d113426e",
+        "type": "イベント",
         "title": "説明会＆交流会",
         "description": "サークルの説明を行った後、サークルメンバーとの交流会を行います。",
         "time_range": {
@@ -45,6 +48,8 @@ const mockEvents = [
         ]
       },
       {
+        "id": "84a1e944-884d-4950-8b01-382a93b5d263",
+        "type": "イベント",
         "title": "夕食会",
         "description": "希望者で夕食会に行ってさらに仲を深めます。",
         "time_range": {
@@ -79,6 +84,7 @@ const mockEvents = [
     "type": "オンライン",
     "schedules": [
       {
+        "id": "4d1b8089-08a6-419b-a32b-3e5a7b0d9124",
         "type": "イベント",
         "title": "団体説明&質問会",
         "description": "サークルの説明を行った後、質問会を行います。",

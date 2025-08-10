@@ -25,7 +25,6 @@ export async function getEventByAuthUser(db, {id, authUser}) {
 
   const myParticipant = await getRecord(db, "participants", {
     wheres: [
-      
       where("event_id", "==", id),
       where("user_email", "==", authUser.email),
     ]

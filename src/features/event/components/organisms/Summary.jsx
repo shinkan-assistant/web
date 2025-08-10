@@ -103,8 +103,9 @@ function EventOnlineMeetingInfo({online_meeting_info}) {
 }
 
 
-export default function EventSummary({pageType, event}) {
+export default function EventSummary({pageType, event, myUserMetadata}) {
   const isForList = pageType === EventPageTypeEnum.list;
+  const isForDetail = pageType === EventPageTypeEnum.detail;
 
   return (
     <div className={isForList ? "" : "bg-gray-50 p-6 rounded-lg shadow-md"}>
@@ -117,7 +118,7 @@ export default function EventSummary({pageType, event}) {
       <div className={isForList ? "space-y-2" : "space-y-4"}> {/* 各情報ブロック間のスペースを統一 */}
         <EventDate isForList={isForList} event={event} />
         <EventLocation isForList={isForList} event={event} />
-        {!isForList && 
+        {isForDetail && 
           <>
             {event.contact_group && <EventContactGroup contact_group={event.contact_group} />}
             {event.online_meeting_info && <EventOnlineMeetingInfo online_meeting_info={event.online_meeting_info} />}

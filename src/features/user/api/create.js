@@ -6,7 +6,7 @@ export async function createUserMetadata(db, authUser) {
 
   await createRecord(db, "users", {
     Schema: CreateUserSchema,
-    record: {
+    rawData: {
       "email": authUser.email,
       "name": authUser.displayName,
     }, 
