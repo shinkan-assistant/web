@@ -14,14 +14,13 @@ export default function useFormController({
       ...acc};
   }, {});
 
-  const [inputValues, setInputValues] = useState(
-    Object.keys(inputInfos).reduce((acc, inputName) => {
-      return {
-        [inputName]: inputInfos[inputName].initialValue,
-        ...acc
-      }
-    }, {})
-  );
+  const initialInputValues = Object.keys(inputInfos).reduce((acc, inputName) => {
+    return {
+      [inputName]: inputInfos[inputName].initialValue,
+      ...acc,
+    }
+  }, {});
+  const [inputValues, setInputValues] = useState(initialInputValues);
   
   function onChangeInput(inputName, {value}) {
     setInputValues({
@@ -31,7 +30,7 @@ export default function useFormController({
   }
 
   function getCanSubmit() {
-    return judgeCanSubmit(inputValues);
+    return judgeCanSubmit({initialInputValues, inputValues});
   }
 
   const [isProcessing, setIsProcessing] = useState(false);
@@ -42,7 +41,7 @@ export default function useFormController({
     setError(null);
 
     try {
-      await handleSubmit(inputValues)
+      await handleSubmit({initialInputValues, inputValues})
     }
     catch (error) {
       // TODO エラーを格納

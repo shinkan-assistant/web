@@ -5,9 +5,6 @@ import { EventScheduleList } from "@/features/event/components/organisms/Schedul
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 
 export default function EventDetailTemplate({ event, myUserMetadata }) {
-  const allSchedules = event.schedules;
-  const participatingScheduleIds = event.myParticipant.schedules.map(ps => ps["id"]);
-
   return (
     <ItemContainer>
       <div className="ml-3 mb-4">
@@ -20,10 +17,9 @@ export default function EventDetailTemplate({ event, myUserMetadata }) {
 
       <EventScheduleList 
         pageType={EventPageTypeEnum.detail} 
-        allSchedules={allSchedules}
-        participatingScheduleIds={participatingScheduleIds}
+        allSchedules={event.schedules}
         belong={myUserMetadata["belong"]} 
-        publicLocation={true} 
+        myParticipant={event.myParticipant}
       />
     </ItemContainer>
   );

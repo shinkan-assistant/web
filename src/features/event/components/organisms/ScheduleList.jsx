@@ -92,8 +92,22 @@ function ScheduleFee({feesByBelong, belong}) {
   );
 }
 
-export function ScheduleItem({pageType, schedule, isParticipating, belong, publicLocation, formController}) {
+export function ScheduleItem({
+  pageType, schedule, belong, 
+  myParticipant, // isFormPage === false の場合に必要
+  formController // isFormPage === true の場合に必要
+}) {
   const isFormPage = judgeFormPage(pageType)
+  const publicLocation = pageType === EventPageTypeEnum.apply;
+
+  let isParticipating;
+  if (isFormPage) {
+    isParticipating = formController.inputValues[getInputName(schedule)];
+  }
+  else {
+    isParticipating = myParticipant.schedules.map(ps => ps["id"]).includes(schedule["id"]);
+  }
+
   // 詳細ページで、参加しないイベントをグレーにする
   return (
     <div className={`${!(isFormPage && !isParticipating) ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
@@ -130,7 +144,11 @@ export function ScheduleItem({pageType, schedule, isParticipating, belong, publi
   );
 }
 
-export function EventScheduleList({pageType, allSchedules, participatingScheduleIds, belong, publicLocation, formController}) {
+export function EventScheduleList({
+  pageType, allSchedules, belong, 
+  myParticipant, // isFormPage === false の場合に必要
+  formController // isFormPage === true の場合に必要
+}) {
   return (
     <div>
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
@@ -140,9 +158,8 @@ export function EventScheduleList({pageType, allSchedules, participatingSchedule
             key={schedule["id"]}
             pageType={pageType}
             schedule={schedule}
-            isParticipating={participatingScheduleIds.includes(schedule["id"])}
             belong={belong} 
-            publicLocation={publicLocation}
+            myParticipant={myParticipant}
             formController={formController}
           />
         ))}

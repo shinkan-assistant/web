@@ -15,12 +15,13 @@ import { Checkbox } from "@/base/components/atoms/FormInput";
 
 export default function EventApplyTemplate({ event, myUserMetadata }) {
   const router = useRouter();
+
   const allSchedules = event.schedules;
 
   const formController = useFormController({
-    inputInfos: allSchedules.reduce((acc, s) => {
+    inputInfos: allSchedules.reduce((acc, schedule) => {
       return {
-        [getInputName(s)]: {
+        [getInputName(schedule)]: {
           Component: Checkbox,
           label: "参加しますか？",
           initialValue: false,
@@ -28,11 +29,11 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
         ...acc
       }
     }, {}),
-    judgeCanSubmit: (inputValues) => {
+    judgeCanSubmit: ({inputValues}) => {
       const checkedScheduleIds = getCheckedScheduleIds({inputValues})
       return checkedScheduleIds.length > 0;
     },
-    handleSubmit: async function (inputValues) {
+    handleSubmit: async function ({inputValues}) {
       const checkedScheduleIds = getCheckedScheduleIds({inputValues});
       await createNormalParticipant(db, {
         userEmail: myUserMetadata.email, 
