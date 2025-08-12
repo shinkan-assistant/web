@@ -17,11 +17,14 @@ function FormSubmitButton({canSubmit, isProcessing}) {
   );
 }
 
-export default function FormContainer({canSubmit, onSubmit, isProcessing, children}) {
+export default function FormContainer({controller, children}) {
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
+    <form onSubmit={controller.onSubmit} className="space-y-6">
       {children}
-      <FormSubmitButton canSubmit={canSubmit} isProcessing={isProcessing} />
+      <FormSubmitButton 
+        canSubmit={controller.getCanSubmit()}
+        isProcessing={controller.isProcessing}
+      />
     </form>
   );
 }

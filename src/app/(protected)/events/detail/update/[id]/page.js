@@ -3,12 +3,12 @@
 import { getEventByAuthUser } from "@/features/event/api/get";
 import { getUserMetadataByEmail } from "@/features/user/api/get";
 import { notFound, useParams, useRouter } from "next/navigation";
-import EventApplyTemplate from "@/features/event/components/templates/Apply";
-import useLoad from "@/base/hooks/useLoad";
+import EventDetailUpdateTemplate from "@/features/event/components/templates/DetailUpdate";
 import { useAuthUser } from "@/features/user/stores/authUser";
+import useLoad from "@/base/hooks/useLoad";
 import { EventFilterEnum } from "@/features/event/enums/page";
 
-export default function EventApply({ params }) {
+export default function EventDetailUpdate() {
   const authUser = useAuthUser();
 
   const router = useRouter();
@@ -23,9 +23,9 @@ export default function EventApply({ params }) {
     if (!event) {
       notFound();
     }
-    if (event.myParticipant) {
-      // TODO 通知：すでに申し込んでいます
-      router.push(`/events?filter=${EventFilterEnum.registrable}`);
+    if (!event.myParticipant) {
+      // TODO 通知：まだ申し込んでいません。
+      router.push(`/events?filter=${EventFilterEnum.participating}`);
     }
 
     return {myUserMetadata, event};
@@ -36,9 +36,6 @@ export default function EventApply({ params }) {
   const {myUserMetadata, event } = data;
 
   return (
-    <EventApplyTemplate 
-      event={event} 
-      myUserMetadata={myUserMetadata}
-    />
+    <EventDetailUpdateTemplate event={event} myUserMetadata={myUserMetadata} />
   );
 }

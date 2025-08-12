@@ -3,13 +3,10 @@ import ParticipantSchema from "./object";
 import { transformForCreate } from "../../../base/schema/api";
 import { AttendanceStatusEnum } from "../enums/data";
 
-console.log(ParticipantSchema.extend({"schedule_ids": z.array(z.string().uuid()).min(1)}))
-
 export const CreateParticipantSchema = ParticipantSchema
   .extend({"schedule_ids": z.array(z.string().uuid()).min(1)})
   .pick({"user_email": true, "event_id": true, "is_organizer": true, "schedule_ids": true })
   .transform((data) => {
-    console.log("data", data);
     data = {
       "user_email": data["user_email"],
       "event_id": data["event_id"],

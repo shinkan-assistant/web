@@ -1,34 +1,42 @@
+'use client';
+
 import { getOrganizerEvents, getParticipatingEvents, getRegistrableEvents } from "@/features/event/api/get";
-import { getAuthenticatedAppForUser, getAuthenticatedDb } from "@/lib/firebase/serverApp";
-import { redirect } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { EventFilterEnum, } from "@/features/event/enums/page";
 import EventsTemplate from "@/features/event/components/templates/List";
+import { useAuthUser } from "@/features/user/stores/authUser";
+import { getUserMetadataByEmail } from "@/features/user/api/get";
+import useLoad from "@/base/hooks/useLoad";
 
-export default async function Events({ searchParams }) {
-  const {firebaseServerApp, authUser} = await getAuthenticatedAppForUser();
-  if (authUser === null) redirect('/');
-  const db = getAuthenticatedDb(firebaseServerApp);
-
-  const { filter } = await searchParams;
+export default function Events() {
+  const authUser = useAuthUser();
+  
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const filter = searchParams.get("filter");
   if (!Object.values(EventFilterEnum).includes(filter)) {
-    redirect(`/events?filter=${EventFilterEnum.participating}`);
+    router.push(`/events?filter=${EventFilterEnum.participating}`);
   }
+  
+  const {data, isLoading} = useLoad(async (db) => {
+    const myUserMetadata = await getUserMetadataByEmail(db, {email: authUser.email});
+    if (filter === EventFilterEnum.organizer && !myUserMetadata["belong"]["is_member"]) {
+      router.push(`/events?filter=${EventFilterEnum.participating}`);
+    }
 
-  let events;
-  if (filter === EventFilterEnum.participating) {
-    events = await getParticipatingEvents(db, {authUser: authUser});
-  }
-  else if (filter === EventFilterEnum.registrable) {
-    events = await getRegistrableEvents(db, {authUser: authUser});
-  }
-  else if (filter === EventFilterEnum.organizer) {
-    events = await getOrganizerEvents(db, {authUser: authUser});
-  }
+    const getEventsFunc = {
+      [EventFilterEnum.participating]: getParticipatingEvents,
+      [EventFilterEnum.registrable]: getRegistrableEvents,
+      [EventFilterEnum.organizer]: getOrganizerEvents,
+    }[[filter]];
+    const events = await getEventsFunc(db, {authUser: authUser});
 
-  // イベント管理用のページに、新入生がアクセスできないようにする　など
-  if (events === null) {
-    redirect(`/events?filter=${EventFilterEnum.participating}`);
+    return { events }
+  });
+  if (isLoading) {
+    return <div>読み込み中です</div>
   }
+  const { events } = data;
   
   return (
     <EventsTemplate events={events} filter={filter} />

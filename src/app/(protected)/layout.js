@@ -15,10 +15,6 @@ export default function ProtectedLayout({ children }) {
     }
   }, [authUser, router]); 
 
-  if (!authUser) {
-    return null;
-  }
-
   return (
     <>
       <div className="fixed left-0 right-0">

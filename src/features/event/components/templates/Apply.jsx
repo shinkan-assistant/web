@@ -6,51 +6,47 @@ import { EventScheduleList } from "@/features/event/components/organisms/Schedul
 import ItemContainer from "@/base/components/containers/Item";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
-import useOnSubmitForPost from "@/base/hooks/useOnSubmit";
-import { useRef } from "react";
-import { db } from "@/lib/firebase/clientApp";
 import { createNormalParticipant } from "@/features/participant/api/create";
-import useCanSubmit from "@/base/hooks/useCanSubmit";
+import { db } from "@/lib/firebase/clientApp";
+import useFormController from "@/base/hooks/useFormController";
 import { useRouter } from "next/navigation";
+import { getCheckedScheduleIds, getInputName } from "../utils";
+import { Checkbox } from "@/base/components/atoms/FormInput";
 
 export default function EventApplyTemplate({ event, myUserMetadata }) {
-  console.log('reload');
   const router = useRouter();
+  const allSchedules = event.schedules;
 
-  const inputElementRefs = event.schedules
-    .reduce((elements, schedule) => {
+  const formController = useFormController({
+    inputInfos: allSchedules.reduce((acc, s) => {
       return {
-        ...elements,
-        [schedule["id"]]: useRef(null),
+        [getInputName(s)]: {
+          Component: Checkbox,
+          label: "参加しますか？",
+          initialValue: false,
+        },
+        ...acc
       }
-    }, {});
-
-  const { canSubmit, updateCanSubmit } = useCanSubmit(
-    function () {
-      return event.schedules.some(schedule => 
-        inputElementRefs[schedule["id"]].current.checked,
-      );
-    }
-  );
-
-  const { onSubmit, isProcessing, errors } = useOnSubmitForPost({
-    postData: async function (e) {
-      const checkedScheduleIds = event.schedules
-        .filter(schedule => inputElementRefs[schedule["id"]].current.checked)
-        .map(schedule => schedule["id"]);
+    }, {}),
+    judgeCanSubmit: (inputValues) => {
+      const checkedScheduleIds = getCheckedScheduleIds({inputValues})
+      return checkedScheduleIds.length > 0;
+    },
+    handleSubmit: async function (inputValues) {
+      const checkedScheduleIds = getCheckedScheduleIds({inputValues});
       await createNormalParticipant(db, {
         userEmail: myUserMetadata.email, 
         eventId: event.id,
         scheduleIds: checkedScheduleIds,
       });
-      // TODO 上から通知バーを出すようにする
+      // TODO 通知：申し込みが完了しました
       router.push(`/events/detail/${event["id"]}`);
     }
   });
 
   return (
     <ItemContainer>
-      <FormContainer canSubmit={canSubmit} onSubmit={onSubmit} isProcessing={isProcessing} >
+      <FormContainer controller={formController} >
         <div className="ml-3 mb-4">
           <EventHeader pageType={EventPageTypeEnum.apply} isApplyPage={false} event={event} />
         </div>
@@ -61,12 +57,11 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
 
         <EventScheduleList 
           pageType={EventPageTypeEnum.apply} 
-          event={event}
+          allSchedules={allSchedules}
+          participatingScheduleIds={getCheckedScheduleIds({inputValues: formController.inputValues})}
           belong={myUserMetadata["belong"]}
           publicLocation={false}
-          schedule2InputNameFunc={schedule => `is_participating-${schedule["id"]}`}
-          inputElementRefs={inputElementRefs}
-          updateCanSubmit={updateCanSubmit}
+          formController={formController}
         />
       </FormContainer>
     </ItemContainer>

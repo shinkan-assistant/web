@@ -1,8 +1,9 @@
 import {FeeTypeEnum} from "@/features/event/enums/data.js";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventItemIcon } from "../atoms/TextItemIcon";
-import Checkbox from "@/base/components/atoms/FormCheckbox";
-import { EventPageTypeEnum } from "../../enums/page";
+import { EventPageTypeEnum, judgeFormPage } from "../../enums/page";
+import { getInputName } from "../utils";
+import Input from "@/base/components/atoms/FormInput";
 
 function ScheduleTimeRange({timeRange}) {
   function formatScheduleTime(isoString) {
@@ -91,14 +92,11 @@ function ScheduleFee({feesByBelong, belong}) {
   );
 }
 
-export function ScheduleItem({pageType, schedule, myParticipant, belong, publicLocation, inputName, inputElementRef, updateCanSubmit}) {
+export function ScheduleItem({pageType, schedule, isParticipating, belong, publicLocation, formController}) {
+  const isFormPage = judgeFormPage(pageType)
   // 詳細ページで、参加しないイベントをグレーにする
-  const isDetailPage = pageType === EventPageTypeEnum.detail;
-  const isNotParticipate = myParticipant && !myParticipant?.schedules.find(s=>schedule["id"] === s["id"]);
-
-  console.log(myParticipant);
   return (
-    <div className={`${!(isDetailPage && isNotParticipate) ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
+    <div className={`${!(isFormPage && !isParticipating) ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
       <div className="mb-2">
         <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
           {schedule.title}
@@ -123,39 +121,29 @@ export function ScheduleItem({pageType, schedule, myParticipant, belong, publicL
         <ScheduleFee feesByBelong={schedule.fees_by_belong} belong={belong} />
       </div>
       
-      {pageType === EventPageTypeEnum.apply  &&
+      {isFormPage  &&
         <div className="mt-4">
-          <Checkbox 
-            name={inputName}
-            label="参加しますか？"
-            ref={inputElementRef}
-            onChange={(e) => updateCanSubmit()}
-          />
+          <Input name={getInputName(schedule)} formController={formController} />
         </div>
       }
     </div>
   );
 }
 
-export function EventScheduleList({pageType, event, belong, publicLocation, schedule2InputNameFunc, inputElementRefs, updateCanSubmit}) {
-  const schedules = event.schedules;
-  const myParticipant = event.myParticipant;
-
+export function EventScheduleList({pageType, allSchedules, participatingScheduleIds, belong, publicLocation, formController}) {
   return (
     <div>
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
       <div className="space-y-6">
-        {schedules.map((schedule) => (
+        {allSchedules.map((schedule) => (
           <ScheduleItem 
             key={schedule["id"]}
             pageType={pageType}
-            schedule={schedule} 
-            myParticipant={myParticipant}
+            schedule={schedule}
+            isParticipating={participatingScheduleIds.includes(schedule["id"])}
             belong={belong} 
             publicLocation={publicLocation}
-            inputName={schedule2InputNameFunc ? schedule2InputNameFunc(schedule) : undefined}
-            inputElementRef={inputElementRefs?.[schedule["id"]]}
-            updateCanSubmit={updateCanSubmit}
+            formController={formController}
           />
         ))}
       </div>

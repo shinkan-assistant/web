@@ -6,7 +6,13 @@ export const EventFilterEnum = Object.freeze({
 
 export const EventPageTypeEnum = Object.freeze({
   list: "list",
-  detail: "detail",
   apply: "apply",
+  detail: "detail",
+  detailUpdate: "detail-update",
   manage: "manage",
 });
+
+export function judgeFormPage(pageType) {
+  return [EventPageTypeEnum.apply, EventPageTypeEnum.detailUpdate]
+    .some(pt => pageType === pt);
+}
