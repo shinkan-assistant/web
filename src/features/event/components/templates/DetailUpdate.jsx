@@ -9,8 +9,9 @@ import FormContainer from "@/base/components/containers/Form";
 import useFormController from "@/base/hooks/useFormController";
 import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
-import { getChangedScheduleIds, getInputName } from "../utils";
+import { getUpdatedScheduleInfos, getCheckedScheduleIds, getInputName, getScheduleIdFromInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
+import { updateParticipantSchedules } from "@/features/participant/api/update";
 
 export default function EventDetailUpdateTemplate({ event, myUserMetadata }) {
   const router = useRouter();
@@ -24,21 +25,22 @@ export default function EventDetailUpdateTemplate({ event, myUserMetadata }) {
         [getInputName(schedule)]: {
           Component: Checkbox,
           label: "参加しますか？（キャンセルならチェックを外す）",
-          initialValue: myParticipant.schedules.find(ps => schedule["id"] === ps["id"]),
+          initialValue: myParticipant.schedules.map(ps => ps["id"]).includes(schedule["id"])
         },
         ...acc
       }
     }, {}),
-    judgeCanSubmit: ({initialInputValues, inputValues}) => {
-      const [cancelScheduleIds, addScheduleIds] = getChangedScheduleIds({initialInputValues, inputValues})
-      return (cancelScheduleIds + addScheduleIds).length > 0;
+    judgeCanSubmit: ({inputValues}) => {
+      const updatedScheduleInfos = getUpdatedScheduleInfos({
+        initialParticipant: myParticipant, 
+        currentCheckedScheduleIds: getCheckedScheduleIds({inputValues}),
+      });
+      return updatedScheduleInfos.length > 0;
     },
-    handleSubmit: async function ({initialInputValues, inputValues}) {
-      const [cancelScheduleIds, addScheduleIds] = getChangedScheduleIds({initialInputValues, inputValues});
-      await updateParticipant(db, {
-        id: myParticipant["id"],
-        cancelScheduleIds: cancelScheduleIds,
-        addScheduleIds: addScheduleIds,
+    handleSubmit: async function ({inputValues}) {
+      await updateParticipantSchedules(db, {
+        initialParticipant: myParticipant,
+        currentCheckedScheduleIds: getCheckedScheduleIds({ inputValues }),
       });
       // TODO 上から通知バーを出すようにする
       router.push(`/events/detail/${event["id"]}`);

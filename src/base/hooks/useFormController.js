@@ -5,7 +5,8 @@ import { useRef, useState } from "react";
 export default function useFormController({
   inputInfos, judgeCanSubmit, handleSubmit
 }) {
-  const inputInfosTmp = Object.keys(inputInfos).reduce((acc, inputName) => {
+  const inputNames = Object.keys(inputInfos);
+  const inputInfosTmp = inputNames.reduce((acc, inputName) => {
     return {
       [inputName]: {
         ...inputInfos[inputName],
@@ -14,7 +15,7 @@ export default function useFormController({
       ...acc};
   }, {});
 
-  const initialInputValues = Object.keys(inputInfos).reduce((acc, inputName) => {
+  const initialInputValues = inputNames.reduce((acc, inputName) => {
     return {
       [inputName]: inputInfos[inputName].initialValue,
       ...acc,
@@ -28,9 +29,20 @@ export default function useFormController({
       [inputName]: value,
     });
   }
+  function changeInputs(updatedInputValues) {
+    const updatedInputNames = Object.keys(updatedInputValues);
+    setInputValues(
+      Object.keys(inputValues).reduce((acc, inputName) => {
+        acc[inputName] = updatedInputNames.includes(inputName)
+          ? updatedInputValues[inputName]
+          : inputValues[inputName];
+        return acc;
+      }, {})
+    );
+  }
 
   function getCanSubmit() {
-    return judgeCanSubmit({initialInputValues, inputValues});
+    return judgeCanSubmit({inputValues});
   }
 
   const [isProcessing, setIsProcessing] = useState(false);
@@ -39,9 +51,9 @@ export default function useFormController({
     e.preventDefault();
     setIsProcessing(true);
     setError(null);
-
+    
     try {
-      await handleSubmit({initialInputValues, inputValues})
+      await handleSubmit({inputValues})
     }
     catch (error) {
       // TODO エラーを格納
@@ -53,8 +65,10 @@ export default function useFormController({
   };
 
   const formController = {
+    inputNames,
     inputInfos: inputInfosTmp, 
     onChangeInput, 
+    changeInputs,
     inputValues, 
     getCanSubmit, 
     onSubmit, 

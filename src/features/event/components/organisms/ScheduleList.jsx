@@ -3,7 +3,8 @@ import { BlankLink } from "@/base/components/atoms/Link";
 import { EventItemIcon } from "../atoms/TextItemIcon";
 import { EventPageTypeEnum, judgeFormPage } from "../../enums/page";
 import { getInputName } from "../utils";
-import Input from "@/base/components/atoms/FormInput";
+import Input, { Checkbox } from "@/base/components/atoms/FormInput";
+import { useEffect, useRef, useState } from "react";
 
 function ScheduleTimeRange({timeRange}) {
   function formatScheduleTime(isoString) {
@@ -101,16 +102,14 @@ export function ScheduleItem({
   const publicLocation = pageType === EventPageTypeEnum.apply;
 
   let isParticipating;
-  if (isFormPage) {
+  if (isFormPage) 
     isParticipating = formController.inputValues[getInputName(schedule)];
-  }
-  else {
+  else 
     isParticipating = myParticipant.schedules.map(ps => ps["id"]).includes(schedule["id"]);
-  }
 
   // 詳細ページで、参加しないイベントをグレーにする
   return (
-    <div className={`${!(isFormPage && !isParticipating) ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
+    <div className={`${isParticipating ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
       <div className="mb-2">
         <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
           {schedule.title}
@@ -144,14 +143,81 @@ export function ScheduleItem({
   );
 }
 
+export function AllCancelButton({formController}) {
+  const [disabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    const isAllCancel =formController.inputNames
+      .every(inputName => !formController.inputValues[inputName]);
+    setDisabled(isAllCancel);
+  }, [formController.inputValues])
+
+  function changeAllCancel() { 
+    const updatedInputValues = formController.inputNames
+      .reduce((acc, inputName) => {
+        return {
+          [inputName]: false,
+          ...acc,
+        }
+      }, {});
+    setDisabled(true);
+    formController.changeInputs(updatedInputValues);
+  }
+
+  return (
+    // TODO デザイン
+    <button onClick={changeAllCancel} disabled={disabled} className="focus:cursor-pointer bg-sky-300 disabled:bg-sky-500">
+      全キャンセル
+    </button>
+  );
+}
+
+export function ResetButton({formController}) {
+  const [disabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    const { inputNames, inputInfos, inputValues } = formController;
+    const isInitialValues = inputNames
+      .every(name => inputValues[name] === inputInfos[name].initialValue);
+    setDisabled(isInitialValues);
+  }, [formController.inputValues])
+
+  function changeAllCancel() { 
+    const { inputNames, inputInfos } = formController;
+    const resetInputValues = inputNames.reduce((acc, name) => {
+      return {
+        [name]: inputInfos[name].initialValue,
+        ...acc,
+      }
+    }, {});
+    setDisabled(true);
+    formController.changeInputs(resetInputValues);
+  }
+
+  return (
+    // TODO デザイン
+    <button onClick={changeAllCancel} disabled={disabled} className="focus:cursor-pointer bg-sky-300 disabled:bg-sky-500">
+      リセット
+    </button>
+  );
+}
+
 export function EventScheduleList({
   pageType, allSchedules, belong, 
   myParticipant, // isFormPage === false の場合に必要
   formController // isFormPage === true の場合に必要
 }) {
+  const isDetailUpdatePage = pageType === EventPageTypeEnum.detailUpdate;
+
   return (
     <div>
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
+      {isDetailUpdatePage && 
+        <div className="flex gap-x-4">
+          <AllCancelButton formController={formController} />
+          <ResetButton formController={formController} />
+        </div>
+      }
       <div className="space-y-6">
         {allSchedules.map((schedule) => (
           <ScheduleItem 

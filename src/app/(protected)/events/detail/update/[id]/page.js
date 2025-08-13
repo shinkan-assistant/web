@@ -5,37 +5,51 @@ import { getUserMetadataByEmail } from "@/features/user/api/get";
 import { notFound, useParams, useRouter } from "next/navigation";
 import EventDetailUpdateTemplate from "@/features/event/components/templates/DetailUpdate";
 import { useAuthUser } from "@/features/user/stores/authUser";
-import useLoad from "@/base/hooks/useLoad";
+import usePage from "@/base/hooks/usePage";
 import { EventFilterEnum } from "@/features/event/enums/page";
+import { useEffect } from "react";
 
 export default function EventDetailUpdate() {
   const authUser = useAuthUser();
-
   const router = useRouter();
   const { id } = useParams();
 
-  const {data, isLoading} = useLoad(async (db) => {
-    const [myUserMetadata, event] = await Promise.all([
-      getUserMetadataByEmail(db, {email: authUser.email}),
-      getEventByAuthUser(db, {id: id, authUser: authUser}),
-    ]);
+  const { 
+    initializeLoading, finalizeLoading, loadingDependencies, 
+    db, setData, handleLoadingError, 
+    render 
+  } = usePage({requests: [authUser, router, id]});
 
-    if (!event) {
-      notFound();
-    }
-    if (!event.myParticipant) {
-      // TODO 通知：まだ申し込んでいません。
-      router.push(`/events?filter=${EventFilterEnum.participating}`);
-    }
+  useEffect(() => {
+    (async () => {
+      initializeLoading();
 
-    return {myUserMetadata, event};
-  });
-  if (isLoading) {
-    return <div>読み込み中です</div>
-  }
-  const {myUserMetadata, event } = data;
+      try {
+        const [myUserMetadata, event] = await Promise.all([
+          getUserMetadataByEmail(db, {email: authUser.email}),
+          getEventByAuthUser(db, {id: id, authUser: authUser}),
+        ]);
 
-  return (
-    <EventDetailUpdateTemplate event={event} myUserMetadata={myUserMetadata} />
+        if (!event) {
+          notFound();
+        }
+
+        if (!event.myParticipant) {
+          // TODO 通知：まだ申し込んでいません
+          router.push(`/events?filter=${EventFilterEnum.registrable}`);
+          return;
+        }
+        
+        setData({ myUserMetadata, event });
+      } catch (error) {
+        handleLoadingError(error);
+      } finally {
+        finalizeLoading();
+      }
+    })();
+  }, loadingDependencies);
+  
+  return render(
+    (data) => <EventDetailUpdateTemplate event={data.event} myUserMetadata={data.myUserMetadata} />
   );
 }

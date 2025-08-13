@@ -1,8 +1,10 @@
+import { ParticipantUpdatedScheduleActionEnum } from "@/features/participant/enums/api";
+
 export function getInputName(schedule) {
   return `is_participating--${schedule["id"]}`
 }
 
-function getScheduleIdFromInputName(inputName) {
+export function getScheduleIdFromInputName(inputName) {
   return inputName.split("--")[1];
 }
 
@@ -12,16 +14,24 @@ export function getCheckedScheduleIds({inputValues}) {
     .map(inputName => getScheduleIdFromInputName(inputName));
 }
 
-export function getChangedScheduleIds({initialInputValues, inputValues}) {
-  const inputNames = Object.keys(initialInputValues);
+export function getUpdatedScheduleInfos({initialParticipant, currentCheckedScheduleIds}) {
+  const initialSchedules = initialParticipant["schedules"]
+  const initialScheduleIds = initialSchedules.map(is => is["id"]);
 
-  const [cancelScheduleIds, addScheduleIds] = [[], []];
-  for (let inputName of inputNames) {
-    const scheduleId = getScheduleIdFromInputName(inputName);
-    const isInitialChecked = initialInputValues[inputName];
-    const isCurrentChecked = inputValues[inputName];
-    if (isInitialChecked && !isCurrentChecked) cancelScheduleIds.push(scheduleId);
-    if (!isInitialChecked && isCurrentChecked) addScheduleIds.push(scheduleId);
-  }
-  return [cancelScheduleIds, addScheduleIds];
+  const updatedScheduleInfosByAction = {
+    [ParticipantUpdatedScheduleActionEnum.cancel]: initialScheduleIds
+      .filter(initialScheduleId => !currentCheckedScheduleIds.includes(initialScheduleId)),
+    [ParticipantUpdatedScheduleActionEnum.add]: currentCheckedScheduleIds
+      .filter(currentCheckedScheduleId => !initialScheduleIds.includes(currentCheckedScheduleId)),
+  };
+
+  return Object.keys(updatedScheduleInfosByAction)
+    .reduce((acc, action) => {
+      const targetScheduleIds = updatedScheduleInfosByAction[action];
+      return acc.concat(
+        targetScheduleIds.map(scheduleId => {
+          return {"id": scheduleId, "action": action}
+        })
+      );
+    }, []);
 }

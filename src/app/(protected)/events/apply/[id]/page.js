@@ -4,41 +4,52 @@ import { getEventByAuthUser } from "@/features/event/api/get";
 import { getUserMetadataByEmail } from "@/features/user/api/get";
 import { notFound, useParams, useRouter } from "next/navigation";
 import EventApplyTemplate from "@/features/event/components/templates/Apply";
-import useLoad from "@/base/hooks/useLoad";
+import usePage from "@/base/hooks/usePage";
 import { useAuthUser } from "@/features/user/stores/authUser";
 import { EventFilterEnum } from "@/features/event/enums/page";
+import { useEffect } from "react";
 
-export default function EventApply({ params }) {
+export default function EventApply() {
   const authUser = useAuthUser();
-
   const router = useRouter();
   const { id } = useParams();
 
-  const {data, isLoading} = useLoad(async (db) => {
-    const [myUserMetadata, event] = await Promise.all([
-      getUserMetadataByEmail(db, {email: authUser.email}),
-      getEventByAuthUser(db, {id: id, authUser: authUser}),
-    ]);
+  const { 
+    initializeLoading, finalizeLoading, loadingDependencies, 
+    db, setData, handleLoadingError, 
+    render 
+  } = usePage({requests: [authUser, router, id]});
+  
+  useEffect(() => {
+    (async () => {
+      initializeLoading();
 
-    if (!event) {
-      notFound();
-    }
-    if (event.myParticipant) {
-      // TODO 通知：すでに申し込んでいます
-      router.push(`/events?filter=${EventFilterEnum.registrable}`);
-    }
+      try {
+        const [myUserMetadata, event] = await Promise.all([
+          getUserMetadataByEmail(db, {email: authUser.email}),
+          getEventByAuthUser(db, {id: id, authUser: authUser}),
+        ]);
 
-    return {myUserMetadata, event};
-  });
-  if (isLoading) {
-    return <div>読み込み中です</div>
-  }
-  const {myUserMetadata, event } = data;
+        if (!event) {
+          notFound();
+        }
 
-  return (
-    <EventApplyTemplate 
-      event={event} 
-      myUserMetadata={myUserMetadata}
-    />
+        if (event.myParticipant) {
+          // TODO 通知：すでに申し込んでいます
+          router.push(`/events?filter=${EventFilterEnum.registrable}`);
+          return;
+        }
+        
+        setData({ myUserMetadata, event });
+      } catch (error) {
+        handleLoadingError(error);
+      } finally {
+        finalizeLoading();
+      }
+    })();
+  }, loadingDependencies);
+
+  return render(
+    (data) => <EventApplyTemplate event={data.event} myUserMetadata={data.myUserMetadata}/>
   );
 }
