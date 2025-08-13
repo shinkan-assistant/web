@@ -13,7 +13,7 @@ import { getUpdatedScheduleInfos, getCheckedScheduleIds, getInputName, getSchedu
 import { Checkbox } from "@/base/components/atoms/FormInput";
 import { updateParticipantSchedules } from "@/features/participant/api/update";
 
-export default function EventDetailUpdateTemplate({ event, myUserMetadata }) {
+export default function EventDetailEditTemplate({ event, myUserMetadata }) {
   const router = useRouter();
 
   const allSchedules = event.schedules;
@@ -51,15 +51,15 @@ export default function EventDetailUpdateTemplate({ event, myUserMetadata }) {
     <ItemContainer>
       <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
-          <EventHeader pageType={EventPageTypeEnum.detailUpdate} isApplyPage={false} event={event} />
+          <EventHeader pageType={EventPageTypeEnum.detailEdit} isApplyPage={false} event={event} />
         </div>
 
         <div className="mb-8">
-          <EventSummary pageType={EventPageTypeEnum.detailUpdate} event={event} />
+          <EventSummary pageType={EventPageTypeEnum.detailEdit} event={event} />
         </div>
 
         <EventScheduleList
-          pageType={EventPageTypeEnum.detailUpdate}
+          pageType={EventPageTypeEnum.detailEdit}
           allSchedules={allSchedules}
           belong={myUserMetadata["belong"]}
           formHook={formHook}

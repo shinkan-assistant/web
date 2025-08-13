@@ -3,13 +3,13 @@
 import { getEventByAuthUser } from "@/features/event/api/get";
 import { getUserMetadataByEmail } from "@/features/user/api/get";
 import { notFound, useParams, useRouter } from "next/navigation";
-import EventDetailUpdateTemplate from "@/features/event/components/templates/DetailUpdate";
+import EventDetailEditTemplate from "@/features/event/components/templates/DetailEdit";
 import { useAuthUser } from "@/features/user/stores/authUser";
 import usePageHook from "@/base/hooks/usePage";
 import { EventFilterEnum } from "@/features/event/enums/page";
 import { useEffect } from "react";
 
-export default function EventDetailUpdate() {
+export default function EventDetailEdit() {
   const authUser = useAuthUser();
   const router = useRouter();
   const { id } = useParams();
@@ -50,6 +50,6 @@ export default function EventDetailUpdate() {
   }, loadingDependencies);
   
   return render(
-    (data) => <EventDetailUpdateTemplate event={data.event} myUserMetadata={data.myUserMetadata} />
+    (data) => <EventDetailEditTemplate event={data.event} myUserMetadata={data.myUserMetadata} />
   );
 }

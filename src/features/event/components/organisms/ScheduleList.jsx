@@ -207,12 +207,12 @@ export function EventScheduleList({
   myParticipant, // isFormPage === false の場合に必要
   formHook // isFormPage === true の場合に必要
 }) {
-  const isDetailUpdatePage = pageType === EventPageTypeEnum.detailUpdate;
+  const isDetailEditPage = pageType === EventPageTypeEnum.detailEdit;
 
   return (
     <div>
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
-      {isDetailUpdatePage && 
+      {isDetailEditPage && 
         <div className="flex gap-x-4">
           <AllCancelButton formHook={formHook} />
           <ResetButton formHook={formHook} />

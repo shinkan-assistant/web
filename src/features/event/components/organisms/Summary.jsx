@@ -1,7 +1,7 @@
 import { EventItemIcon } from "../atoms/TextItemIcon";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventTypeEnum } from "@/features/event/enums/data";
-import { EventPageTypeEnum } from "../../enums/page";
+import { EventPageTypeEnum, judgePageForParticipant } from "../../enums/page";
 
 function EventDate({isListPage, event}) {
   const date = new Date(event.schedules[0].time_range.start_at)
@@ -105,7 +105,7 @@ function EventOnlineMeetingInfo({online_meeting_info}) {
 
 export default function EventSummary({pageType, event, myUserMetadata}) {
   const isListPage = pageType === EventPageTypeEnum.list;
-  const isDetailPage = pageType === EventPageTypeEnum.detail;
+  const isPageForParticipant = judgePageForParticipant(pageType);
 
   return (
     <div className={isListPage ? "" : "bg-gray-50 p-6 rounded-lg shadow-md"}>
@@ -118,7 +118,7 @@ export default function EventSummary({pageType, event, myUserMetadata}) {
       <div className={isListPage ? "space-y-2" : "space-y-4"}> {/* 各情報ブロック間のスペースを統一 */}
         <EventDate isListPage={isListPage} event={event} />
         <EventLocation isListPage={isListPage} event={event} />
-        {isDetailPage && 
+        {isPageForParticipant && 
           <>
             {event.contact_group && <EventContactGroup contact_group={event.contact_group} />}
             {event.online_meeting_info && <EventOnlineMeetingInfo online_meeting_info={event.online_meeting_info} />}
