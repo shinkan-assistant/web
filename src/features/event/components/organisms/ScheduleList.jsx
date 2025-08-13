@@ -5,6 +5,8 @@ import { EventPageTypeEnum, judgeFormPage } from "../../enums/page";
 import { getInputName } from "../utils";
 import Input, { Checkbox } from "@/base/components/atoms/FormInput";
 import { useEffect, useRef, useState } from "react";
+import FormButton from "@/base/components/atoms/FormButton";
+import { ResetButton } from "@/base/components/organisms/FormResetButton";
 
 function ScheduleTimeRange({timeRange}) {
   function formatScheduleTime(isoString) {
@@ -165,40 +167,7 @@ export function AllCancelButton({formHook}) {
   }
 
   return (
-    // TODO デザイン
-    <button onClick={changeAllCancel} disabled={disabled} className="focus:cursor-pointer bg-sky-300 disabled:bg-sky-500">
-      全キャンセル
-    </button>
-  );
-}
-
-export function ResetButton({formHook}) {
-  const [disabled, setDisabled] = useState(false);
-
-  useEffect(() => {
-    const { inputNames, inputInfos, inputValues } = formHook;
-    const isInitialValues = inputNames
-      .every(name => inputValues[name] === inputInfos[name].initialValue);
-    setDisabled(isInitialValues);
-  }, [formHook.inputValues])
-
-  function changeAllCancel() { 
-    const { inputNames, inputInfos } = formHook;
-    const resetInputValues = inputNames.reduce((acc, name) => {
-      return {
-        [name]: inputInfos[name].initialValue,
-        ...acc,
-      }
-    }, {});
-    setDisabled(true);
-    formHook.changeInputs(resetInputValues);
-  }
-
-  return (
-    // TODO デザイン
-    <button onClick={changeAllCancel} disabled={disabled} className="focus:cursor-pointer bg-sky-300 disabled:bg-sky-500">
-      リセット
-    </button>
+    <FormButton title="全キャンセル" onClick={changeAllCancel} disabled={disabled} />
   );
 }
 
@@ -211,13 +180,12 @@ export function EventScheduleList({
 
   return (
     <div>
-      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
-      {isDetailEditPage && 
-        <div className="flex gap-x-4">
-          <AllCancelButton formHook={formHook} />
-          <ResetButton formHook={formHook} />
-        </div>
-      }
+      {!isDetailEditPage && (
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">
+          スケジュール
+        </h2>
+      )}
+
       <div className="space-y-6">
         {allSchedules.map((schedule) => (
           <ScheduleItem 

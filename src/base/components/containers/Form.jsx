@@ -1,3 +1,5 @@
+import FormButtonArea from "../organisms/FormButtonArea";
+
 function FormSubmitButton({canSubmit, isProcessing}) {
   return (
     <button
@@ -21,6 +23,7 @@ export default function FormContainer({hook, children}) {
   return (
     <form onSubmit={hook.onSubmit} className="space-y-6">
       {children}
+      <FormButtonArea hook={hook} />
       <FormSubmitButton 
         canSubmit={hook.getCanSubmit()}
         isProcessing={hook.isProcessing}

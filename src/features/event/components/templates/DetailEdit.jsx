@@ -2,7 +2,7 @@
 
 import EventHeader from "@/features/event/components/organisms/Header";
 import EventSummary from "@/features/event/components/organisms/Summary";
-import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
+import { AllCancelButton, EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import ItemContainer from "@/base/components/containers/Item";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { getUpdatedScheduleInfos, getCheckedScheduleIds, getInputName, getScheduleIdFromInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
 import { updateParticipantSchedules } from "@/features/participant/api/update";
+import { ResetButton } from "@/base/components/organisms/FormResetButton";
 
 export default function EventDetailEditTemplate({ event, myUserMetadata }) {
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function EventDetailEditTemplate({ event, myUserMetadata }) {
         ...acc
       }
     }, {}),
+    Buttons: [ResetButton, AllCancelButton],
     judgeCanSubmit: ({inputValues}) => {
       const updatedScheduleInfos = getUpdatedScheduleInfos({
         initialParticipant: myParticipant, 
@@ -44,7 +46,7 @@ export default function EventDetailEditTemplate({ event, myUserMetadata }) {
       });
       // TODO 上から通知バーを出すようにする
       router.push(`/events/detail/${event["id"]}`);
-    }
+    },
   });
 
   return (
@@ -52,10 +54,6 @@ export default function EventDetailEditTemplate({ event, myUserMetadata }) {
       <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
           <EventHeader pageType={EventPageTypeEnum.detailEdit} isApplyPage={false} event={event} />
-        </div>
-
-        <div className="mb-8">
-          <EventSummary pageType={EventPageTypeEnum.detailEdit} event={event} />
         </div>
 
         <EventScheduleList

@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 
 export default function useFormHook({
-  inputInfos, judgeCanSubmit, handleSubmit
+  inputInfos, judgeCanSubmit, handleSubmit, Buttons
 }) {
   const inputNames = Object.keys(inputInfos);
   const inputInfosTmp = inputNames.reduce((acc, inputName) => {
@@ -67,6 +67,7 @@ export default function useFormHook({
   const formHook = {
     inputNames,
     inputInfos: inputInfosTmp, 
+    Buttons,
     onChangeInput, 
     changeInputs,
     inputValues, 

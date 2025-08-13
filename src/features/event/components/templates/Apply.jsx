@@ -12,6 +12,7 @@ import useFormHook from "@/base/hooks/useForm";
 import { useRouter } from "next/navigation";
 import { getCheckedScheduleIds, getInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
+import { ResetButton } from "@/base/components/organisms/FormResetButton";
 
 export default function EventApplyTemplate({ event, myUserMetadata }) {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
         ...acc
       }
     }, {}),
+    Buttons: [ResetButton],
     judgeCanSubmit: ({inputValues}) => {
       const checkedScheduleIds = getCheckedScheduleIds({inputValues})
       return checkedScheduleIds.length > 0;
