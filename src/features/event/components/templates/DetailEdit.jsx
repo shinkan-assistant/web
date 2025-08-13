@@ -14,11 +14,10 @@ import { Checkbox } from "@/base/components/atoms/FormInput";
 import { updateParticipantSchedules } from "@/features/participant/api/update";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
 
-export default function EventDetailEditTemplate({ event, myUserData }) {
+export default function EventDetailEditTemplate({ event, myUserData, myParticipant }) {
   const router = useRouter();
 
   const allSchedules = event.schedules;
-  const myParticipant = event.myParticipant
 
   const formHook = useFormHook({
     inputInfos: allSchedules.reduce((acc, schedule) => {

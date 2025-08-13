@@ -1,56 +1,65 @@
 'use client';
 
-import { getOrganizerEvents, getParticipatingEvents, getRegistrableEvents } from "@/features/event/api/get";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EventFilterEnum, } from "@/features/event/enums/page";
 import EventsTemplate from "@/features/event/components/templates/List";
 import { useAuthUser } from "@/features/user/stores/authUser";
-import { getUserDataByEmail } from "@/features/user/api/get";
 import { useEffect } from "react";
-import usePageHook from "@/base/hooks/usePage";
+import useDataComponentHook from "@/base/hooks/useDataComponentHook";
+import { useMyUserData } from "@/features/user/stores/myUserData";
+import { useAllEvents } from "@/features/event/stores/allEvents";
+import { useMyParticipants } from "@/features/participant/stores/myParticipants";
 
 export default function Events() {
-  const authUser = useAuthUser();
   const router = useRouter();
   const searchParams = useSearchParams();
   const filter = searchParams.get("filter");
 
+  const authUser = useAuthUser();
+  const myUserData = useMyUserData();
+  const allEvents = useAllEvents();
+  const myParticipants = useMyParticipants();
+
   const { 
-    initializeLoading, finalizeLoading, loadingDependencies, 
-    db, setData, handleLoadingError, 
-    render 
-  } = usePageHook({requests: [authUser, router, filter]});
+    initLoading, finLoading, requestValues, judgeLoadedRequests, render 
+  } = useDataComponentHook({
+    requests: {router, filter, authUser, myUserData, allEvents, myParticipants},
+    notHaveToLoadRequestNames: ["filter"],
+  });
 
   useEffect(() => {
-    (async () => {
-      initializeLoading();
+    initLoading();
+    if (!judgeLoadedRequests())
+      return;
 
-      try {
-        if (!Object.values(EventFilterEnum).includes(filter)) {
-          router.push(`/events?filter=${EventFilterEnum.participating}`);
-          return;
-        }
-      
-        const myUserData = await getUserDataByEmail(db, { email: authUser.email });
-        if (filter === EventFilterEnum.organizer && !myUserData["belong"]["is_member"]) {
-          router.push(`/events?filter=${EventFilterEnum.participating}`);
-          return;
-        }
-        
-        const getEventsFunc = {
-          [EventFilterEnum.participating]: getParticipatingEvents,
-          [EventFilterEnum.registrable]: getRegistrableEvents,
-          [EventFilterEnum.organizer]: getOrganizerEvents,
-        }[filter];
-        const events = await getEventsFunc(db, { authUser: authUser });
-        setData({ events });
-      } catch (error) {
-        handleLoadingError(error);
+    if (!Object.values(EventFilterEnum).includes(filter)) {
+      router.push(`/events?filter=${EventFilterEnum.participating}`);
+      return;
+    }
+    if (filter === EventFilterEnum.organizer && !myUserData["belong"]["is_member"]) {
+      router.push(`/events?filter=${EventFilterEnum.participating}`);
+      return;
+    }
+
+    const targetEventsFilterFunc = {
+      [EventFilterEnum.participating]: (e) => {
+        return myParticipants.some(mp => e["id"] === mp["event_id"])
+      },
+      [EventFilterEnum.registrable]: (e) => {
+        return myParticipants.every(mp => e["id"] !== mp["event_id"])
+      },
+      [EventFilterEnum.organizer]: (e) => {
+        if (myUserData["is_admin"]) 
+          return true;
+        return myParticipants.some(mp => e["id"] === mp["event_id"] && mp["is_organizer"]);
       }
-
-      finalizeLoading();
-    })();
-  }, loadingDependencies);
+    }[filter];
+    const targetEvents = allEvents.filter(targetEventsFilterFunc)
+    
+    finLoading({ 
+      data: { events: targetEvents }
+    });
+  }, requestValues);
 
   return render(
     (data) => <EventsTemplate events={data.events} filter={filter} />

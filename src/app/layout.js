@@ -1,6 +1,6 @@
 import "./globals.css";
 import Header from "@/features/shared/components/organisms/Header";
-import { UserProvider } from "@/features/user/stores/authUser";
+import { AuthUserProvider } from "@/features/user/stores/authUser";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 
 export const metadata = {
@@ -9,18 +9,12 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const { authUser } = await getAuthenticatedAppForUser();
-  const initialAuthUser = authUser ? {
-    uid: authUser.uid,
-    email: authUser.email,
-    displayName: authUser.displayName,
-    photoURL: authUser.photoURL,
-  } : undefined;
+  const { initialAuthUser } = await getAuthenticatedAppForUser();
 
   return (
     <html lang="ja">
       <body>
-        <UserProvider initialAuthUser={initialAuthUser}>
+        <AuthUserProvider initialAuthUser={initialAuthUser}>
           <div className="fixed top-0 left-0 right-0 z-50">
             <Header title={metadata.title}/>
           </div>
@@ -28,7 +22,7 @@ export default async function RootLayout({ children }) {
           <div className="pt-[74px]">
             {children}
           </div>
-        </UserProvider>
+        </AuthUserProvider>
       </body>
     </html>
   );

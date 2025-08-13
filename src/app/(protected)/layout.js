@@ -4,17 +4,11 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthUser } from "@/features/user/stores/authUser";
 import NavMenu from "@/features/shared/components/organisms/NavMenu";
+import { MyUserDataProvider, useMyUserData } from "@/features/user/stores/myUserData";
+import { AllEventsProvider, useAllEvents } from "@/features/event/stores/allEvents";
+import { MyParticipantsProvider } from "@/features/participant/stores/myParticipants";
 
-export default function ProtectedLayout({ children }) {
-  const authUser = useAuthUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!authUser) {
-      router.push('/');
-    }
-  }, [authUser, router]); 
-
+function WithoutProviderLayout({ children }) {
   return (
     <>
       <div className="fixed left-0 right-0">
@@ -24,5 +18,56 @@ export default function ProtectedLayout({ children }) {
         {children}
       </div>
     </>
+  );
+}
+
+function WithMyParticipantsLayout({ children }) {
+  const myUserData = useMyUserData();
+  const events = useAllEvents();
+  return (
+    <MyParticipantsProvider myUserData={myUserData} events={events} >
+      <WithoutProviderLayout>
+        {children}
+      </WithoutProviderLayout>
+    </MyParticipantsProvider>
+  );
+}
+
+function WithEventsLayout({ children }) {
+  const myUserData = useMyUserData();
+  return (
+    <AllEventsProvider myUserData={myUserData}>
+      <WithMyParticipantsLayout>
+        {children}
+      </WithMyParticipantsLayout>
+    </AllEventsProvider>
+  );
+}
+
+function WithMyUserDataLayout({ children }) {
+  const authUser = useAuthUser();
+  return (
+    <MyUserDataProvider authUser={authUser}>
+      <WithEventsLayout>
+        {children}
+      </WithEventsLayout>
+    </MyUserDataProvider>
+  );
+}
+
+export default function ProtectedLayout({ children }) {
+  const router = useRouter();
+  const authUser = useAuthUser();
+
+  useEffect(() => {
+    if (!authUser) {
+      router.push('/');
+    }
+  }, [authUser, router]); 
+
+  return (
+    <WithMyUserDataLayout>
+      {children}
+    </WithMyUserDataLayout>
   );
 }

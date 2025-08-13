@@ -1,55 +1,58 @@
 'use client';
 
-import { getEventByAuthUser } from "@/features/event/api/get";
-import { getUserDataByEmail } from "@/features/user/api/get";
 import EventDetailTemplate from "@/features/event/components/templates/Detail";
 import { useAuthUser } from "@/features/user/stores/authUser";
-import usePageHook from "@/base/hooks/usePage";
+import useDataComponentHook from "@/base/hooks/useDataComponentHook";
 import { EventFilterEnum } from "@/features/event/enums/page";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useMyUserData } from "@/features/user/stores/myUserData";
+import { useAllEvents } from "@/features/event/stores/allEvents";
+import { useMyParticipants } from "@/features/participant/stores/myParticipants";
 
 export default function EventDetail() {
-  const authUser = useAuthUser();
   const router = useRouter();
   const { id } = useParams();
 
+  const authUser = useAuthUser();
+  const myUserData = useMyUserData();
+  const allEvents = useAllEvents();
+  const myParticipants = useMyParticipants();
+
   const { 
-    initializeLoading, finalizeLoading, loadingDependencies, 
-    db, setData, handleLoadingError, 
-    render 
-  } = usePageHook({requests: [authUser, router, id]});
+    initLoading, finLoading, requestValues, judgeLoadedRequests, render 
+  } = useDataComponentHook({
+    requests: [router, id, authUser, myUserData, allEvents, myParticipants]
+  });
   
   useEffect(() => {
-    (async () => {
-      initializeLoading();
+    initLoading();
+    if (!judgeLoadedRequests())
+      return;
 
-      try {
-        const [myUserData, event] = await Promise.all([
-          getUserDataByEmail(db, {email: authUser.email}),
-          getEventByAuthUser(db, {id: id, authUser: authUser}),
-        ]);
+    const event = allEvents.find(e => id === e["id"]);
+    if (!event) {
+      notFound();
+    }
 
-        if (!event) {
-          notFound();
-        }
+    const myParticipant = myParticipants.find(mp => id === mp["event_id"]);
+    if (!myParticipant) {
+      // TODO 通知：まだ申し込んでいません
+      router.push(`/events?filter=${EventFilterEnum.participating}`);
+      return;
+    }
 
-        if (!event.myParticipant) {
-          // TODO 通知：まだ申し込んでいません
-          router.push(`/events?filter=${EventFilterEnum.registrable}`);
-          return;
-        }
-        
-        setData({ myUserData, event });
-      } catch (error) {
-        handleLoadingError(error);
-      } finally {
-        finalizeLoading();
-      }
-    })();
-  }, loadingDependencies);
+    finLoading({
+      data: { event, myParticipant }
+    });
+  }, requestValues);
 
   return render(
-    (data) => <EventDetailTemplate event={data.event} myUserData={data.myUserData} />
+    (data) => 
+      <EventDetailTemplate 
+        event={data.event} 
+        myUserData={myUserData} 
+        myParticipant={data.myParticipant} 
+      />
   );
 }

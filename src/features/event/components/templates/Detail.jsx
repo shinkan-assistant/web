@@ -4,7 +4,7 @@ import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 
-export default function EventDetailTemplate({ event, myUserData }) {
+export default function EventDetailTemplate({ event, myUserData, myParticipant }) {
   return (
     <ItemContainer>
       <div className="ml-3 mb-4">
@@ -19,7 +19,7 @@ export default function EventDetailTemplate({ event, myUserData }) {
         pageType={EventPageTypeEnum.detail} 
         allSchedules={event.schedules}
         belong={myUserData["belong"]} 
-        myParticipant={event.myParticipant}
+        myParticipant={myParticipant}
       />
     </ItemContainer>
   );

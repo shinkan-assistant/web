@@ -6,8 +6,16 @@ import { setCookie, deleteCookie } from "cookies-next";
 
 const AuthUserContext = createContext(null);
 
-function UserProvider({ initialAuthUser, children }) {
-  const [authUser, setAuthUser] = useState(initialAuthUser);
+function toAuthUser(src) {
+  return src ? {
+    email: src.email,
+    displayName: src.displayName,
+    photoURL: src.photoURL,
+  } : undefined;
+}
+
+function AuthUserProvider({ initialAuthUser, children }) {
+  const [authUser, setAuthUser] = useState(toAuthUser(initialAuthUser));
 
   useEffect(() => {
     const unsubscribeAuth = onIdTokenChanged(async (latestAuthUser) => {
@@ -17,7 +25,7 @@ function UserProvider({ initialAuthUser, children }) {
       } else {
         await deleteCookie("__session");
       }
-      setAuthUser(latestAuthUser)
+      setAuthUser(toAuthUser(latestAuthUser));
     });
 
     return () => {
@@ -36,4 +44,4 @@ function useAuthUser() {
   return useContext(AuthUserContext);
 }
 
-export {UserProvider, useAuthUser};
+export { AuthUserProvider, useAuthUser };

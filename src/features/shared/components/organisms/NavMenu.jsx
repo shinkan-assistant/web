@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useAuthUser } from '@/features/user/stores/authUser';
-import { useEffect, useState } from 'react';
-import { getUserDataByEmail } from '@/features/user/api/get';
-import { db } from '@/lib/firebase/clientApp';
+import { useEffect } from 'react';
 import { EventFilterEnum } from "@/features/event/enums/page";
+import { useMyUserData } from '@/features/user/stores/myUserData';
+import useDataComponentHook from '@/base/hooks/useDataComponentHook';
 
 function NavLink({ href, children }) {
   const pathname = usePathname();
@@ -40,71 +40,80 @@ function NavLink({ href, children }) {
 
 export default function NavMenu() {
   const authUser = useAuthUser();
-  const [navLinkInfos, setNavLinkInfos] = useState([]);
+  const myUserData = useMyUserData();
 
-  // TODO ユーザーメタデータをサーバー側で変更しても、すぐに反映されない、、
+  const { 
+    initLoading, finLoading, requestValues, judgeLoadedRequests, render 
+  } = useDataComponentHook({
+    isNotForPage: true,
+    requests: {authUser, myUserData},
+    notHaveToLoadRequestNames: ["authUser"],
+  });
+
   useEffect(() => {
-    // ログインユーザーが存在しない場合は処理を終了
-    if (!authUser) {
+    initLoading();
+    if (!judgeLoadedRequests())
       return;
-    }
 
-    // ログインユーザーのメールアドレスを使って管理者情報を取得
-    const fetchUserInfo = async () => {
-      const userData = await getUserDataByEmail(db, { email: authUser.email });
-      if (userData) {
-        const isAdmin = userData["is_admin"];
-        const isMember = userData["belong"]["is_member"];
-        setNavLinkInfos([
-          {
-            href: `/events?filter=${EventFilterEnum.participating}`, 
-            title: "参加予定", 
-            isOnlyForAdmin: false, isOnlyForMember: false
-          },
-          {
-            href: `/events?filter=${EventFilterEnum.registrable}`, 
-            title: "申込可能", 
-            isOnlyForAdmin: false, isOnlyForMember: false
-          },
-          {
-            href: `/events?filter=${EventFilterEnum.organizer}`, 
-            title: "イベント管理", 
-            isOnlyForAdmin: false, isOnlyForMember: true
-          },
-          {
-            href: "/users", 
-            title: "ユーザー管理", 
-            isOnlyForAdmin: true
-          },
-        ].filter(info => {
-          if (info.isOnlyForAdmin && !isAdmin) return false;
-          if (info.isOnlyForMember && !isMember) return false;
-          return true;
-        }));
+    const isAdmin = myUserData["is_admin"];
+    const isMember = myUserData["belong"]["is_member"];
+
+    const allNavLinkInfos = [
+      {
+        href: `/events?filter=${EventFilterEnum.participating}`, 
+        title: "参加予定", 
+        isOnlyForAdmin: false, isOnlyForMember: false
+      },
+      {
+        href: `/events?filter=${EventFilterEnum.registrable}`, 
+        title: "申込可能", 
+        isOnlyForAdmin: false, isOnlyForMember: false
+      },
+      {
+        href: `/events?filter=${EventFilterEnum.organizer}`, 
+        title: "イベント管理", 
+        isOnlyForAdmin: false, isOnlyForMember: true
+      },
+      {
+        href: "/users", 
+        title: "ユーザー管理", 
+        isOnlyForAdmin: true
+      },
+    ];
+    const navLinkInfos = allNavLinkInfos.filter(info => {
+      if (info.isOnlyForAdmin && !isAdmin) return false;
+      if (info.isOnlyForMember && !isMember) return false;
+      return true;
+    });
+    finLoading({
+      data: { navLinkInfos }
+    });
+  }, requestValues);
+
+  return render(
+    (data) => {
+      if (!authUser) {
+        return <></>
       }
-    };
 
-    fetchUserInfo();
-  }, [authUser]); // authUserが変更されたときに再実行
-
-  if (!authUser)
-    return (<></>);
-  
-  return (
-    <nav className="relative bg-white shadow-md"> {/* ナビゲーション全体に影を追加 */}
-      <div className="container mx-8 px-4 sm:px-6 lg:px-8"> {/* 中央揃えとパディング */}
-        <div className="flex h-16"> {/* ナビゲーションの高さ */}
-          <div className="flex">
-            <ul className="flex items-center space-x-12"> {/* リンク間のスペースを増やす */}
-              {navLinkInfos.map(info => (
-                <li key={info.title}>
-                  <NavLink href={info.href}>{info.title}</NavLink>
-                </li>
-              ))}
-            </ul>
+      return (
+        <nav className="relative bg-white shadow-md"> {/* ナビゲーション全体に影を追加 */}
+          <div className="container mx-8 px-4 sm:px-6 lg:px-8"> {/* 中央揃えとパディング */}
+            <div className="flex h-16"> {/* ナビゲーションの高さ */}
+              <div className="flex">
+                <ul className="flex items-center space-x-12"> {/* リンク間のスペースを増やす */}
+                  {data.navLinkInfos.map(info => (
+                    <li key={info.title}>
+                      <NavLink href={info.href}>{info.title}</NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </nav>
-  );
+        </nav>
+      );
+    }
+  )
+  
 }
