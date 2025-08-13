@@ -53,6 +53,7 @@ export default function EventManage() {
         event={data.event}
         subNavInfos={[
           {href: `/events/?filter=${EventFilterEnum.manage}`, text: "一覧へ戻る"},
+          {href: `/events/manage/${id}/participants`, text: "参加者一覧を見る"},
         ]}
       />
   );
