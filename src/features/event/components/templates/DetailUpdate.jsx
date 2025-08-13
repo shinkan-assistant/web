@@ -6,7 +6,7 @@ import { EventScheduleList } from "@/features/event/components/organisms/Schedul
 import ItemContainer from "@/base/components/containers/Item";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
-import useForm from "@/base/hooks/useForm";
+import useFormHook from "@/base/hooks/useForm";
 import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
 import { getUpdatedScheduleInfos, getCheckedScheduleIds, getInputName, getScheduleIdFromInputName } from "../utils";
@@ -19,7 +19,7 @@ export default function EventDetailUpdateTemplate({ event, myUserMetadata }) {
   const allSchedules = event.schedules;
   const myParticipant = event.myParticipant
 
-  const formHook = useForm({
+  const formHook = useFormHook({
     inputInfos: allSchedules.reduce((acc, schedule) => {
       return {
         [getInputName(schedule)]: {

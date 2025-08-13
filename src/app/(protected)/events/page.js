@@ -7,7 +7,7 @@ import EventsTemplate from "@/features/event/components/templates/List";
 import { useAuthUser } from "@/features/user/stores/authUser";
 import { getUserMetadataByEmail } from "@/features/user/api/get";
 import { useEffect } from "react";
-import usePage from "@/base/hooks/usePage";
+import usePageHook from "@/base/hooks/usePage";
 
 export default function Events() {
   const authUser = useAuthUser();
@@ -19,7 +19,7 @@ export default function Events() {
     initializeLoading, finalizeLoading, loadingDependencies, 
     db, setData, handleLoadingError, 
     render 
-  } = usePage({requests: [authUser, router, filter]});
+  } = usePageHook({requests: [authUser, router, filter]});
 
   useEffect(() => {
     (async () => {

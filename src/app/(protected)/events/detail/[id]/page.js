@@ -4,7 +4,7 @@ import { getEventByAuthUser } from "@/features/event/api/get";
 import { getUserMetadataByEmail } from "@/features/user/api/get";
 import EventDetailTemplate from "@/features/event/components/templates/Detail";
 import { useAuthUser } from "@/features/user/stores/authUser";
-import usePage from "@/base/hooks/usePage";
+import usePageHook from "@/base/hooks/usePage";
 import { EventFilterEnum } from "@/features/event/enums/page";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -18,7 +18,7 @@ export default function EventDetail() {
     initializeLoading, finalizeLoading, loadingDependencies, 
     db, setData, handleLoadingError, 
     render 
-  } = usePage({requests: [authUser, router, id]});
+  } = usePageHook({requests: [authUser, router, id]});
   
   useEffect(() => {
     (async () => {

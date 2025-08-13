@@ -1,7 +1,7 @@
 import { db } from "@/lib/firebase/clientApp";
 import { useState } from "react"
 
-export default function usePage({requests}) {
+export default function usePageHook({requests}) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingError, setIsLoadingError] = useState(null);

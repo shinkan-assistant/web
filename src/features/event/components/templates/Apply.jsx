@@ -8,7 +8,7 @@ import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
 import { createNormalParticipant } from "@/features/participant/api/create";
 import { db } from "@/lib/firebase/clientApp";
-import useForm from "@/base/hooks/useForm";
+import useFormHook from "@/base/hooks/useForm";
 import { useRouter } from "next/navigation";
 import { getCheckedScheduleIds, getInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
@@ -18,7 +18,7 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
 
   const allSchedules = event.schedules;
 
-  const formHook = useForm({
+  const formHook = useFormHook({
     inputInfos: allSchedules.reduce((acc, schedule) => {
       return {
         [getInputName(schedule)]: {

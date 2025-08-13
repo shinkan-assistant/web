@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-export default function useForm({
+export default function useFormHook({
   inputInfos, judgeCanSubmit, handleSubmit
 }) {
   const inputNames = Object.keys(inputInfos);
