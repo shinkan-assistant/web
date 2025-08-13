@@ -28,6 +28,7 @@ function EventTitle({pageType, event}) {
   const subTitle = {
     [EventPageTypeEnum.apply]: "申し込みフォーム",
     [EventPageTypeEnum.detailEdit]: "スケジュール変更 / キャンセル",
+    [EventPageTypeEnum.manage]: "管理画面",
   }[pageType] ?? null;
 
   return (

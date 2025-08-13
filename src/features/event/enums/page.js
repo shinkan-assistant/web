@@ -12,12 +12,16 @@ export const EventPageTypeEnum = Object.freeze({
   manage: "manage",
 });
 
-export function judgeFormPage(pageType) {
+export function judgeFormPageForParticipant(pageType) {
   return [EventPageTypeEnum.apply, EventPageTypeEnum.detailEdit]
     .includes(pageType);
 }
 
 export function judgePageForParticipant(pageType) {
   return [EventPageTypeEnum.detail, EventPageTypeEnum.detailEdit]
+    .includes(pageType);
+}
+export function judgePageForManage(pageType) {
+  return [EventPageTypeEnum.manage]
     .includes(pageType);
 }

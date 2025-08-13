@@ -1,18 +1,18 @@
 'use client';
 
 import EventHeader from "@/features/event/components/organisms/Header";
-import EventSummary from "@/features/event/components/organisms/Summary";
-import { AllCancelButton, EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
+import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import ItemContainer from "@/base/components/containers/Item";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
 import useFormHook from "@/base/hooks/useForm";
 import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
-import { getUpdatedScheduleInfos, getCheckedScheduleIds, getInputName, getScheduleIdFromInputName } from "../utils";
+import { getUpdatedScheduleInfos, getCheckedScheduleIds, getInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
 import { updateParticipantSchedules } from "@/features/participant/api/update";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
+import { AllCancelButton } from "../organisms/AllCancelButton";
 
 export default function EventDetailEditTemplate({ event, myUserData, myParticipant }) {
   const router = useRouter();

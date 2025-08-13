@@ -1,12 +1,9 @@
 import {FeeTypeEnum} from "@/features/event/enums/data.js";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventItemIcon } from "../atoms/TextItemIcon";
-import { EventPageTypeEnum, judgeFormPage } from "../../enums/page";
+import { EventPageTypeEnum, judgeFormPageForParticipant, judgePageForManage } from "../../enums/page";
 import { getInputName } from "../utils";
-import Input, { Checkbox } from "@/base/components/atoms/FormInput";
-import { useEffect, useRef, useState } from "react";
-import FormButton from "@/base/components/atoms/FormButton";
-import { ResetButton } from "@/base/components/organisms/FormResetButton";
+import Input from "@/base/components/atoms/FormInput";
 
 function ScheduleTimeRange({timeRange}) {
   function formatScheduleTime(isoString) {
@@ -76,6 +73,10 @@ function ScheduleFee({feesByBelong, belong}) {
     }
   }
 
+  if (!feeInfo) {
+    feeInfo = Object.values(feesByBelong)[0];
+  }
+
   return (
     <div className="flex items-start text-gray-700 text-sm">
       {/* 参加費のアイコンを色付きに */}
@@ -97,21 +98,25 @@ function ScheduleFee({feesByBelong, belong}) {
 
 export function ScheduleItem({
   pageType, schedule, belong, 
-  myParticipant, // isFormPage === false の場合に必要
-  formHook // isFormPage === true の場合に必要
+  myParticipant, // isFormPageForParticipant === false の場合に必要
+  formHook // isFormPageForParticipant === true の場合に必要
 }) {
-  const isFormPage = judgeFormPage(pageType)
+  const isFormPageForParticipant = judgeFormPageForParticipant(pageType)
   const publicLocation = pageType === EventPageTypeEnum.apply;
+  const isPageForManage = judgePageForManage(pageType);
 
   let isParticipating;
-  if (isFormPage) 
-    isParticipating = formHook.inputValues[getInputName(schedule)];
-  else 
-    isParticipating = myParticipant.schedules.map(ps => ps["id"]).includes(schedule["id"]);
+  if (!isPageForManage) {
+    if (isFormPageForParticipant) {
+      isParticipating = formHook.inputValues[getInputName(schedule)];
+    } else {
+      isParticipating = myParticipant.schedules.map(ps => ps["id"]).includes(schedule["id"]);
+    }
+  }
 
   // 詳細ページで、参加しないイベントをグレーにする
   return (
-    <div className={`${isParticipating ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
+    <div className={`${(isPageForManage || isParticipating) ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
       <div className="mb-2">
         <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
           {schedule.title}
@@ -136,7 +141,7 @@ export function ScheduleItem({
         <ScheduleFee feesByBelong={schedule.fees_by_belong} belong={belong} />
       </div>
       
-      {isFormPage  &&
+      {isFormPageForParticipant &&
         <div className="mt-4">
           <Input name={getInputName(schedule)} formHook={formHook} />
         </div>
@@ -145,36 +150,10 @@ export function ScheduleItem({
   );
 }
 
-export function AllCancelButton({formHook}) {
-  const [disabled, setDisabled] = useState(false);
-
-  useEffect(() => {
-    const isAllCancel =formHook.inputNames
-      .every(inputName => !formHook.inputValues[inputName]);
-    setDisabled(isAllCancel);
-  }, [formHook.inputValues])
-
-  function changeAllCancel() { 
-    const updatedInputValues = formHook.inputNames
-      .reduce((acc, inputName) => {
-        return {
-          [inputName]: false,
-          ...acc,
-        }
-      }, {});
-    setDisabled(true);
-    formHook.changeInputs(updatedInputValues);
-  }
-
-  return (
-    <FormButton title="全キャンセル" onClick={changeAllCancel} disabled={disabled} />
-  );
-}
-
 export function EventScheduleList({
   pageType, allSchedules, belong, 
-  myParticipant, // isFormPage === false の場合に必要
-  formHook // isFormPage === true の場合に必要
+  myParticipant, // isFormPageForParticipant === false の場合に必要
+  formHook // isFormPageForParticipant === true の場合に必要
 }) {
   const isDetailEditPage = pageType === EventPageTypeEnum.detailEdit;
 

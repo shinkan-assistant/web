@@ -1,7 +1,7 @@
 'use client';
 
+import FormButton from "@/base/components/atoms/FormButton";
 import { useEffect, useState } from "react";
-import FormButton from "../atoms/FormButton";
 
 export function AllCancelButton({formHook}) {
   const [disabled, setDisabled] = useState(false);

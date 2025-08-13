@@ -21,7 +21,7 @@ export default function Events() {
   const myParticipants = useMyParticipants();
 
   const { 
-    initLoading, finLoading, requestValues, judgeLoadedRequests, render 
+    initLoading, finLoading, requestValues, judgeLoadedRequests, render
   } = useDataComponentHook({
     requests: {router, filter, authUser, myUserData, allEvents, myParticipants},
     notHaveToLoadRequestNames: ["filter"],
