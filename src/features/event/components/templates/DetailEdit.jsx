@@ -14,7 +14,7 @@ import { Checkbox } from "@/base/components/atoms/FormInput";
 import { updateParticipantSchedules } from "@/features/participant/api/update";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
 
-export default function EventDetailEditTemplate({ event, myUserMetadata }) {
+export default function EventDetailEditTemplate({ event, myUserData }) {
   const router = useRouter();
 
   const allSchedules = event.schedules;
@@ -59,7 +59,7 @@ export default function EventDetailEditTemplate({ event, myUserMetadata }) {
         <EventScheduleList
           pageType={EventPageTypeEnum.detailEdit}
           allSchedules={allSchedules}
-          belong={myUserMetadata["belong"]}
+          belong={myUserData["belong"]}
           formHook={formHook}
         />
       </FormContainer>

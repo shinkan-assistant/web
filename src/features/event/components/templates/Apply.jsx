@@ -14,7 +14,7 @@ import { getCheckedScheduleIds, getInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
 
-export default function EventApplyTemplate({ event, myUserMetadata }) {
+export default function EventApplyTemplate({ event, myUserData }) {
   const router = useRouter();
 
   const allSchedules = event.schedules;
@@ -38,7 +38,7 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
     handleSubmit: async function ({inputValues}) {
       const checkedScheduleIds = getCheckedScheduleIds({inputValues});
       await createNormalParticipant(db, {
-        userEmail: myUserMetadata.email, 
+        userEmail: myUserData.email, 
         eventId: event.id,
         scheduleIds: checkedScheduleIds,
       });
@@ -62,7 +62,7 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
           pageType={EventPageTypeEnum.apply} 
           allSchedules={allSchedules}
           participatingScheduleIds={getCheckedScheduleIds({inputValues: formHook.inputValues})}
-          belong={myUserMetadata["belong"]}
+          belong={myUserData["belong"]}
           publicLocation={false}
           formHook={formHook}
         />

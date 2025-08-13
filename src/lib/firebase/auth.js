@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 
 import { auth, db } from "./clientApp";
-import { updateUserMetadata } from "@/features/user/api/update";
+import { updateUserData } from "@/features/user/api/update";
 
 export function onAuthStateChanged(cb) {
   return _onAuthStateChanged(auth, cb);
@@ -35,7 +35,7 @@ export async function signInWithGoogle() {
   }
 
   try {
-    await updateUserMetadata(db, authUser);
+    await updateUserData(db, authUser);
   } catch (error) {
     console.error("ユーザーデータの更新に失敗しました", error);
     signOut();

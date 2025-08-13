@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { EventFilterEnum, } from "@/features/event/enums/page";
 import EventsTemplate from "@/features/event/components/templates/List";
 import { useAuthUser } from "@/features/user/stores/authUser";
-import { getUserMetadataByEmail } from "@/features/user/api/get";
+import { getUserDataByEmail } from "@/features/user/api/get";
 import { useEffect } from "react";
 import usePageHook from "@/base/hooks/usePage";
 
@@ -31,25 +31,24 @@ export default function Events() {
           return;
         }
       
-        const myUserMetadata = await getUserMetadataByEmail(db, { email: authUser.email });
-        if (filter === EventFilterEnum.organizer && !myUserMetadata["belong"]["is_member"]) {
+        const myUserData = await getUserDataByEmail(db, { email: authUser.email });
+        if (filter === EventFilterEnum.organizer && !myUserData["belong"]["is_member"]) {
           router.push(`/events?filter=${EventFilterEnum.participating}`);
           return;
         }
-      
+        
         const getEventsFunc = {
           [EventFilterEnum.participating]: getParticipatingEvents,
           [EventFilterEnum.registrable]: getRegistrableEvents,
           [EventFilterEnum.organizer]: getOrganizerEvents,
         }[filter];
         const events = await getEventsFunc(db, { authUser: authUser });
-        
         setData({ events });
       } catch (error) {
         handleLoadingError(error);
-      } finally {
-        finalizeLoading();
       }
+
+      finalizeLoading();
     })();
   }, loadingDependencies);
 

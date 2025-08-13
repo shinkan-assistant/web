@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useAuthUser } from '@/features/user/stores/authUser';
 import { useEffect, useState } from 'react';
-import { getUserMetadataByEmail } from '@/features/user/api/get';
+import { getUserDataByEmail } from '@/features/user/api/get';
 import { db } from '@/lib/firebase/clientApp';
 import { EventFilterEnum } from "@/features/event/enums/page";
 
@@ -51,10 +51,10 @@ export default function NavMenu() {
 
     // ログインユーザーのメールアドレスを使って管理者情報を取得
     const fetchUserInfo = async () => {
-      const userMetadata = await getUserMetadataByEmail(db, { email: authUser.email });
-      if (userMetadata) {
-        const isAdmin = userMetadata["is_admin"];
-        const isMember = userMetadata["belong"]["is_member"];
+      const userData = await getUserDataByEmail(db, { email: authUser.email });
+      if (userData) {
+        const isAdmin = userData["is_admin"];
+        const isMember = userData["belong"]["is_member"];
         setNavLinkInfos([
           {
             href: `/events?filter=${EventFilterEnum.participating}`, 

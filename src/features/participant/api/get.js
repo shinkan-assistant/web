@@ -1,6 +1,6 @@
 import { where } from "firebase/firestore";
 import { getRecord, getRecords } from "../../../base/api/get";
-import { getUserMetadataByEmail } from "../../user/api/get";
+import { getUserDataByEmail } from "../../user/api/get";
 
 export async function getMyParticipantByEvent(db, {authUser, eventId}) {
   return getRecord(db, "participants", {
@@ -22,8 +22,8 @@ export async function getParticipantsByEvent(db, {authUser, eventId}) {
   if (myParticipant?.["is_organizer"]) 
     return participants;
 
-  const myUserMetadata = await getUserMetadataByEmail(db, {email: authUser.email});
-  if (myUserMetadata["is_admin"])
+  const myUserData = await getUserDataByEmail(db, {email: authUser.email});
+  if (myUserData["is_admin"])
     return participants;
 
   return [];

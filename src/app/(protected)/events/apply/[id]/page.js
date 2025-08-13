@@ -1,7 +1,7 @@
 'use client';
 
 import { getEventByAuthUser } from "@/features/event/api/get";
-import { getUserMetadataByEmail } from "@/features/user/api/get";
+import { getUserDataByEmail } from "@/features/user/api/get";
 import { notFound, useParams, useRouter } from "next/navigation";
 import EventApplyTemplate from "@/features/event/components/templates/Apply";
 import usePageHook from "@/base/hooks/usePage";
@@ -25,8 +25,8 @@ export default function EventApply() {
       initializeLoading();
 
       try {
-        const [myUserMetadata, event] = await Promise.all([
-          getUserMetadataByEmail(db, {email: authUser.email}),
+        const [myUserData, event] = await Promise.all([
+          getUserDataByEmail(db, {email: authUser.email}),
           getEventByAuthUser(db, {id: id, authUser: authUser}),
         ]);
 
@@ -40,7 +40,7 @@ export default function EventApply() {
           return;
         }
         
-        setData({ myUserMetadata, event });
+        setData({ myUserData, event });
       } catch (error) {
         handleLoadingError(error);
       } finally {
@@ -50,6 +50,6 @@ export default function EventApply() {
   }, loadingDependencies);
 
   return render(
-    (data) => <EventApplyTemplate event={data.event} myUserMetadata={data.myUserMetadata}/>
+    (data) => <EventApplyTemplate event={data.event} myUserData={data.myUserData}/>
   );
 }

@@ -1,5 +1,5 @@
 import { getRecord } from "@/base/api/get";
-import { getUserMetadataByEmail } from "@/features/user/api/get";
+import { getUserDataByEmail } from "@/features/user/api/get";
 import { where } from "firebase/firestore";
 
 export async function judgeOrganizerOrAdmin(db, {eventId, authUser}) {
@@ -13,8 +13,8 @@ export async function judgeOrganizerOrAdmin(db, {eventId, authUser}) {
   if (myParticipant?.["is_organizer"]) 
     return true;
 
-  const myUserMetadata = await getUserMetadataByEmail(db, {email: authUser.email});
-  if (myUserMetadata["is_admin"])
+  const myUserData = await getUserDataByEmail(db, {email: authUser.email});
+  if (myUserData["is_admin"])
     return true;
 
   return false;
@@ -31,8 +31,8 @@ export async function judgeParticipateOrAdmin(db, {eventId, authUser}) {
   if (myParticipant) 
     return true;
 
-  const myUserMetadata = await getUserMetadataByEmail(db, {email: authUser.email});
-  if (myUserMetadata["is_admin"])
+  const myUserData = await getUserDataByEmail(db, {email: authUser.email});
+  if (myUserData["is_admin"])
     return true;
 
   return false;

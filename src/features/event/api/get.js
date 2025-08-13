@@ -1,6 +1,6 @@
 import { where } from "firebase/firestore";
 import { getRecordById, getRecord, getRecords } from "@/base/api/get";
-import { getUserMetadataByEmail } from "@/features/user/api/get";
+import { getUserDataByEmail } from "@/features/user/api/get";
 
 function toEventRecord({rawEvent, myParticipant}) {
   if (rawEvent === null) return null;
@@ -21,7 +21,7 @@ function toEventRecords({rawEvents, myParticipants}) {""
 }
 
 export async function getEventByAuthUser(db, {id, authUser}) {
-  const myUserMetadata = await getUserMetadataByEmail(db, {email: authUser.email});
+  const myUserData = await getUserDataByEmail(db, {email: authUser.email});
 
   const myParticipant = await getRecord(db, "participants", {
     wheres: [
@@ -29,7 +29,7 @@ export async function getEventByAuthUser(db, {id, authUser}) {
       where("user_email", "==", authUser.email),
     ]
   });
-  if (!(myUserMetadata["is_admin"] || myParticipant)) return null;
+  if (!(myUserData["is_admin"] || myParticipant)) return null;
 
   return toEventRecord({
     rawEvent: await getRecordById(db, "events", {id: id}),
@@ -81,8 +81,8 @@ export async function getRegistrableEvents(db, {authUser}) {
 }
 
 export async function getOrganizerEvents(db, {authUser}) {
-  const myUserMetadata = await getUserMetadataByEmail(db, {email: authUser.email});
-  if (!myUserMetadata["belong"]["is_member"]) return null;
+  const myUserData = await getUserDataByEmail(db, {email: authUser.email});
+  if (!myUserData["belong"]["is_member"]) return null;
   
   const myOrganizers = await getRecords(db, "participants", {
     wheres: [
@@ -92,7 +92,7 @@ export async function getOrganizerEvents(db, {authUser}) {
   });
 
   let events = [];
-  if (myUserMetadata["is_admin"]) {
+  if (myUserData["is_admin"]) {
     events = await getRecords(db, "events", {wheres: []});
   }
   else {
