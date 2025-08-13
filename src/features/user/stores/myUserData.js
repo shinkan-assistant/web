@@ -4,7 +4,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { getUserDataByEmail } from "../api/get";
 import { db } from "@/lib/firebase/clientApp";
 import { doc, onSnapshot } from "firebase/firestore";
-import { createUserData } from "../api/create";
 
 const MyUserDataContext = createContext(null);
 
