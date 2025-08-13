@@ -53,6 +53,10 @@ export default function EventDetailEdit() {
         event={data.event} 
         myUserData={myUserData} 
         myParticipant={data.myParticipant} 
+        subNavInfos={[
+          {href: `/events/?filter=${EventFilterEnum.participating}`, text: "一覧へ戻る"},
+          {href: `/events/detail/${data.event.id}`, text: "編集キャンセル"},
+        ]}
       />
   );
 }

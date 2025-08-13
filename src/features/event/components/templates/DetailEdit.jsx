@@ -14,7 +14,7 @@ import { updateParticipantSchedules } from "@/features/participant/api/update";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
 import { AllCancelButton } from "../organisms/AllCancelButton";
 
-export default function EventDetailEditTemplate({ event, myUserData, myParticipant }) {
+export default function EventDetailEditTemplate({ event, myUserData, myParticipant, subNavInfos }) {
   const router = useRouter();
 
   const allSchedules = event.schedules;
@@ -52,7 +52,11 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
     <ItemContainer>
       <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
-          <EventHeader pageType={EventPageTypeEnum.detailEdit} isApplyPage={false} event={event} />
+          <EventHeader
+            pageType={EventPageTypeEnum.detailEdit} 
+            event={event}
+            subNavInfos={subNavInfos}
+          />
         </div>
 
         <EventScheduleList

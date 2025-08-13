@@ -4,11 +4,15 @@ import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 
-export default function EventDetailTemplate({ event, myUserData, myParticipant }) {
+export default function EventDetailTemplate({ event, myUserData, myParticipant, subNavInfos }) {
   return (
     <ItemContainer>
       <div className="ml-3 mb-4">
-        <EventHeader pageType={EventPageTypeEnum.detail} event={event} />
+        <EventHeader 
+          pageType={EventPageTypeEnum.detail}
+          event={event}
+          subNavInfos={subNavInfos}
+        />
       </div>
 
       <div className="mb-8">

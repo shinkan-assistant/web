@@ -1,7 +1,7 @@
 export const EventFilterEnum = Object.freeze({
   participating: "participating",
-  registrable: "registrable",
-  organizer: "organizer",
+  apply: "apply",
+  manage: "manage",
 });
 
 export const EventPageTypeEnum = Object.freeze({

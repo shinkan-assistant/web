@@ -36,10 +36,9 @@ export default function EventManage() {
     }
 
     const myParticipant = myParticipants.find(mp => id === mp["event_id"]);
-    console.log(myUserData["is_admin"], myParticipant);
     if (!myUserData["is_admin"] && !myParticipant?.["is_organizer"]) {
       // TODO 通知：アクセスできません
-      router.push(`/events?filter=${EventFilterEnum.organizer}`);
+      router.push(`/events?filter=${EventFilterEnum.manage}`);
       return;
     }
 
@@ -51,7 +50,10 @@ export default function EventManage() {
   return render(
     (data) => 
       <EventManageTemplate 
-        event={data.event} 
+        event={data.event}
+        subNavInfos={[
+          {href: `/events/?filter=${EventFilterEnum.manage}`, text: "一覧へ戻る"},
+        ]}
       />
   );
 }

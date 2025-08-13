@@ -36,7 +36,7 @@ export default function Events() {
       router.push(`/events?filter=${EventFilterEnum.participating}`);
       return;
     }
-    if (filter === EventFilterEnum.organizer && !myUserData["belong"]["is_member"]) {
+    if (filter === EventFilterEnum.manage && !myUserData["belong"]["is_member"]) {
       router.push(`/events?filter=${EventFilterEnum.participating}`);
       return;
     }
@@ -45,10 +45,10 @@ export default function Events() {
       [EventFilterEnum.participating]: (e) => {
         return myParticipants.some(mp => e["id"] === mp["event_id"])
       },
-      [EventFilterEnum.registrable]: (e) => {
+      [EventFilterEnum.apply]: (e) => {
         return myParticipants.every(mp => e["id"] !== mp["event_id"])
       },
-      [EventFilterEnum.organizer]: (e) => {
+      [EventFilterEnum.manage]: (e) => {
         if (myUserData["is_admin"]) 
           return true;
         return myParticipants.some(mp => e["id"] === mp["event_id"] && mp["is_organizer"]);

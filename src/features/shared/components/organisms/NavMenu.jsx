@@ -65,12 +65,12 @@ export default function NavMenu() {
         isOnlyForAdmin: false, isOnlyForMember: false
       },
       {
-        href: `/events?filter=${EventFilterEnum.registrable}`, 
+        href: `/events?filter=${EventFilterEnum.apply}`, 
         title: "申込可能", 
         isOnlyForAdmin: false, isOnlyForMember: false
       },
       {
-        href: `/events?filter=${EventFilterEnum.organizer}`, 
+        href: `/events?filter=${EventFilterEnum.manage}`, 
         title: "イベント管理", 
         isOnlyForAdmin: false, isOnlyForMember: true
       },

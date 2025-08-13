@@ -7,11 +7,11 @@ export default function EventListItemLink({event, filter}) {
     url = `/events/detail/${event.id}`;
     text = "詳細を見る";
   }
-  else if (filter === EventFilterEnum.registrable) {
+  else if (filter === EventFilterEnum.apply) {
     url = `/events/apply/${event.id}`;
     text = "申し込む";
   }
-  else if (filter === EventFilterEnum.organizer) {
+  else if (filter === EventFilterEnum.manage) {
     url = `/events/manage/${event.id}`;
     text = "管理する";
   }

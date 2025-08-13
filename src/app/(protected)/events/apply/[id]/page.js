@@ -38,7 +38,7 @@ export default function EventApply() {
     const myParticipant = myParticipants.find(mp => id === mp["event_id"]);
     if (myParticipant) {
       // TODO 通知：すでに申し込んでいます
-      router.push(`/events?filter=${EventFilterEnum.registrable}`);
+      router.push(`/events?filter=${EventFilterEnum.apply}`);
       return;
     }
 
@@ -46,8 +46,18 @@ export default function EventApply() {
       data: { event }
     });
   }, requestValues);
-
+  
   return render(
-    (data) => <EventApplyTemplate event={data.event} myUserData={myUserData}/>
+    (data) => {
+      return (
+        <EventApplyTemplate 
+          event={data.event}
+          myUserData={myUserData}
+          subNavInfos={[
+            {href: `/events?filter=${EventFilterEnum.apply}`, text: "一覧へ戻る"}
+          ]}
+        />
+      );
+    }
   );
 }

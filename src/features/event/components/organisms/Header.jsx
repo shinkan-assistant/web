@@ -1,28 +1,6 @@
 import Link from 'next/link';
 import { EventPageTypeEnum } from "../../enums/page";
 
-function LinkIcon({pageType, event}) {
-  const info = {
-    [EventPageTypeEnum.detail]: {
-      href: `/events/detail/${event.id}/edit`,
-      label: "スケジュール変更 / キャンセル",
-    },
-    [EventPageTypeEnum.detailEdit]: {
-      href: `/events/detail/${event.id}`,
-      label: "編集キャンセル"
-    },
-  }[pageType];
-
-  return (
-    <Link
-      href={info.href}
-      className="ml-4 px-4 py-2 text-sm font-semibold rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
-    >
-      {info.label}
-    </Link>
-  );
-}
-
 function EventTitle({pageType, event}) {
   const isListPage = pageType === EventPageTypeEnum.list;
   const subTitle = {
@@ -39,15 +17,35 @@ function EventTitle({pageType, event}) {
   );
 }
 
-export default function EventHeader({pageType, event}) {
-  const hasLinkIcon = [EventPageTypeEnum.detail, EventPageTypeEnum.detailEdit]
-    .includes(pageType)
+function SubNavLink({info}) {
+  return (
+    <Link
+      href={info.href}
+      className="px-4 py-2 text-sm font-semibold rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+    >
+      {info.text}
+    </Link>
+  );
+}
 
+function SubNavMenu({ infos }) {
+  return (
+    <div className="flex justify-start items-center gap-x-4">
+      {infos.map((info, index) => (
+        <SubNavLink key={index} info={info} />
+      ))}
+    </div>
+  );
+}
+
+export default function EventHeader({pageType, event, subNavInfos}) {
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col space-y-6">
         <EventTitle pageType={pageType} event={event} />
-        {hasLinkIcon && <LinkIcon pageType={pageType} event={event} />}
+        { pageType !== EventPageTypeEnum.list && 
+          <SubNavMenu infos={subNavInfos} />
+        }
       </div>
     </div>
   );

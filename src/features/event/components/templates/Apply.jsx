@@ -14,9 +14,8 @@ import { getCheckedScheduleIds, getInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
 
-export default function EventApplyTemplate({ event, myUserData }) {
+export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
   const router = useRouter();
-
   const allSchedules = event.schedules;
 
   const formHook = useFormHook({
@@ -51,7 +50,11 @@ export default function EventApplyTemplate({ event, myUserData }) {
     <ItemContainer>
       <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
-          <EventHeader pageType={EventPageTypeEnum.apply} isApplyPage={false} event={event} />
+          <EventHeader 
+            pageType={EventPageTypeEnum.apply}
+            event={event}
+            subNavInfos={subNavInfos}
+          />
         </div>
 
         <div className="mb-8">
