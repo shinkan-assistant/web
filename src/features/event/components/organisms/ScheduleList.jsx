@@ -96,14 +96,14 @@ function ScheduleFee({feesByBelong, belong}) {
 export function ScheduleItem({
   pageType, schedule, belong, 
   myParticipant, // isFormPage === false の場合に必要
-  formController // isFormPage === true の場合に必要
+  formHook // isFormPage === true の場合に必要
 }) {
   const isFormPage = judgeFormPage(pageType)
   const publicLocation = pageType === EventPageTypeEnum.apply;
 
   let isParticipating;
   if (isFormPage) 
-    isParticipating = formController.inputValues[getInputName(schedule)];
+    isParticipating = formHook.inputValues[getInputName(schedule)];
   else 
     isParticipating = myParticipant.schedules.map(ps => ps["id"]).includes(schedule["id"]);
 
@@ -136,24 +136,24 @@ export function ScheduleItem({
       
       {isFormPage  &&
         <div className="mt-4">
-          <Input name={getInputName(schedule)} formController={formController} />
+          <Input name={getInputName(schedule)} formHook={formHook} />
         </div>
       }
     </div>
   );
 }
 
-export function AllCancelButton({formController}) {
+export function AllCancelButton({formHook}) {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    const isAllCancel =formController.inputNames
-      .every(inputName => !formController.inputValues[inputName]);
+    const isAllCancel =formHook.inputNames
+      .every(inputName => !formHook.inputValues[inputName]);
     setDisabled(isAllCancel);
-  }, [formController.inputValues])
+  }, [formHook.inputValues])
 
   function changeAllCancel() { 
-    const updatedInputValues = formController.inputNames
+    const updatedInputValues = formHook.inputNames
       .reduce((acc, inputName) => {
         return {
           [inputName]: false,
@@ -161,7 +161,7 @@ export function AllCancelButton({formController}) {
         }
       }, {});
     setDisabled(true);
-    formController.changeInputs(updatedInputValues);
+    formHook.changeInputs(updatedInputValues);
   }
 
   return (
@@ -172,18 +172,18 @@ export function AllCancelButton({formController}) {
   );
 }
 
-export function ResetButton({formController}) {
+export function ResetButton({formHook}) {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    const { inputNames, inputInfos, inputValues } = formController;
+    const { inputNames, inputInfos, inputValues } = formHook;
     const isInitialValues = inputNames
       .every(name => inputValues[name] === inputInfos[name].initialValue);
     setDisabled(isInitialValues);
-  }, [formController.inputValues])
+  }, [formHook.inputValues])
 
   function changeAllCancel() { 
-    const { inputNames, inputInfos } = formController;
+    const { inputNames, inputInfos } = formHook;
     const resetInputValues = inputNames.reduce((acc, name) => {
       return {
         [name]: inputInfos[name].initialValue,
@@ -191,7 +191,7 @@ export function ResetButton({formController}) {
       }
     }, {});
     setDisabled(true);
-    formController.changeInputs(resetInputValues);
+    formHook.changeInputs(resetInputValues);
   }
 
   return (
@@ -205,7 +205,7 @@ export function ResetButton({formController}) {
 export function EventScheduleList({
   pageType, allSchedules, belong, 
   myParticipant, // isFormPage === false の場合に必要
-  formController // isFormPage === true の場合に必要
+  formHook // isFormPage === true の場合に必要
 }) {
   const isDetailUpdatePage = pageType === EventPageTypeEnum.detailUpdate;
 
@@ -214,8 +214,8 @@ export function EventScheduleList({
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">スケジュール</h2>
       {isDetailUpdatePage && 
         <div className="flex gap-x-4">
-          <AllCancelButton formController={formController} />
-          <ResetButton formController={formController} />
+          <AllCancelButton formHook={formHook} />
+          <ResetButton formHook={formHook} />
         </div>
       }
       <div className="space-y-6">
@@ -226,7 +226,7 @@ export function EventScheduleList({
             schedule={schedule}
             belong={belong} 
             myParticipant={myParticipant}
-            formController={formController}
+            formHook={formHook}
           />
         ))}
       </div>

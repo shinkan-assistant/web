@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-export default function useFormController({
+export default function useForm({
   inputInfos, judgeCanSubmit, handleSubmit
 }) {
   const inputNames = Object.keys(inputInfos);
@@ -64,7 +64,7 @@ export default function useFormController({
     }
   };
 
-  const formController = {
+  const formHook = {
     inputNames,
     inputInfos: inputInfosTmp, 
     onChangeInput, 
@@ -75,5 +75,5 @@ export default function useFormController({
     isProcessing, 
     error,
   }
-  return formController;
+  return formHook;
 }

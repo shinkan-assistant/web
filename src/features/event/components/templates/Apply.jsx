@@ -8,7 +8,7 @@ import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
 import { createNormalParticipant } from "@/features/participant/api/create";
 import { db } from "@/lib/firebase/clientApp";
-import useFormController from "@/base/hooks/useFormController";
+import useForm from "@/base/hooks/useForm";
 import { useRouter } from "next/navigation";
 import { getCheckedScheduleIds, getInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
@@ -18,7 +18,7 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
 
   const allSchedules = event.schedules;
 
-  const formController = useFormController({
+  const formHook = useForm({
     inputInfos: allSchedules.reduce((acc, schedule) => {
       return {
         [getInputName(schedule)]: {
@@ -47,7 +47,7 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
 
   return (
     <ItemContainer>
-      <FormContainer controller={formController} >
+      <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
           <EventHeader pageType={EventPageTypeEnum.apply} isApplyPage={false} event={event} />
         </div>
@@ -59,10 +59,10 @@ export default function EventApplyTemplate({ event, myUserMetadata }) {
         <EventScheduleList 
           pageType={EventPageTypeEnum.apply} 
           allSchedules={allSchedules}
-          participatingScheduleIds={getCheckedScheduleIds({inputValues: formController.inputValues})}
+          participatingScheduleIds={getCheckedScheduleIds({inputValues: formHook.inputValues})}
           belong={myUserMetadata["belong"]}
           publicLocation={false}
-          formController={formController}
+          formHook={formHook}
         />
       </FormContainer>
     </ItemContainer>

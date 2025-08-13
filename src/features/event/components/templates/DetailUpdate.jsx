@@ -6,7 +6,7 @@ import { EventScheduleList } from "@/features/event/components/organisms/Schedul
 import ItemContainer from "@/base/components/containers/Item";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
-import useFormController from "@/base/hooks/useFormController";
+import useForm from "@/base/hooks/useForm";
 import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
 import { getUpdatedScheduleInfos, getCheckedScheduleIds, getInputName, getScheduleIdFromInputName } from "../utils";
@@ -19,7 +19,7 @@ export default function EventDetailUpdateTemplate({ event, myUserMetadata }) {
   const allSchedules = event.schedules;
   const myParticipant = event.myParticipant
 
-  const formController = useFormController({
+  const formHook = useForm({
     inputInfos: allSchedules.reduce((acc, schedule) => {
       return {
         [getInputName(schedule)]: {
@@ -49,7 +49,7 @@ export default function EventDetailUpdateTemplate({ event, myUserMetadata }) {
 
   return (
     <ItemContainer>
-      <FormContainer controller={formController} >
+      <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
           <EventHeader pageType={EventPageTypeEnum.detailUpdate} isApplyPage={false} event={event} />
         </div>
@@ -62,7 +62,7 @@ export default function EventDetailUpdateTemplate({ event, myUserMetadata }) {
           pageType={EventPageTypeEnum.detailUpdate}
           allSchedules={allSchedules}
           belong={myUserMetadata["belong"]}
-          formController={formController}
+          formHook={formHook}
         />
       </FormContainer>
     </ItemContainer>

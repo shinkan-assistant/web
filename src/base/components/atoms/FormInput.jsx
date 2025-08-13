@@ -19,15 +19,15 @@ export function Checkbox({name, label, ref, value, onChange}) {
   );
 }
 
-export default function Input({name, formController}) {
-  const inputInfo = formController.inputInfos[name];
+export default function Input({name, formHook}) {
+  const inputInfo = formHook.inputInfos[name];
   return (
     <inputInfo.Component
       name={name}
       label={inputInfo.label}
       ref={inputInfo.ref}
-      value={formController.inputValues[name]}
-      onChange={formController.onChangeInput}
+      value={formHook.inputValues[name]}
+      onChange={formHook.onChangeInput}
     />
   )
 }
