@@ -15,10 +15,6 @@ export async function updateParticipantSchedules(db, {initialParticipant, curren
     return;
   }
 
-  console.log({
-    "schedules": initialParticipant.schedules,
-    "updated_schedule_infos": getUpdatedScheduleInfos({initialParticipant, currentCheckedScheduleIds}),
-  });
   updateRecord(db, "participants", {
     Schema: UpdateParticipantSchedulesSchema,
     id: id, 

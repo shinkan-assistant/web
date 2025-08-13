@@ -37,7 +37,6 @@ export const UpdateParticipantSchedulesSchema = ParticipantSchema
   // TODO initial_schedules は store から取得する
   .pick({"schedules": true, "updated_schedule_infos": true })
   .transform((data) => {
-    console.log(data);
     const cancelScheduleIds = data["updated_schedule_infos"]
       .filter(elem => elem["action"] === ParticipantUpdatedScheduleActionEnum.cancel)
       .map(elem => elem["id"]);
@@ -49,8 +48,6 @@ export const UpdateParticipantSchedulesSchema = ParticipantSchema
       .map(elem => elem["id"]);
     schedules = schedules
       .concat(addScheduleIds.map(scheduleId => getInitialSchedule(scheduleId)));
-
-    console.log(cancelScheduleIds, addScheduleIds);
 
     data = {
       "schedules": schedules,
