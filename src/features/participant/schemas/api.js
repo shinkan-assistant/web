@@ -1,75 +1,60 @@
 import z from "@/lib/zod";
 import ParticipantSchema from "./object";
 import { transformForCreate, transformForUpdate } from "../../../base/schema/api";
-import { AttendanceStatusEnum } from "../enums/data";
-import { ParticipantUpdatedScheduleActionEnum } from "../enums/api";
-
-function getInitialSchedule(id) {
-  return {
-    "id": id,
-    "attendance": {"status": AttendanceStatusEnum.unAttend},
-    "payment": {"is_completed": false},
-  };
-}
+import { judgeIsParticipating } from "@/features/event/components/utils";
+import { getNowDateTimeStr } from "@/base/utils";
 
 export const CreateParticipantSchema = ParticipantSchema
+  .pick({"user_email": true, "event_id": true, "is_organizer": true })
   .extend({"schedule_ids": z.array(z.string().uuid()).min(1)})
-  .pick({"user_email": true, "event_id": true, "is_organizer": true, "schedule_ids": true })
-  .transform((data) => {
-    data = {
-      "user_email": data["user_email"],
-      "event_id": data["event_id"],
-      "is_organizer": data["is_organizer"],
-      "schedules": data["schedule_ids"].map(scheduleId => getInitialSchedule(scheduleId)),
-    }
-    return transformForCreate(data);
+  .transform((formData) => {
+    return transformForCreate({
+      "user_email": formData["user_email"],
+      "event_id": formData["event_id"],
+      "is_organizer": formData["is_organizer"],
+      "schedules": formData["schedule_ids"]
+        .map(scheduleId => {
+          return { "id": scheduleId, "created_at": getNowDateTimeStr() } 
+        }),
+    });
   });
 
-const UpdatedScheduleInfoSchema = z.object({
-  "id": z.string().uuid(),
-  "action": z.enum(Object.values(ParticipantUpdatedScheduleActionEnum)),
-});
+export const UpdateParticipantSchedulesSchema = z.object({
+    initialData: ParticipantSchema,
+    formData: z.object({
+      "schedule_ids": z.array(z.string().uuid()),
+    }),
+  }).transform(({initialData, formData}) => {
+    const data = initialData;
 
-export const UpdateParticipantScheduleSchema = z.object({
-  initial: ParticipantSchema,
-  formData: z.object({
-    "schedule_ids": z.array(z.string().uuid()).min(1),
-  }),
-}).transform(({initial, formData}) => {
-  const data = initial;
+    (() => {
+      const initialScheduleIds = initialData["schedules"]
+        .filter(schedule => judgeIsParticipating(schedule, {myParticipant: initialData}))
+        .map(schedule => schedule["id"]);
 
-  (() => {
-    const initialScheduleIds = initial["schedules"]
-      .filter(schedule => schedule["cancel"] !== undefined)
-      .map(schedule => schedule["id"]);
-
-    const cancelScheduleIds = initialScheduleIds
-      .filter(scheduleId => !formData["schedule_ids"].includes(scheduleId));
-    if (cancelScheduleIds.length > 0) {
-      if (initialScheduleIds.length === cancelScheduleIds.length) {
-        data["cancel"] = { "issued_at": (new Date()).toString() };
-        return;
+      const cancelScheduleIds = initialScheduleIds
+        .filter(scheduleId => !formData["schedule_ids"].includes(scheduleId));
+      if (cancelScheduleIds.length > 0) {
+        data["schedules"]
+          .filter(schedule => cancelScheduleIds.includes(schedule["id"]))
+          .map(schedule => {
+            schedule["cancel"] = { "issued_at": getNowDateTimeStr() }
+            return schedule;
+          })
       }
-      data["schedules"]
-        .filter(schedule => !cancelScheduleIds.includes(schedule["id"]))
-        .map(schedule => {
-          schedule["cancel"] = { "issued_at": (new Date()).toString() }
-          return schedule;
-        })
-    }
-    
-    const addedScheduleIds = formData["schedule_ids"]
-      .filter(scheduleId => !initialScheduleIds.includes(scheduleId));
-    if (addedScheduleIds.length > 0) {
-      for (let addedScheduleId of addedScheduleIds) {
-        const existSchedule = data["schedules"].find(schedule => addedScheduleId === schedule["id"]);
-        if (existSchedule) 
-          delete existSchedule["cancel"];
-        else 
-          data["schedule"].push(getInitialSchedule(addedScheduleId));
+      
+      const addedScheduleIds = formData["schedule_ids"]
+        .filter(scheduleId => !initialScheduleIds.includes(scheduleId));
+      if (addedScheduleIds.length > 0) {
+        for (let addedScheduleId of addedScheduleIds) {
+          const existSchedule = data["schedules"].find(schedule => addedScheduleId === schedule["id"]);
+          if (existSchedule) 
+            delete existSchedule["cancel"];
+          else 
+            data["schedules"].push({ "id": addedScheduleId, "created_at": getNowDateTimeStr() });
+        }
       }
-    }
-  })();
+    })();
 
-  return transformForUpdate(data);
-})
+    return transformForUpdate(data);
+  })

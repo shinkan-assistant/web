@@ -2,13 +2,10 @@ import { EventItemIcon } from "../atoms/TextItemIcon";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventTypeEnum } from "@/features/event/enums/data";
 import { EventPageTypeEnum, judgePageForManage, judgePageForParticipant } from "../../enums/page";
+import { formatDateTime } from "@/base/utils";
 
 function EventDate({isListPage, event}) {
-  const date = new Date(event.schedules[0].time_range.start_at)
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1; // 月は0から始まるため+1
-  const day = date.getDate();
-  const formattedDate = `${year}年${month}月${day}日`;
+  const formattedDate = formatDateTime(event.schedules[0].time_range.start_at, ({year, month, date}) => `${year}年${month}月${date}日`)
 
   return (
     <div className={`flex items-center text-gray-700 ${isListPage ? "text-base" : "text-lg"}`}>

@@ -8,6 +8,21 @@ import seedUsers from './seed/user.mjs';
 import mockEvents from './mock/event.mjs';
 import mockParticipants from './mock/participant.mjs';
 
+function getNowDateTimeStr() {
+  const now = new Date();
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZoneName: 'short', // タイムゾーンを略語で表示（例: 'JST'）
+  };
+  return now.toLocaleString('ja-JP', options);
+}
+
+
 const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 let serviceAccount;
@@ -72,7 +87,7 @@ async function insertDocs(tableName, dataArray) {
       // IDをデータから削除（Firestoreのデータ自体にIDを含めないため）
       const { id, ...dataWithoutId } = item;
       
-      const nowDateStr = new Date().toString();
+      const nowDateStr = getNowDateTimeStr();
       dataWithoutId['created_at'] = nowDateStr;
       dataWithoutId['updated_at'] = nowDateStr;
       

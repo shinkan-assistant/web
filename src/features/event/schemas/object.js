@@ -2,6 +2,7 @@ import { v4 as uuidV4 } from 'uuid';
 import z from "@/lib/zod";
 import { BelongEnum } from "@/data/enums/user.js";
 import { ContactGroupPlatformEnum, EventTypeEnum, FeeTypeEnum, OnlineMeetingPlatformEnum } from "@/features/event/enums/data.js";
+import { DateTimeSchema } from '@/base/schema/object';
 
 const LocationSchema = z.object({
   name: z.string().min(1),
@@ -29,8 +30,8 @@ const FeeByBelongSchema = z.object({
 });
 
 const TimeRangeSchema = z.object({
-  start_at: z.string().datetime(),
-  end_at: z.string().datetime().optional(),
+  start_at: DateTimeSchema,
+  end_at: DateTimeSchema.optional(),
 }).transform((data) => {
   data.start_at = new Date(data.start_at);
   if (data.end_at !== undefined) 

@@ -8,11 +8,12 @@ import FormContainer from "@/base/components/containers/Form";
 import useForm from "@/base/hooks/useForm";
 import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
-import { getInputName, getScheduleIdFromInputName } from "../utils";
+import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
 import { AllCancelButton } from "../organisms/AllCancelButton";
 import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
+import { updateRecord } from "@/base/api/update";
 
 export default function EventDetailEditTemplate({ event, myUserData, myParticipant, subNavInfos }) {
   const router = useRouter();
@@ -22,10 +23,10 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
   const formHook = useForm({
     inputInfos: allSchedules.reduce((acc, schedule) => {
       return {
-        [getInputName(schedule)]: {
+        [getInputNameFromSchedule(schedule)]: {
           Component: Checkbox,
           label: "参加しますか？（キャンセルならチェックを外す）",
-          initialValue: myParticipant.schedules.map(ps => ps["id"]).includes(schedule["id"])
+          initialValue: judgeIsParticipating(schedule, { myParticipant })
         },
         ...acc
       }
@@ -39,14 +40,17 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
         "schedule_ids": scheduleIds,
       };
     },
-    judgeCanSubmit: (formData) => {
-      const initialScheduleIds = myParticipant.schedules.map(s => s["id"]);
-      return initialScheduleIds.toString() !== formData["schedule_ids"].toString();
+    judgeCanSubmit: (initialFormData, formData) => {
+      if (initialFormData["schedule_ids"].length !== formData["schedule_ids"].length) return true;
+      for (let scheduleId of formData["schedule_ids"]) {
+        if (!initialFormData['schedule_ids'].includes(scheduleId)) return true;
+      }
+      return false;
     },
     handleSubmit: async function (formData) {
       await updateRecord(db, "participants", {
         Schema: UpdateParticipantSchedulesSchema,
-        initial: myParticipant,
+        initialData: myParticipant,
         formData: formData,
       });
       // TODO 上から通知バーを出すようにする

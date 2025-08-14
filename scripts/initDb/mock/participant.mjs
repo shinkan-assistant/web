@@ -7,24 +7,20 @@ const mockParticipants = [
       {
         "id": "b3484f0e-36c1-4039-9d7a-1f81d113426e",
         "attendance": {
-          "status": "出席",
-          "attend_at" :"",
+          "issued_at": "2025/03/29 14:55:00 JST",
         },
         "payment": {
-          "is_completed": true,
-          "paid_at": "",
+          "issued_at": "2025/03/29 17:20:00 JST",
           "method": "PayPay",
         },
+        "created_at": "2025/03/20 18:19:00 JST",
       },
       {
         "id": "84a1e944-884d-4950-8b01-382a93b5d263",
         "attendance": {
-          "status": "出席",
-          "attend_at" :"",
+          "issued_at": "2025/03/29 18:07:00 JST",
         },
-        "payment": {
-          "is_completed": false,
-        },
+        "created_at": "2025/03/20 18:19:00 JST",
       },
     ],
   },
@@ -36,14 +32,13 @@ const mockParticipants = [
       {
         "id": "b3484f0e-36c1-4039-9d7a-1f81d113426e",
         "attendance": {
-          "status": "出席",
-          "attend_at" :"",
+          "issued_at": "2025/03/29 15:10:00 JST",
         },
         "payment": {
-          "is_completed": true,
-          "paid_at": "",
-          "method": "現金",
+          "issued_at": "2025/03/29 17:25:00 JST",
+          "method": "PayPay",
         },
+        "created_at": "2025/03/24 20:12:00 JST",
       },
     ]
   },
@@ -54,9 +49,7 @@ const mockParticipants = [
     "schedules": [
       {
         "id": "4d1b8089-08a6-419b-a32b-3e5a7b0d9124",
-        "attendance": {
-          "status": "未出席",
-        },
+        "created_at": "2025/03/22 10:15:00 JST",
       }
     ]
   },
@@ -67,8 +60,9 @@ const mockParticipants = [
     "schedules": [
       {
         "id": "4d1b8089-08a6-419b-a32b-3e5a7b0d9124",
-        "attendance": {
-          "status": "キャンセル",
+        "created_at": "2025/03/26 12:57:00 JST",
+        "cancel": {
+          "issued_at": "2025/03/28 12:27:00 JST", 
         },
       }
     ]

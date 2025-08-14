@@ -2,16 +2,13 @@ import {FeeTypeEnum} from "@/features/event/enums/data.js";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventItemIcon } from "../atoms/TextItemIcon";
 import { EventPageTypeEnum, judgeFormPageForParticipant, judgePageForManage } from "../../enums/page";
-import { getInputName } from "../utils";
+import { getInputNameFromSchedule, judgeIsParticipating } from "../utils";
 import Input from "@/base/components/atoms/FormInput";
+import { formatDateTime } from "@/base/utils";
 
 function ScheduleTimeRange({timeRange}) {
-  function formatScheduleTime(isoString) {
-    const date = new Date(isoString)
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const minuteStr = minute >= 10 ? `${minute}` : `0${minute}`
-    return `${hour}:${minuteStr}`;
+  function formatScheduleTime(datetimeString) {
+    return formatDateTime(datetimeString, ({hour, minute}) => `${hour}:${minute}`);
   };
   
   const existsEndAt = Boolean(timeRange.end_at);
@@ -108,9 +105,9 @@ export function ScheduleItem({
   let isParticipating;
   if (!isPageForManage) {
     if (isFormPageForParticipant) {
-      isParticipating = formHook.inputValues[getInputName(schedule)];
+      isParticipating = formHook.inputValues[getInputNameFromSchedule(schedule)];
     } else {
-      isParticipating = myParticipant.schedules.map(ps => ps["id"]).includes(schedule["id"]);
+      isParticipating = judgeIsParticipating(schedule, {myParticipant});
     }
   }
 
@@ -143,7 +140,7 @@ export function ScheduleItem({
       
       {isFormPageForParticipant &&
         <div className="mt-4">
-          <Input name={getInputName(schedule)} formHook={formHook} />
+          <Input name={getInputNameFromSchedule(schedule)} formHook={formHook} />
         </div>
       }
     </div>

@@ -1,7 +1,8 @@
 import { v4 as uuidV4 } from 'uuid';
+import { getNowDateTimeStr } from '../utils';
 
 export function transformForCreate(data) {
-  const nowDateStr = new Date().toString();
+  const nowDateStr = getNowDateTimeStr();
   data.id = uuidV4();
   data.updated_at = nowDateStr
   data.created_at = nowDateStr;
@@ -9,7 +10,7 @@ export function transformForCreate(data) {
 }
 
 export function transformForUpdate(data) {
-  const nowDateStr = new Date().toString();
+  const nowDateStr = getNowDateTimeStr();
   data.updated_at = nowDateStr
   return data;
 }

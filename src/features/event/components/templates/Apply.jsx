@@ -6,13 +6,14 @@ import { EventScheduleList } from "@/features/event/components/organisms/Schedul
 import ItemContainer from "@/base/components/containers/Item";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
-import { createNormalParticipant } from "@/features/participant/api/create";
 import { db } from "@/lib/firebase/clientApp";
 import useForm from "@/base/hooks/useForm";
 import { useRouter } from "next/navigation";
-import { getCheckedScheduleIds, getInputName } from "../utils";
+import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
+import { createRecord } from "@/base/api/create";
+import { CreateParticipantSchema } from "@/features/participant/schemas/api";
 
 export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
   const formHook = useForm({
     inputInfos: allSchedules.reduce((acc, schedule) => {
       return {
-        [getInputName(schedule)]: {
+        [getInputNameFromSchedule(schedule)]: {
           Component: Checkbox,
           label: "参加しますか？",
           initialValue: false,
@@ -30,16 +31,28 @@ export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
       }
     }, {}),
     Buttons: [ResetButton],
-    judgeCanSubmit: ({inputValues}) => {
-      const checkedScheduleIds = getCheckedScheduleIds({inputValues})
-      return checkedScheduleIds.length > 0;
+    convertToFormData: (inputValues) => {
+      const scheduleIds = Object.keys(inputValues)
+        .filter(name => inputValues[name])
+        .map(name => getScheduleIdFromInputName(name));
+      return {
+        "schedule_ids": scheduleIds,
+      };
     },
-    handleSubmit: async function ({inputValues}) {
-      const checkedScheduleIds = getCheckedScheduleIds({inputValues});
-      await createNormalParticipant(db, {
-        userEmail: myUserData.email, 
-        eventId: event.id,
-        scheduleIds: checkedScheduleIds,
+    judgeCanSubmit: (_, formData) => {
+      return formData["schedule_ids"].length > 0;
+    },
+    handleSubmit: async function (formData) {
+      await createRecord(db, "participants", {
+        Schema: CreateParticipantSchema,
+        uniqueData: {
+          "user_email": myUserData["email"],
+          "event_id": event["id"],
+        },
+        otherData: {
+          "is_organizer": false,
+          "schedule_ids": formData["schedule_ids"],
+        }
       });
       // TODO 通知：申し込みが完了しました
       router.push(`/events/detail/${event["id"]}`);
@@ -64,9 +77,7 @@ export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
         <EventScheduleList 
           pageType={EventPageTypeEnum.apply} 
           allSchedules={allSchedules}
-          participatingScheduleIds={getCheckedScheduleIds({inputValues: formHook.inputValues})}
           belong={myUserData["belong"]}
-          publicLocation={false}
           formHook={formHook}
         />
       </FormContainer>

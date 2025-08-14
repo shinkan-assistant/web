@@ -1,13 +1,13 @@
 import { doc, updateDoc } from "firebase/firestore";
 
-export async function updateRecord(db, tableName, {Schema, initial, formData}) {
-  const id = initial["id"];
+export async function updateRecord(db, tableName, {Schema, initialData, formData}) {
+  const id = initialData["id"];
 
-  if (id) {
+  if (!id) {
     throw new Error('Item ID is required for update operation.');
   }
 
-  const data = Schema.parse({ initial, formData });
+  const data = Schema.parse({ initialData, formData });
 
   const docRef = doc(db, tableName, id);
   await updateDoc(docRef, data);
