@@ -38,13 +38,15 @@ function NavLink({ href, children }) {
 }
 
 export default function NavMenu() {
-  const authUser = useAuthUser();
   const myUserData = useMyUserData();
 
   const [navLinkInfos, setNavLinkInfos] = useState(null);
 
   useEffect(() => {
-    if (!myUserData) return;
+    if (!myUserData) {
+      setNavLinkInfos(null);
+      return;
+    }
 
     const isAdmin = myUserData["is_admin"];
     const isMember = myUserData["belong"]["is_member"];
@@ -80,12 +82,8 @@ export default function NavMenu() {
     );
   }, [myUserData?.["email"]]);
 
-  if (!authUser) {
-    return <></>
-  }
-
   if (!navLinkInfos) {
-    return <div>読み込み中です</div>
+    return <></>
   }
 
   return (

@@ -25,7 +25,6 @@ export default function useForm({
   }, [{}, {}]);
 
   function onChangeInput(name, {value}) {
-    console.log(setInputValues);
     setInputValues[name](value);
   }
 

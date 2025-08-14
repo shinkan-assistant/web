@@ -1,26 +1,48 @@
 import "server-only";
 
 import { cookies } from "next/headers";
-import { initializeServerApp, initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp, getApps, cert } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
+import path from 'path';
+import fs from 'fs';
+import 'dotenv/config';
 
-import { getAuth } from "firebase/auth";
-import { firebaseConfig } from "./config";
+const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
-// Returns an authenticated client SDK instance for use in Server Side Rendering
-// and Static Site Generation
+let serviceAccount;
+try {
+  const absoluteServiceAccountPath = path.resolve(serviceAccountPath);
+  const serviceAccountFile = fs.readFileSync(absoluteServiceAccountPath, 'utf8');
+  serviceAccount = JSON.parse(serviceAccountFile);
+} catch (error) {
+  console.error('エラー: サービスアカウントキーの読み込みに失敗しました。');
+  console.error('パスを確認するか、ファイルが正しいJSON形式であるか確認してください。');
+  console.error(error);
+  process.exit(1);
+}
+
+// Firebase Admin SDKの初期化
+if (!getApps().length) {
+  initializeApp({
+    credential: cert(serviceAccount), // Admin SDKのサービスアカウントキー
+    // ... firebaseConfigから他の設定も追加
+  });
+}
+
+// 認証ユーザーを返す関数
 export async function getAuthenticatedAppForUser() {
   const authIdToken = (await cookies()).get("__session")?.value;
 
-  const firebaseServerApp = initializeServerApp(initializeApp(firebaseConfig), {authIdToken});
-
-  const auth = getAuth(firebaseServerApp);
-  await auth.authStateReady();
-  const authUser = auth.currentUser;
-
-  return { firebaseServerApp, authUser };
+  try {
+    // Admin SDKを使ってIDトークンを検証
+    const decodedToken = await getAuth().verifyIdToken(authIdToken);
+    const authUser = await getAuth().getUser(decodedToken.uid);
+    return { authUser };
+  } catch (error) {
+    // トークンが無効または存在しない場合はnullを返す
+    return { authUser: null };
+  }
 }
 
-export function getAuthenticatedDb(firebaseServerApp) {
-  return getFirestore(firebaseServerApp);
-}
+export const db = getFirestore();

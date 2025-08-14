@@ -22,7 +22,11 @@ export async function signInWithGoogle() {
   let authUser = null;
   try {
     const result = await signInWithPopup(auth, provider);
-    authUser = result.user;
+    authUser = result.user ? {
+      email: authUser.email,
+      displayName: authUser.displayName,
+      photoURL: authUser.photoURL,
+    } : null;
   } catch (error) {
     // ユーザーがポップアップを閉じた、またはキャンセルされた場合はエラーを無視する
     switch (error.code) {

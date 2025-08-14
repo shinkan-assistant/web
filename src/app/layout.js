@@ -9,7 +9,12 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const { initialAuthUser } = await getAuthenticatedAppForUser();
+  const { authUser } = await getAuthenticatedAppForUser();
+  const initialAuthUser = authUser ? {
+    email: authUser.email,
+    displayName: authUser.displayName,
+    photoURL: authUser.photoURL,
+  } : null;
 
   return (
     <html lang="ja">

@@ -1,4 +1,4 @@
-import { initializeApp, cert } from 'firebase-admin/app';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import path from 'path';
 import fs from 'fs';
@@ -15,7 +15,7 @@ try {
   const absoluteServiceAccountPath = path.resolve(serviceAccountPath);
   const serviceAccountFile = fs.readFileSync(absoluteServiceAccountPath, 'utf8');
   serviceAccount = JSON.parse(serviceAccountFile);
-  console.log(`サービスアカウントキーをロードしました: ${absoluteServiceAccountPath}`);
+  console.log("サービスアカウントキーをロードしました");
 } catch (error) {
   console.error('エラー: サービスアカウントキーの読み込みに失敗しました。');
   console.error('パスを確認するか、ファイルが正しいJSON形式であるか確認してください。');
@@ -23,16 +23,12 @@ try {
   process.exit(1);
 }
 
-try {
+// Firebase Admin SDKの初期化
+if (!getApps().length) {
   initializeApp({
-    credential: cert(serviceAccount)
+    credential: cert(serviceAccount), // Admin SDKのサービスアカウントキー
+    // ... firebaseConfigから他の設定も追加
   });
-  console.log('Firebase Admin SDK が正常に初期化されました。');
-} catch (error) {
-  console.error('エラー: Firebase Admin SDK の初期化に失敗しました。');
-  console.error('認証情報が正しいか、または既に Firebase App が初期化されていないか確認してください。');
-  console.error(error);
-  process.exit(1);
 }
 
 const db = getFirestore();
