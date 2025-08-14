@@ -104,9 +104,9 @@ async function initializeData() {
 
   await Promise.all([
     () => insertDocs('users', seedUsers),
-    useMock ? () => insertDocs('events', mockEvents) : null,
-    useMock ? () => insertDocs('participants', mockParticipants) : null,
-  ].filter(fn => fn !== null).map(fn => fn()));
+    useMock ? () => insertDocs('events', mockEvents) : () => {},
+    useMock ? () => insertDocs('participants', mockParticipants) : () => {},
+  ].map(fn => fn()));
 }
 
 initializeData();

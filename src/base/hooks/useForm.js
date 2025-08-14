@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function useFormHook({
-  inputInfos, judgeCanSubmit, handleSubmit, Buttons
+export default function useForm({
+  inputInfos, convertToFormData, judgeCanSubmit, handleSubmit, Buttons
 }) {
   const inputNames = Object.keys(inputInfos);
-  const inputInfosTmp = inputNames.reduce((acc, inputName) => {
+  inputInfos = inputNames.reduce((acc, inputName) => {
     return {
       [inputName]: {
         ...inputInfos[inputName],
@@ -15,35 +15,36 @@ export default function useFormHook({
       ...acc};
   }, {});
 
-  const initialInputValues = inputNames.reduce((acc, inputName) => {
-    return {
-      [inputName]: inputInfos[inputName].initialValue,
-      ...acc,
-    }
-  }, {});
-  const [inputValues, setInputValues] = useState(initialInputValues);
-  
-  function onChangeInput(inputName, {value}) {
-    setInputValues({
-      ...inputValues,
-      [inputName]: value,
-    });
-  }
-  function changeInputs(updatedInputValues) {
-    const updatedInputNames = Object.keys(updatedInputValues);
-    setInputValues(
-      Object.keys(inputValues).reduce((acc, inputName) => {
-        acc[inputName] = updatedInputNames.includes(inputName)
-          ? updatedInputValues[inputName]
-          : inputValues[inputName];
-        return acc;
-      }, {})
-    );
+  const [inputValues, setInputValues] = inputNames.reduce((acc, inputName) => {
+    const [states, setStates] = acc;
+    const [state, setState] = useState(inputInfos[inputName].initialValue)
+    return [
+      { [inputName]: state, ...states },
+      { [inputName]: setState, ...setStates }
+    ];
+  }, [{}, {}]);
+
+  function onChangeInput(name, {value}) {
+    console.log(setInputValues);
+    setInputValues[name](value);
   }
 
-  function getCanSubmit() {
-    return judgeCanSubmit({inputValues});
+  function changeInputs(updatedInputValues) {
+    const updatedInputNames = Object.keys(updatedInputValues);
+    for (let inputName of Object.keys(setInputValues)) {
+      if (updatedInputNames.includes(inputName))
+        setInputValues[inputName](updatedInputValues[inputName]);
+    }
   }
+
+  console.log(inputValues);
+  const [formData, setFormData] = useState(convertToFormData(inputValues));
+  const [canSubmit, setCanSubmit] = useState(false);
+
+  useEffect(() => {
+    setFormData(convertToFormData(inputValues));
+    setCanSubmit(judgeCanSubmit(formData));
+  }, Object.values(inputValues))
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
@@ -53,7 +54,7 @@ export default function useFormHook({
     setError(null);
     
     try {
-      await handleSubmit({inputValues})
+      await handleSubmit({formData})
     }
     catch (error) {
       // TODO エラーを格納
@@ -64,17 +65,16 @@ export default function useFormHook({
     }
   };
 
-  const formHook = {
+  return {
     inputNames,
-    inputInfos: inputInfosTmp, 
+    inputInfos, 
     Buttons,
-    onChangeInput, 
-    changeInputs,
     inputValues, 
-    getCanSubmit, 
-    onSubmit, 
+    canSubmit,
     isProcessing, 
     error,
-  }
-  return formHook;
+    onChangeInput, 
+    changeInputs,
+    onSubmit, 
+  };
 }

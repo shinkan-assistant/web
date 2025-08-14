@@ -5,21 +5,21 @@ import { EventScheduleList } from "@/features/event/components/organisms/Schedul
 import ItemContainer from "@/base/components/containers/Item";
 import { EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
-import useFormHook from "@/base/hooks/useForm";
+import useForm from "@/base/hooks/useForm";
 import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
-import { getUpdatedScheduleInfos, getCheckedScheduleIds, getInputName } from "../utils";
+import { getInputName, getScheduleIdFromInputName } from "../utils";
 import { Checkbox } from "@/base/components/atoms/FormInput";
-import { updateParticipantSchedules } from "@/features/participant/api/update";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
 import { AllCancelButton } from "../organisms/AllCancelButton";
+import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
 
 export default function EventDetailEditTemplate({ event, myUserData, myParticipant, subNavInfos }) {
   const router = useRouter();
 
   const allSchedules = event.schedules;
 
-  const formHook = useFormHook({
+  const formHook = useForm({
     inputInfos: allSchedules.reduce((acc, schedule) => {
       return {
         [getInputName(schedule)]: {
@@ -31,17 +31,23 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
       }
     }, {}),
     Buttons: [ResetButton, AllCancelButton],
-    judgeCanSubmit: ({inputValues}) => {
-      const updatedScheduleInfos = getUpdatedScheduleInfos({
-        initialParticipant: myParticipant, 
-        currentCheckedScheduleIds: getCheckedScheduleIds({inputValues}),
-      });
-      return updatedScheduleInfos.length > 0;
+    convertToFormData: (inputValues) => {
+      const scheduleIds = Object.keys(inputValues)
+        .filter(name => inputValues[name])
+        .map(name => getScheduleIdFromInputName(name));
+      return {
+        "schedule_ids": scheduleIds,
+      };
     },
-    handleSubmit: async function ({inputValues}) {
-      await updateParticipantSchedules(db, {
-        initialParticipant: myParticipant,
-        currentCheckedScheduleIds: getCheckedScheduleIds({ inputValues }),
+    judgeCanSubmit: (formData) => {
+      const initialScheduleIds = myParticipant.schedules.map(s => s["id"]);
+      return initialScheduleIds.toString() !== formData["schedule_ids"].toString();
+    },
+    handleSubmit: async function (formData) {
+      await updateRecord(db, "participants", {
+        Schema: UpdateParticipantSchedulesSchema,
+        initial: myParticipant,
+        formData: formData,
       });
       // TODO 上から通知バーを出すようにする
       router.push(`/events/detail/${event["id"]}`);

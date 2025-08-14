@@ -11,18 +11,19 @@ export function ResetButton({formHook}) {
     const isInitialValues = inputNames
       .every(name => inputValues[name] === inputInfos[name].initialValue);
     setDisabled(isInitialValues);
-  }, [formHook.inputValues])
+  }, Object.values(formHook.inputValues))
 
   function reset() { 
     const { inputNames, inputInfos } = formHook;
-    const resetInputValues = inputNames.reduce((acc, name) => {
-      return {
-        [name]: inputInfos[name].initialValue,
-        ...acc,
-      }
-    }, {});
+    formHook.changeInputs(
+      inputNames.reduce((acc, name) => {
+        return {
+          [name]: inputInfos[name].initialValue,
+          ...acc,
+        }
+      }, {})
+    );
     setDisabled(true);
-    formHook.changeInputs(resetInputValues);
   }
 
   return (

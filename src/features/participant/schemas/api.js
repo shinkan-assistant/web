@@ -30,27 +30,46 @@ const UpdatedScheduleInfoSchema = z.object({
   "action": z.enum(Object.values(ParticipantUpdatedScheduleActionEnum)),
 });
 
-export const UpdateParticipantSchedulesSchema = ParticipantSchema
-  .extend({
-    "updated_schedule_infos": z.array(UpdatedScheduleInfoSchema).min(1)
-  })
-  // TODO initial_schedules は store から取得する
-  .pick({"schedules": true, "updated_schedule_infos": true })
-  .transform((data) => {
-    const cancelScheduleIds = data["updated_schedule_infos"]
-      .filter(elem => elem["action"] === ParticipantUpdatedScheduleActionEnum.cancel)
-      .map(elem => elem["id"]);
-    let schedules = data["schedules"]
-      .filter(schedule => !cancelScheduleIds.includes(schedule["id"]));
+export const UpdateParticipantScheduleSchema = z.object({
+  initial: ParticipantSchema,
+  formData: z.object({
+    "schedule_ids": z.array(z.string().uuid()).min(1),
+  }),
+}).transform(({initial, formData}) => {
+  const data = initial;
 
-    const addScheduleIds = data["updated_schedule_infos"]
-      .filter(elem => elem["action"] === ParticipantUpdatedScheduleActionEnum.add)
-      .map(elem => elem["id"]);
-    schedules = schedules
-      .concat(addScheduleIds.map(scheduleId => getInitialSchedule(scheduleId)));
+  (() => {
+    const initialScheduleIds = initial["schedules"]
+      .filter(schedule => schedule["cancel"] !== undefined)
+      .map(schedule => schedule["id"]);
 
-    data = {
-      "schedules": schedules,
+    const cancelScheduleIds = initialScheduleIds
+      .filter(scheduleId => !formData["schedule_ids"].includes(scheduleId));
+    if (cancelScheduleIds.length > 0) {
+      if (initialScheduleIds.length === cancelScheduleIds.length) {
+        data["cancel"] = { "issued_at": (new Date()).toString() };
+        return;
+      }
+      data["schedules"]
+        .filter(schedule => !cancelScheduleIds.includes(schedule["id"]))
+        .map(schedule => {
+          schedule["cancel"] = { "issued_at": (new Date()).toString() }
+          return schedule;
+        })
     }
-    return transformForUpdate(data);
-  });
+    
+    const addedScheduleIds = formData["schedule_ids"]
+      .filter(scheduleId => !initialScheduleIds.includes(scheduleId));
+    if (addedScheduleIds.length > 0) {
+      for (let addedScheduleId of addedScheduleIds) {
+        const existSchedule = data["schedules"].find(schedule => addedScheduleId === schedule["id"]);
+        if (existSchedule) 
+          delete existSchedule["cancel"];
+        else 
+          data["schedule"].push(getInitialSchedule(addedScheduleId));
+      }
+    }
+  })();
+
+  return transformForUpdate(data);
+})

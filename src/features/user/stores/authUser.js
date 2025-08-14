@@ -11,7 +11,7 @@ function toAuthUser(src) {
     email: src.email,
     displayName: src.displayName,
     photoURL: src.photoURL,
-  } : undefined;
+  } : src;
 }
 
 function AuthUserProvider({ initialAuthUser, children }) {

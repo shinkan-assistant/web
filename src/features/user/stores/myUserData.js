@@ -11,7 +11,6 @@ function MyUserDataProvider({ authUser, children }) {
   const [myUserData, setMyUserData] = useState(null);
 
   useEffect(() => {
-    // 認証ユーザーが存在しない場合は何もしない
     if (!authUser?.email) {
       setMyUserData(null);
       return;

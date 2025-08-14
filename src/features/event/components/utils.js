@@ -1,11 +1,19 @@
 import { ParticipantUpdatedScheduleActionEnum } from "@/features/participant/enums/api";
 
 export function getInputName(schedule) {
-  return `is_participating--${schedule["id"]}`
+  return `is_participating.[${schedule["id"]}]`
 }
 
 export function getScheduleIdFromInputName(inputName) {
-  return inputName.split("--")[1];
+  // `is_participating.[<ID>]` の形式を正規表現でマッチ
+  const match = inputName.match(/^is_participating\.\[(.*?)\]$/);
+  
+  // マッチした場合、キャプチャグループ1（[ ]の中身）を返す
+  if (match && match[1]) {
+    return match[1];
+  }
+  
+  return null;
 }
 
 export function getCheckedScheduleIds({inputValues}) {

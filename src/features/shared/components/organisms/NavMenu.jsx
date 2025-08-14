@@ -3,10 +3,9 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useAuthUser } from '@/features/user/stores/authUser';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { EventFilterEnum } from "@/features/event/enums/page";
 import { useMyUserData } from '@/features/user/stores/myUserData';
-import useDataComponentHook from '@/base/hooks/useDataComponentHook';
 
 function NavLink({ href, children }) {
   const pathname = usePathname();
@@ -42,18 +41,10 @@ export default function NavMenu() {
   const authUser = useAuthUser();
   const myUserData = useMyUserData();
 
-  const { 
-    initLoading, finLoading, requestValues, judgeLoadedRequests, render 
-  } = useDataComponentHook({
-    isNotForPage: true,
-    requests: {authUser, myUserData},
-    notHaveToLoadRequestNames: ["authUser"],
-  });
+  const [navLinkInfos, setNavLinkInfos] = useState(null);
 
   useEffect(() => {
-    initLoading();
-    if (!judgeLoadedRequests())
-      return;
+    if (!myUserData) return;
 
     const isAdmin = myUserData["is_admin"];
     const isMember = myUserData["belong"]["is_member"];
@@ -80,40 +71,38 @@ export default function NavMenu() {
         isOnlyForAdmin: true
       },
     ];
-    const navLinkInfos = allNavLinkInfos.filter(info => {
-      if (info.isOnlyForAdmin && !isAdmin) return false;
-      if (info.isOnlyForMember && !isMember) return false;
-      return true;
-    });
-    finLoading({
-      data: { navLinkInfos }
-    });
-  }, requestValues);
+    setNavLinkInfos(
+      allNavLinkInfos.filter(info => {
+        if (info.isOnlyForAdmin && !isAdmin) return false;
+        if (info.isOnlyForMember && !isMember) return false;
+        return true;
+      })
+    );
+  }, [myUserData?.["email"]]);
 
-  return render(
-    (data) => {
-      if (!authUser) {
-        return <></>
-      }
+  if (!authUser) {
+    return <></>
+  }
 
-      return (
-        <nav className="relative bg-white shadow-md"> {/* ナビゲーション全体に影を追加 */}
-          <div className="container mx-8 px-4 sm:px-6 lg:px-8"> {/* 中央揃えとパディング */}
-            <div className="flex h-16"> {/* ナビゲーションの高さ */}
-              <div className="flex">
-                <ul className="flex items-center space-x-12"> {/* リンク間のスペースを増やす */}
-                  {data.navLinkInfos.map(info => (
-                    <li key={info.title}>
-                      <NavLink href={info.href}>{info.title}</NavLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+  if (!navLinkInfos) {
+    return <div>読み込み中です</div>
+  }
+
+  return (
+    <nav className="relative bg-white shadow-md"> {/* ナビゲーション全体に影を追加 */}
+      <div className="container mx-8 px-4 sm:px-6 lg:px-8"> {/* 中央揃えとパディング */}
+        <div className="flex h-16"> {/* ナビゲーションの高さ */}
+          <div className="flex">
+            <ul className="flex items-center space-x-12"> {/* リンク間のスペースを増やす */}
+              {navLinkInfos.map(info => (
+                <li key={info.title}>
+                  <NavLink href={info.href}>{info.title}</NavLink>
+                </li>
+              ))}
+            </ul>
           </div>
-        </nav>
-      );
-    }
-  )
-  
+        </div>
+      </div>
+    </nav>
+  );
 }

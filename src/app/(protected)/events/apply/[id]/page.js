@@ -2,10 +2,8 @@
 
 import { notFound, useParams, useRouter } from "next/navigation";
 import EventApplyTemplate from "@/features/event/components/templates/Apply";
-import useDataComponentHook from "@/base/hooks/useDataComponentHook";
-import { useAuthUser } from "@/features/user/stores/authUser";
 import { EventFilterEnum } from "@/features/event/enums/page";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMyUserData } from "@/features/user/stores/myUserData";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
 import { useAllEvents } from "@/features/event/stores/allEvents";
@@ -14,50 +12,42 @@ export default function EventApply() {
   const router = useRouter();
   const { id } = useParams();
 
-  const authUser = useAuthUser();
   const myUserData = useMyUserData();
   const allEvents = useAllEvents();
   const myParticipants = useMyParticipants();
-
-  const { 
-    initLoading, finLoading, requestValues, judgeLoadedRequests, render 
-  } = useDataComponentHook({
-    requests: [router, id, authUser, myUserData, allEvents, myParticipants]
-  });
   
-  useEffect(() => {
-    initLoading();
-    if (!judgeLoadedRequests())
-      return;
+  const [event, setEvent] = useState(null);
 
-    const event = allEvents.find(e => id === e["id"]);
-    if (!event) {
-      notFound();
+  useEffect(() => {
+    if (!myUserData || !allEvents || !myParticipants) {
+      setEvent(null);
+      return;
     }
 
-    const myParticipant = myParticipants.find(mp => id === mp["event_id"]);
-    if (myParticipant) {
+    const eventTmp = allEvents.find(e => id === e["id"]);
+    if (!eventTmp) 
+      notFound();
+    setEvent(eventTmp);
+
+    const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
+    if (myParticipantTmp) {
       // TODO 通知：すでに申し込んでいます
       router.push(`/events?filter=${EventFilterEnum.apply}`);
       return;
     }
+  }, [router, id, myUserData, allEvents, myParticipants]);
 
-    finLoading({
-      data: { event }
-    });
-  }, requestValues);
+  if (!myUserData || !event) {
+    return <div>読み込み中です</div>
+  }
   
-  return render(
-    (data) => {
-      return (
-        <EventApplyTemplate 
-          event={data.event}
-          myUserData={myUserData}
-          subNavInfos={[
-            {href: `/events?filter=${EventFilterEnum.apply}`, text: "一覧へ戻る"}
-          ]}
-        />
-      );
-    }
+  return (
+    <EventApplyTemplate 
+      event={event}
+      myUserData={myUserData}
+      subNavInfos={[
+        {href: `/events?filter=${EventFilterEnum.apply}`, text: "一覧へ戻る"}
+      ]}
+    />
   );
 }

@@ -25,7 +25,7 @@ export default function FormContainer({hook, children}) {
       {children}
       <FormButtonArea hook={hook} />
       <FormSubmitButton 
-        canSubmit={hook.getCanSubmit()}
+        canSubmit={hook.canSubmit}
         isProcessing={hook.isProcessing}
       />
     </form>
