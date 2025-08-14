@@ -41,14 +41,13 @@ export default function EventManage() {
     return <div>読み込み中です</div>
   }
 
-  return render(
-    (data) => 
-      <EventManageTemplate 
-        event={event}
-        subNavInfos={[
-          {href: `/events/?filter=${EventFilterEnum.manage}`, text: "一覧へ戻る"},
-          {href: `/events/manage/${id}/participants`, text: "参加者一覧を見る"},
-        ]}
-      />
+  return (
+    <EventManageTemplate 
+      event={event}
+      subNavInfos={[
+        {href: `/events/?filter=${EventFilterEnum.manage}`, text: "一覧へ戻る"},
+        {href: `/events/manage/${id}/participants`, text: "参加者一覧を見る"},
+      ]}
+    />
   );
 }
