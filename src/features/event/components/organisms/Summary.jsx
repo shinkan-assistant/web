@@ -103,7 +103,7 @@ function EventOnlineMeetingInfo({online_meeting_info}) {
 }
 
 
-export default function EventSummary({pageType, event, myUserData}) {
+export default function EventSummary({pageType, event }) {
   const isListPage = pageType === EventPageTypeEnum.list;
   const isPageForParticipant = judgePageForParticipant(pageType);
   const isPageForManage = judgePageForManage(pageType);
