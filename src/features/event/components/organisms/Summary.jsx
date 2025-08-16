@@ -1,7 +1,7 @@
 import { EventItemIcon } from "../atoms/TextItemIcon";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventTypeEnum } from "@/features/event/enums/data";
-import { EventPageTypeEnum, judgePageForManage, judgePageForParticipant } from "../../enums/page";
+import { EventPageTypeEnum, judgeManagePage, judgePageForParticipant } from "../../enums/page";
 import { formatDateTime } from "@/base/utils";
 
 function EventDate({isListPage, event}) {
@@ -103,7 +103,7 @@ function EventOnlineMeetingInfo({online_meeting_info}) {
 export default function EventSummary({pageType, event }) {
   const isListPage = pageType === EventPageTypeEnum.list;
   const isPageForParticipant = judgePageForParticipant(pageType);
-  const isPageForManage = judgePageForManage(pageType);
+  const isPageForManage = judgeManagePage(pageType);
 
   return (
     <div className={isListPage ? "" : "bg-gray-50 p-6 rounded-lg shadow-md"}>

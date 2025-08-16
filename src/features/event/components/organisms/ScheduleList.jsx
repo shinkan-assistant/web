@@ -1,12 +1,81 @@
 import {FeeTypeEnum} from "@/features/event/enums/data.js";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventItemIcon } from "../atoms/TextItemIcon";
-import { EventPageTypeEnum, judgeFormPageForParticipant, judgePageForManage } from "../../enums/page";
+import { EventPageTypeEnum, judgeFormPageForParticipant, judgeManagePage } from "../../enums/page";
 import { getInputNameFromSchedule, judgeIsParticipating } from "../utils";
 import Input from "@/base/components/atoms/FormInput";
 import { formatDateTime } from "@/base/utils";
 
-function ScheduleTimeRange({timeRange}) {
+class ScheduleItemMetaInfo {
+  constructor(schedule, {pageType, myParticipant, formHook, belong}) {
+    this.isManagePage = judgeManagePage(pageType);
+    this.isParticipantPage = !this.isManagePage;
+    if (this.isParticipantPage) {
+      this.isBeforeApplying = pageType === EventPageTypeEnum.apply;
+      this.isAfterApplying = pageType !== this.isBeforeApplying;
+      this.isFormPageForParticipant = judgeFormPageForParticipant(pageType);
+    }
+
+    this.scheduleForParticipant = myParticipant.schedules.find(ps => ps["id"] === schedule["id"]) ?? null;
+    this.formHook = formHook;
+    this.belong = belong;
+
+    if (this.isManagePage) {
+      this.isEnabled = true;
+    } else {
+      if (judgeFormPageForParticipant(pageType)) {
+        this.isEnabled = formHook.inputValues[getInputNameFromSchedule(schedule)];
+      } else {
+        this.isEnabled = judgeIsParticipating(schedule, {myParticipant});
+      }
+    }
+  }
+  
+  getStatuses() {
+    const allStatuses = [
+      {fieldName: "cancel", title: "キャンセル済み"},
+      {fieldName: "attendance", title: "出席済み"},
+      {fieldName: "payment", title: "支払い済み"},
+    ];
+    return allStatuses.filter(
+      status => this.scheduleForParticipant.hasOwnProperty(status.fieldName)
+    );
+  }
+}
+
+function ScheduleStatusBadge({status, metaInfo}) {
+  return (
+    <div
+      className={`inline-flex items-center border bg-white ${metaInfo.DisplayForParticipating ? "border-gray-300" : "border-gray-200"} text-xs font-semibold px-2.5 py-0.5 rounded-full`}
+    >
+      {status.title}
+    </div>
+  )
+}
+
+function ScheduleStatusBadgeArea({metaInfo}) {
+  if (!metaInfo.scheduleForParticipant) {
+    return <></>;
+  }
+
+  const statuses = metaInfo.getStatuses();
+
+  // const infos = allInfos.filter(info => participantSchedule.hasOwnProperty(info.fieldName));
+  if (statuses.length === 0) {
+    return <></>;
+  }
+
+  return (
+    // ✅ バッジを横並びにするためのFlexboxコンテナ
+    <div className="flex flex-wrap gap-2">
+    {statuses.map(status => (
+      <ScheduleStatusBadge key={status.fieldName} status={status} metaInfo={metaInfo} />
+    ))}
+  </div>
+);
+}
+
+function ScheduleTimeRange({timeRange, metaInfo}) {
   function formatScheduleTime(datetimeString) {
     return formatDateTime(datetimeString, ({hour, minute}) => `${hour}:${minute}`);
   };
@@ -16,9 +85,12 @@ function ScheduleTimeRange({timeRange}) {
   const endAtStr = formatScheduleTime(timeRange.end_at);
   
   return (
-    <div className="flex items-center text-gray-700 text-sm">
+    <div className="flex items-center text-sm">
       {/* 開始時間のアイコンを色付きに */}
-      {EventItemIcon.time({className: "w-5 h-5 mr-2"})}
+      <EventItemIcon.time 
+        isDisabled={!metaInfo.isEnabled}
+        className={"w-5 h-5 mr-2"}
+      />
       <p>
         {existsEndAt && (<span className="font-semibold">開始:</span>)} {startAtStr}
       </p>
@@ -34,11 +106,14 @@ function ScheduleTimeRange({timeRange}) {
   );
 }
 
-function ScheduleLocation({location}) {
+function ScheduleLocation({location, metaInfo}) {
   return (
-    <div className="flex items-start text-gray-700 text-sm">
+    <div className="flex items-start text-sm">
       {/* 場所のアイコンを色付きに */}
-      {EventItemIcon.location({className: "w-5 h-5 mr-2 flex-shrink-0 mt-0.5"})}
+      <EventItemIcon.location
+        isDisabled={!metaInfo.isEnabled}
+        className={"w-5 h-5 mr-2 flex-shrink-0 mt-0.5"}
+      />
       <div>
         <p><span className="font-semibold">場所:</span> {location.name}</p>
         {location.address && (
@@ -46,7 +121,7 @@ function ScheduleLocation({location}) {
         )}
         {location.map_url && (
           <div className="mt-1 mb-[6px]">
-            <BlankLink href={location.map_url} paddingClassName={"px-[12px] py-[4px]"} >
+            <BlankLink href={location.map_url} isDisabled={!metaInfo.isEnabled} paddingClassName={"px-[12px] py-[4px]"} >
               地図を見る
             </BlankLink>
           </div>
@@ -56,7 +131,9 @@ function ScheduleLocation({location}) {
   );
 }
 
-function ScheduleFee({feesByBelong, belong}) {
+function ScheduleFee({feesByBelong, metaInfo}) {
+  const belong = metaInfo.belong;
+
   let feeInfo;
   if (feesByBelong === undefined || feesByBelong.length === 0) {
     feeInfo = {type: FeeTypeEnum.free};
@@ -75,15 +152,18 @@ function ScheduleFee({feesByBelong, belong}) {
   }
 
   return (
-    <div className="flex items-start text-gray-700 text-sm">
+    <div className="flex items-start text-sm">
       {/* 参加費のアイコンを色付きに */}
-      {EventItemIcon.fee({className: "w-5 h-5 mr-2 flex-shrink-0 mt-0.5"})}
+      <EventItemIcon.fee 
+        isDisabled={!metaInfo.isEnabled}
+        className={"w-5 h-5 mr-2 flex-shrink-0 mt-0.5"}
+      />
       <div>
         <h4 className="font-semibold inline-block mr-1">参加費:</h4> {/* inline-blockとmr-1で調整 */}
         {/* すべてのbelongについてのfeeを表示 */}
         <div  className="inline-block mr-2"> {/* 各料金項目をinline-blockで横並びに */}
           {/* 所属名は表示せず、料金とコメントのみ */}
-          <span className="text-gray-700 font-bold">
+          <span className="font-bold">
             {feeInfo.type === FeeTypeEnum.fixed ? `¥${feeInfo.fixed}` : feeInfo.type }
           </span>
           {feeInfo.comment && `（${feeInfo.comment}）`}
@@ -93,56 +173,44 @@ function ScheduleFee({feesByBelong, belong}) {
   );
 }
 
-export function ScheduleItem({
-  pageType, schedule, belong, 
-  myParticipant, // isFormPageForParticipant === false の場合に必要
-  formHook // isFormPageForParticipant === true の場合に必要
-}) {
-  const isFormPageForParticipant = judgeFormPageForParticipant(pageType)
-  const publicLocation = pageType === EventPageTypeEnum.apply;
-  const isPageForManage = judgePageForManage(pageType);
-
-  let isParticipating;
-  if (!isPageForManage) {
-    if (isFormPageForParticipant) {
-      isParticipating = formHook.inputValues[getInputNameFromSchedule(schedule)];
-    } else {
-      isParticipating = judgeIsParticipating(schedule, {myParticipant});
-    }
-  }
-
-  // 詳細ページで、参加しないイベントをグレーにする
+export function ScheduleItem({schedule, metaInfo}) {
   return (
-    <div className={`${(isPageForManage || isParticipating) ? "bg-white" : "bg-gray-200"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
+    <div className={`${metaInfo.isEnabled ? "bg-white" : "bg-gray-100"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
       <div className="mb-2">
-        <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
+        <h3 className={`text-xl sm:text-2xl font-extrabold ${metaInfo.isEnabled ? "text-gray-900" : "text-gray-400"}`}>
           {schedule.title}
         </h3>
       </div>
-      
-      {schedule.description && (
-        <div className="mt-2">
-          <p className="text-gray-700 text-base leading-relaxed">
-            {schedule.description}
-          </p>
-        </div>
-      )}
 
-      <div className="mt-4 space-y-2">
-        <ScheduleTimeRange timeRange={schedule.time_range} />
-
-        {(schedule.location && publicLocation) && 
-          <ScheduleLocation location={schedule.location} />
+      <div className={metaInfo.isEnabled ? "text-gray-700" : "text-gray-400"}>
+        {(metaInfo.isParticipantPage && metaInfo.isAfterApplying) && 
+          <ScheduleStatusBadgeArea metaInfo={metaInfo} />
         }
+        
+        {schedule.description && (
+          <div className="mt-2">
+            <p className="text-base leading-relaxed">
+              {schedule.description}
+            </p>
+          </div>
+        )}
 
-        <ScheduleFee feesByBelong={schedule.fees_by_belong} belong={belong} />
-      </div>
-      
-      {isFormPageForParticipant &&
-        <div className="mt-4">
-          <Input name={getInputNameFromSchedule(schedule)} formHook={formHook} />
+        <div className="mt-4 space-y-2">
+          <ScheduleTimeRange timeRange={schedule.time_range} metaInfo={metaInfo} />
+
+          {(metaInfo.isAfterApplying && schedule.location) && 
+            <ScheduleLocation location={schedule.location} metaInfo={metaInfo} />
+          }
+
+          <ScheduleFee feesByBelong={schedule.fees_by_belong} metaInfo={metaInfo} />
         </div>
-      }
+        
+        {metaInfo.isFormPageForParticipant &&
+          <div className="mt-4">
+            <Input name={getInputNameFromSchedule(schedule)} formHook={metaInfo.formHook} />
+          </div>
+        }
+      </div>
     </div>
   );
 }
@@ -152,11 +220,9 @@ export function EventScheduleList({
   myParticipant, // isFormPageForParticipant === false の場合に必要
   formHook // isFormPageForParticipant === true の場合に必要
 }) {
-  const isDetailEditPage = pageType === EventPageTypeEnum.detailEdit;
-
   return (
     <div>
-      {!isDetailEditPage && (
+      {pageType !== EventPageTypeEnum.detailEdit && (
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">
           スケジュール
         </h2>
@@ -166,11 +232,8 @@ export function EventScheduleList({
         {allSchedules.map((schedule) => (
           <ScheduleItem 
             key={schedule["id"]}
-            pageType={pageType}
             schedule={schedule}
-            belong={belong} 
-            myParticipant={myParticipant}
-            formHook={formHook}
+            metaInfo={new ScheduleItemMetaInfo(schedule, {pageType, myParticipant, formHook, belong})}
           />
         ))}
       </div>

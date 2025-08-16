@@ -21,7 +21,7 @@ export function judgePageForParticipant(pageType) {
   return [EventPageTypeEnum.detail, EventPageTypeEnum.detailEdit]
     .includes(pageType);
 }
-export function judgePageForManage(pageType) {
+export function judgeManagePage(pageType) {
   return [EventPageTypeEnum.manage]
     .includes(pageType);
 }

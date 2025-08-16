@@ -73,6 +73,7 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
           pageType={EventPageTypeEnum.detailEdit}
           allSchedules={allSchedules}
           belong={myUserData["belong"]}
+          myParticipant={myParticipant}
           formHook={formHook}
         />
       </FormContainer>
