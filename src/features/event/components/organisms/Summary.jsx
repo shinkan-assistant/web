@@ -1,8 +1,8 @@
 import { EventItemIcon } from "../atoms/TextItemIcon";
-import { BlankLink } from "@/base/components/atoms/Link";
+import { BlankLink } from "@/base/utils/components/atoms/BlankLink";
 import { EventTypeEnum } from "@/features/event/enums/data";
-import { formatDateTime } from "@/base/utils";
-import Input from "@/base/components/atoms/FormInput";
+import { formatDateTime } from "@/base/utils/funcs/dateTime";
+import Input from "@/base/form/components/atoms/Input";
 
 class SummaryMetaInfo {
   constructor({pageMetaInfo, formHook}) {

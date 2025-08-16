@@ -2,7 +2,7 @@ import z from "@/lib/zod";
 import ParticipantSchema from "./object";
 import { transformForCreate, transformForUpdate } from "../../../base/schema/api";
 import { judgeIsParticipating } from "@/features/event/components/utils";
-import { getNowDateTimeStr } from "@/base/utils";
+import { getNowDateTimeStr } from "@/base/utils/funcs/dateTime";
 
 export const CreateParticipantSchema = ParticipantSchema
   .pick({"user_email": true, "event_id": true, "is_organizer": true })

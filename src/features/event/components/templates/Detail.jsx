@@ -1,8 +1,8 @@
-import ItemContainer from "@/base/components/containers/Item";
+import ItemContainer from "@/base/content/components/containers/Item";
 import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import { EventPageMetaInfo, EventPageTypeEnum } from "@/features/event/enums/page";
-import ContentHeader from "@/base/components/molecules/ContentHeader";
+import ContentHeader from "@/base/content/components/molecules/Header";
 
 export default function EventDetailTemplate({ event, myUserData, myParticipant, subNavInfos }) {
   const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.detail);

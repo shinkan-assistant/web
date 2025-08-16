@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import FormButton from "../atoms/FormButton";
+import FormButton from "../atoms/Button";
 
 export function ResetButton({formHook}) {
   const [disabled, setDisabled] = useState(false);

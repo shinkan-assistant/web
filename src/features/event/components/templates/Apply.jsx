@@ -2,19 +2,19 @@
 
 import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
-import ItemContainer from "@/base/components/containers/Item";
+import ItemContainer from "@/base/content/components/containers/Item";
 import { EventPageMetaInfo, EventPageTypeEnum } from "@/features/event/enums/page";
-import FormContainer from "@/base/components/containers/Form";
+import FormContainer from "@/base/form/components/containers/Form";
 import { db } from "@/lib/firebase/clientApp";
-import useForm from "@/base/hooks/useForm";
+import useForm from "@/base/form/hooks/useForm";
 import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../utils";
-import { Checkbox } from "@/base/components/atoms/FormInput";
-import { ResetButton } from "@/base/components/organisms/FormResetButton";
+import { Checkbox } from "@/base/form/components/atoms/Input";
+import { ResetButton } from "@/base/form/components/organisms/ResetButton";
 import { createRecord } from "@/base/api/create";
 import { CreateParticipantSchema } from "@/features/participant/schemas/api";
 import { useMemo } from "react";
-import ContentHeader from "@/base/components/molecules/ContentHeader";
+import ContentHeader from "@/base/content/components/molecules/Header";
 
 export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
   const router = useRouter();

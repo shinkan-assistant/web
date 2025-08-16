@@ -1,4 +1,4 @@
-import FormButtonArea from "../organisms/FormButtonArea";
+import FormButtonArea from "../organisms/ButtonArea";
 
 function FormSubmitButton({canSubmit, isProcessing}) {
   return (

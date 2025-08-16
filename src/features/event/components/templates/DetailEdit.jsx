@@ -1,20 +1,20 @@
 'use client';
 
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
-import ItemContainer from "@/base/components/containers/Item";
+import ItemContainer from "@/base/content/components/containers/Item";
 import { EventPageTypeEnum, EventPageMetaInfo } from "@/features/event/enums/page";
-import FormContainer from "@/base/components/containers/Form";
-import useForm from "@/base/hooks/useForm";
+import FormContainer from "@/base/form/components/containers/Form";
+import useForm from "@/base/form/hooks/useForm";
 import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../utils";
-import { Checkbox } from "@/base/components/atoms/FormInput";
-import { ResetButton } from "@/base/components/organisms/FormResetButton";
+import { Checkbox } from "@/base/form/components/atoms/Input";
+import { ResetButton } from "@/base/form/components/organisms/ResetButton";
 import { AllCancelButton } from "../organisms/AllCancelButton";
 import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
 import { updateRecord } from "@/base/api/update";
 import { useMemo } from "react";
-import ContentHeader from "@/base/components/molecules/ContentHeader";
+import ContentHeader from "@/base/content/components/molecules/Header";
 
 export default function EventDetailEditTemplate({ event, myUserData, myParticipant, subNavInfos }) {
   const router = useRouter();

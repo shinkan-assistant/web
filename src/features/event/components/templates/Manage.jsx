@@ -1,13 +1,13 @@
-import ItemContainer from "@/base/components/containers/Item";
+import ItemContainer from "@/base/content/components/containers/Item";
 import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import { EventPageTypeEnum, EventPageMetaInfo } from "@/features/event/enums/page";
-import { TextInput } from "@/base/components/atoms/FormInput";
+import { TextInput } from "@/base/form/components/atoms/Input";
 import { UpdateEventSchema } from "../../schemas/api";
-import useForm from "@/base/hooks/useForm";
-import { ResetButton } from "@/base/components/organisms/FormResetButton";
+import useForm from "@/base/form/hooks/useForm";
+import { ResetButton } from "@/base/form/components/organisms/ResetButton";
 import { useMemo } from "react";
-import ContentHeader from "@/base/components/molecules/ContentHeader";
+import ContentHeader from "@/base/content/components/molecules/Header";
 
 export default function EventManageTemplate({ event, subNavInfos }) {
   const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.manage);
