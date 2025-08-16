@@ -3,21 +3,28 @@ import { UpdateUserSchema } from "../schemas/api";
 import { createUserData } from "./create";
 import { updateRecord } from "@/base/api/update";
 
-export async function updateUserData(db, authUser) {
+export async function updateUserData(db, {authUser}) {
   if (!authUser) return;
 
   const myUserData = await getUserDataByEmail(db, {email: authUser.email});
+  console.log(authUser, myUserData);
   
-  if (myUserData === null) {
-    await createUserData(db, authUser);
+  if (!myUserData) {
+    await createUserData(db, {
+      email: authUser.email,
+      name: authUser.displayName,
+      isMember: false,
+    });
+    return;
   }
-  else if (!Boolean(myUserData?.name)) {
+
+  if (!myUserData?.name) {
     await updateRecord(db, "users", {
       Schema: UpdateUserSchema,
-      id: myUserData.id,
-      rawData: {
+      initialData: myUserData,
+      formData: {
         "name": authUser.displayName,
-      }, 
+      },
     });
   }
 }

@@ -36,7 +36,7 @@ export async function signInWithGoogle() {
   }
 
   try {
-    await updateUserData(db, authUser);
+    await updateUserData(db, {authUser});
   } catch (error) {
     console.error("ユーザーデータの更新に失敗しました", error);
     signOut();

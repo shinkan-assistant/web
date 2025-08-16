@@ -16,7 +16,7 @@ class ScheduleItemMetaInfo {
       this.isFormPageForParticipant = judgeFormPageForParticipant(pageType);
     }
 
-    this.scheduleForParticipant = myParticipant.schedules.find(ps => ps["id"] === schedule["id"]) ?? null;
+    this.scheduleForParticipant = myParticipant?.schedules.find(ps => ps["id"] === schedule["id"]) ?? null;
     this.formHook = formHook;
     this.belong = belong;
 
