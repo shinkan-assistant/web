@@ -1,29 +1,22 @@
 import {FeeTypeEnum} from "@/features/event/enums/data.js";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventItemIcon } from "../atoms/TextItemIcon";
-import { EventPageTypeEnum, judgeFormPageForParticipant, judgeManagePage } from "../../enums/page";
 import { getInputNameFromSchedule, judgeIsParticipating } from "../utils";
 import Input from "@/base/components/atoms/FormInput";
 import { formatDateTime } from "@/base/utils";
 
 class ScheduleItemMetaInfo {
-  constructor(schedule, {pageType, myParticipant, formHook, belong}) {
-    this.isManagePage = judgeManagePage(pageType);
-    this.isParticipantPage = !this.isManagePage;
-    if (this.isParticipantPage) {
-      this.isBeforeApplying = pageType === EventPageTypeEnum.apply;
-      this.isAfterApplying = pageType !== this.isBeforeApplying;
-      this.isFormPageForParticipant = judgeFormPageForParticipant(pageType);
-    }
-
+  constructor(schedule, {pageMetaInfo, myParticipant, formHook, belong}) {
+    this.page = pageMetaInfo;
     this.scheduleForParticipant = myParticipant?.schedules.find(ps => ps["id"] === schedule["id"]) ?? null;
     this.formHook = formHook;
     this.belong = belong;
 
-    if (this.isManagePage) {
+    console.log(this.page)
+    if (this.page.isManage) {
       this.isEnabled = true;
     } else {
-      if (judgeFormPageForParticipant(pageType)) {
+      if (this.page.isFormForParticipant) {
         this.isEnabled = formHook.inputValues[getInputNameFromSchedule(schedule)];
       } else {
         this.isEnabled = judgeIsParticipating(schedule, {myParticipant});
@@ -183,7 +176,7 @@ export function ScheduleItem({schedule, metaInfo}) {
       </div>
 
       <div className={metaInfo.isEnabled ? "text-gray-700" : "text-gray-400"}>
-        {(metaInfo.isParticipantPage && metaInfo.isAfterApplying) && 
+        {(metaInfo.page.isParticipant && metaInfo.isAfterApplying) && 
           <ScheduleStatusBadgeArea metaInfo={metaInfo} />
         }
         
@@ -205,7 +198,7 @@ export function ScheduleItem({schedule, metaInfo}) {
           <ScheduleFee feesByBelong={schedule.fees_by_belong} metaInfo={metaInfo} />
         </div>
         
-        {metaInfo.isFormPageForParticipant &&
+        {metaInfo.page.isFormForParticipant &&
           <div className="mt-4">
             <Input name={getInputNameFromSchedule(schedule)} formHook={metaInfo.formHook} />
           </div>
@@ -216,13 +209,11 @@ export function ScheduleItem({schedule, metaInfo}) {
 }
 
 export function EventScheduleList({
-  pageType, allSchedules, belong, 
-  myParticipant, // isFormPageForParticipant === false の場合に必要
-  formHook // isFormPageForParticipant === true の場合に必要
+  pageMetaInfo, allSchedules, belong, myParticipant, formHook
 }) {
   return (
     <div>
-      {pageType !== EventPageTypeEnum.detailEdit && (
+      {!(pageMetaInfo.isParticipant && pageMetaInfo.isAfterApplying && pageMetaInfo.isFormForParticipant) && (
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">
           スケジュール
         </h2>
@@ -233,7 +224,7 @@ export function EventScheduleList({
           <ScheduleItem 
             key={schedule["id"]}
             schedule={schedule}
-            metaInfo={new ScheduleItemMetaInfo(schedule, {pageType, myParticipant, formHook, belong})}
+            metaInfo={new ScheduleItemMetaInfo(schedule, {pageMetaInfo, myParticipant, formHook, belong})}
           />
         ))}
       </div>

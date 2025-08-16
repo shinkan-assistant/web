@@ -12,16 +12,36 @@ export const EventPageTypeEnum = Object.freeze({
   manage: "manage",
 });
 
-export function judgeFormPageForParticipant(pageType) {
-  return [EventPageTypeEnum.apply, EventPageTypeEnum.detailEdit]
-    .includes(pageType);
+export class EventPageMetaInfo {
+  constructor(type) {
+    this.type = type;
+
+    this.isList = type === EventPageTypeEnum.list
+    
+    if (!this.isList) {
+      this.isManage = [EventPageTypeEnum.manage].includes(type);
+      this.isParticipant = !this.isManage;
+      if (this.isParticipant) {
+        this.isBeforeApplying = type === EventPageTypeEnum.apply;
+        this.isAfterApplying = type !== this.isBeforeApplying;
+        this.isFormForParticipant = [
+          EventPageTypeEnum.apply, EventPageTypeEnum.detailEdit
+        ].includes(type);
+      }
+    }
+  }
 }
 
-export function judgePageForParticipant(pageType) {
-  return [EventPageTypeEnum.detail, EventPageTypeEnum.detailEdit]
-    .includes(pageType);
+export function judgeFormPageForParticipant(type) {
+  return [EventPageTypeEnum.apply, EventPageTypeEnum.detailEdit]
+    .includes(type);
 }
-export function judgeManagePage(pageType) {
+
+export function judgePageForParticipant(type) {
+  return [EventPageTypeEnum.detail, EventPageTypeEnum.detailEdit]
+    .includes(type);
+}
+export function judgeManagePage(type) {
   return [EventPageTypeEnum.manage]
-    .includes(pageType);
+    .includes(type);
 }

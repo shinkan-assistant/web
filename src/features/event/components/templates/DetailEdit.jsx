@@ -3,7 +3,7 @@
 import EventHeader from "@/features/event/components/organisms/Header";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import ItemContainer from "@/base/components/containers/Item";
-import { EventPageTypeEnum } from "@/features/event/enums/page";
+import { EventPageTypeEnum, EventPageMetaInfo } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
 import useForm from "@/base/hooks/useForm";
 import { db } from "@/lib/firebase/clientApp";
@@ -17,6 +17,7 @@ import { updateRecord } from "@/base/api/update";
 
 export default function EventDetailEditTemplate({ event, myUserData, myParticipant, subNavInfos }) {
   const router = useRouter();
+  const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.detailEdit);
 
   const allSchedules = event.schedules;
 
@@ -63,14 +64,14 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
       <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
           <EventHeader
-            pageType={EventPageTypeEnum.detailEdit} 
+            pageMetaInfo={metaInfo}
             event={event}
             subNavInfos={subNavInfos}
           />
         </div>
 
         <EventScheduleList
-          pageType={EventPageTypeEnum.detailEdit}
+          pageMetaInfo={metaInfo}
           allSchedules={allSchedules}
           belong={myUserData["belong"]}
           myParticipant={myParticipant}

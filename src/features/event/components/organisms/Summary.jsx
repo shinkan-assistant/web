@@ -1,29 +1,28 @@
 import { EventItemIcon } from "../atoms/TextItemIcon";
 import { BlankLink } from "@/base/components/atoms/Link";
 import { EventTypeEnum } from "@/features/event/enums/data";
-import { EventPageTypeEnum, judgeManagePage, judgePageForParticipant } from "../../enums/page";
 import { formatDateTime } from "@/base/utils";
 
-function EventDate({isListPage, event}) {
+function EventDate({event, pageMetaInfo}) {
   const formattedDate = formatDateTime(event.schedules[0].time_range.start_at, ({year, month, date}) => `${year}年${month}月${date}日`)
 
   return (
-    <div className={`flex items-center text-gray-700 ${isListPage ? "text-base" : "text-lg"}`}>
-      {EventItemIcon.date({className: `mr-2 ${isListPage ? "h-5 w-5" : "w-6 h-6 inline-flex items-center"}`})}
+    <div className={`flex items-center text-gray-700 ${pageMetaInfo.isList ? "text-base" : "text-lg"}`}>
+      {EventItemIcon.date({className: `mr-2 ${pageMetaInfo.isList ? "h-5 w-5" : "w-6 h-6 inline-flex items-center"}`})}
       <p>
-        {!isListPage && <span className="font-semibold">開催日: </span>}
+        {!pageMetaInfo.isList && <span className="font-semibold">開催日: </span>}
         <span>{formattedDate}</span>
       </p>
     </div>
   );
 }
 
-function EventLocation({isListPage, event}) {
+function EventLocation({event, pageMetaInfo}) {
   return (
-    <div className={`flex items-center text-gray-700 ${isListPage ? "text-base" : "text-lg"}`}>
-      {EventItemIcon.location({className: `mr-2 ${isListPage ? "w-5 h-5" :"w-6 h-6 inline-flex items-center"}`})}
+    <div className={`flex items-center text-gray-700 ${pageMetaInfo.isList ? "text-base" : "text-lg"}`}>
+      {EventItemIcon.location({className: `mr-2 ${pageMetaInfo.isList ? "w-5 h-5" :"w-6 h-6 inline-flex items-center"}`})}
       <p>
-        {!isListPage && <span className="font-semibold">場所: </span>}
+        {!pageMetaInfo.isList && <span className="font-semibold">場所: </span>}
         <span>{event.type === EventTypeEnum.in_person ? event.rough_location_name : "オンライン開催"}</span>
       </p>
     </div>
@@ -100,23 +99,19 @@ function EventOnlineMeetingInfo({online_meeting_info}) {
 }
 
 
-export default function EventSummary({pageType, event }) {
-  const isListPage = pageType === EventPageTypeEnum.list;
-  const isPageForParticipant = judgePageForParticipant(pageType);
-  const isPageForManage = judgeManagePage(pageType);
-
+export default function EventSummary({pageMetaInfo, event }) {
   return (
-    <div className={isListPage ? "" : "bg-gray-50 p-6 rounded-lg shadow-md"}>
-      {!isListPage &&
+    <div className={pageMetaInfo.isList ? "" : "bg-gray-50 p-6 rounded-lg shadow-md"}>
+      {!pageMetaInfo.isList &&
         <div className="mb-4 border-b pb-2 border-gray-200">
           <h3 className="font-bold text-xl text-gray-800">概要情報</h3>
         </div>
       }
 
-      <div className={isListPage ? "space-y-2" : "space-y-4"}> {/* 各情報ブロック間のスペースを統一 */}
-        <EventDate isListPage={isListPage} event={event} />
-        <EventLocation isListPage={isListPage} event={event} />
-        {(isPageForParticipant || isPageForManage) && 
+      <div className={pageMetaInfo.isList ? "space-y-2" : "space-y-4"}> {/* 各情報ブロック間のスペースを統一 */}
+        <EventDate event={event} pageMetaInfo={pageMetaInfo} />
+        <EventLocation event={event} pageMetaInfo={pageMetaInfo} />
+        {(!pageMetaInfo.isList || pageMetaInfo.isManage || pageMetaInfo.isBeforeApplying) && 
           <>
             {event.contact_group && <EventContactGroup contact_group={event.contact_group} />}
             {event.online_meeting_info && <EventOnlineMeetingInfo online_meeting_info={event.online_meeting_info} />}

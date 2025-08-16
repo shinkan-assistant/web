@@ -4,7 +4,7 @@ import EventHeader from "@/features/event/components/organisms/Header";
 import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import ItemContainer from "@/base/components/containers/Item";
-import { EventPageTypeEnum } from "@/features/event/enums/page";
+import { EventPageMetaInfo, EventPageTypeEnum } from "@/features/event/enums/page";
 import FormContainer from "@/base/components/containers/Form";
 import { db } from "@/lib/firebase/clientApp";
 import useForm from "@/base/hooks/useForm";
@@ -17,6 +17,8 @@ import { CreateParticipantSchema } from "@/features/participant/schemas/api";
 
 export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
   const router = useRouter();
+  const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.apply);
+
   const allSchedules = event.schedules;
 
   const formHook = useForm({
@@ -64,18 +66,21 @@ export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
       <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
           <EventHeader 
-            pageType={EventPageTypeEnum.apply}
+            pageMetaInfo={metaInfo}
             event={event}
             subNavInfos={subNavInfos}
           />
         </div>
 
         <div className="mb-8">
-          <EventSummary pageType={EventPageTypeEnum.apply} event={event} />
+          <EventSummary 
+            pageMetaInfo={metaInfo}
+            event={event}
+          />
         </div>
 
         <EventScheduleList 
-          pageType={EventPageTypeEnum.apply} 
+          pageMetaInfo={metaInfo}
           allSchedules={allSchedules}
           belong={myUserData["belong"]}
           formHook={formHook}
