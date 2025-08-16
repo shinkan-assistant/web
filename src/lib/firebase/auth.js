@@ -7,6 +7,7 @@ import {
 
 import { auth, db } from "./clientApp";
 import { updateUserData } from "@/features/user/api/update";
+import { convertUserImpl2AuthUser } from "@/features/user/utils";
 
 export function onAuthStateChanged(cb) {
   return _onAuthStateChanged(auth, cb);
@@ -22,11 +23,7 @@ export async function signInWithGoogle() {
   let authUser = null;
   try {
     const result = await signInWithPopup(auth, provider);
-    authUser = result.user ? {
-      email: authUser.email,
-      displayName: authUser.displayName,
-      photoURL: authUser.photoURL,
-    } : null;
+    authUser = convertUserImpl2AuthUser(result.user);
   } catch (error) {
     // ユーザーがポップアップを閉じた、またはキャンセルされた場合はエラーを無視する
     switch (error.code) {

@@ -10,16 +10,11 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const { authUser } = await getAuthenticatedAppForUser();
-  const initialAuthUser = authUser ? {
-    email: authUser.email,
-    displayName: authUser.displayName,
-    photoURL: authUser.photoURL,
-  } : null;
 
   return (
     <html lang="ja">
       <body>
-        <AuthUserProvider initialAuthUser={initialAuthUser}>
+        <AuthUserProvider initialAuthUser={authUser}>
           <div className="fixed top-0 left-0 right-0 z-50">
             <Header title={metadata.title}/>
           </div>

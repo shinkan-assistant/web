@@ -7,6 +7,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import path from 'path';
 import fs from 'fs';
 import 'dotenv/config';
+import { convertUserImpl2AuthUser } from "@/features/user/utils";
 
 const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
@@ -37,7 +38,8 @@ export async function getAuthenticatedAppForUser() {
   try {
     // Admin SDKを使ってIDトークンを検証
     const decodedToken = await getAuth().verifyIdToken(authIdToken);
-    const authUser = await getAuth().getUser(decodedToken.uid);
+    const userImpl = await getAuth().getUser(decodedToken.uid);
+    const authUser = convertUserImpl2AuthUser(userImpl);
     return { authUser };
   } catch (error) {
     // トークンが無効または存在しない場合はnullを返す
