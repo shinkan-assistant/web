@@ -1,4 +1,16 @@
-export function Checkbox({name, label, ref, value, onChange}) {
+export function TextInput({name, value, onChange}) {
+  return (
+    <input
+      type="text"
+      name={name}
+      value={value}
+      onChange={(e) => onChange(name, {value: e.target.value})}
+      className="w-full h-10 px-3 text-lg text-gray-700 placeholder-gray-400 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+    />
+  );
+}
+
+export function Checkbox({name, label, value, onChange}) {
   const id = name;
 
   return (
@@ -7,8 +19,7 @@ export function Checkbox({name, label, ref, value, onChange}) {
         type="checkbox"
         id={id}
         name={name}
-        ref={ref}
-        onChange={() => onChange(name, {value: ref.current.checked})}
+        onChange={(e) => onChange(name, {value: e.target.checked})}
         checked={value}
         className="h-6 w-6 text-sky-600 accent-sky-600  focus:ring-sky-500 border-sky-300 rounded-md cursor-pointer"
       />
@@ -25,7 +36,6 @@ export default function Input({name, formHook}) {
     <inputInfo.Component
       name={name}
       label={inputInfo.label}
-      ref={inputInfo.ref}
       value={formHook.inputValues[name]}
       onChange={formHook.onChangeInput}
     />

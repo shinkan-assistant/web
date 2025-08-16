@@ -12,7 +12,6 @@ class ScheduleItemMetaInfo {
     this.formHook = formHook;
     this.belong = belong;
 
-    console.log(this.page)
     if (this.page.isManage) {
       this.isEnabled = true;
     } else {

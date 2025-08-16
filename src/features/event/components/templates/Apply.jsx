@@ -14,6 +14,7 @@ import { Checkbox } from "@/base/components/atoms/FormInput";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
 import { createRecord } from "@/base/api/create";
 import { CreateParticipantSchema } from "@/features/participant/schemas/api";
+import { useMemo } from "react";
 
 export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
   const router = useRouter();
@@ -21,8 +22,8 @@ export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
 
   const allSchedules = event.schedules;
 
-  const formHook = useForm({
-    inputInfos: allSchedules.reduce((acc, schedule) => {
+  const inputInfos = useMemo(() => {
+    return allSchedules.reduce((acc, schedule) => {
       return {
         [getInputNameFromSchedule(schedule)]: {
           Component: Checkbox,
@@ -31,15 +32,20 @@ export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
         },
         ...acc
       }
-    }, {}),
+    }, {});
+  }, [allSchedules]);
+
+  const formHook = useForm({
+    inputInfos,
     Buttons: [ResetButton],
-    convertToFormData: (inputValues) => {
-      const scheduleIds = Object.keys(inputValues)
+    convertToFormData: (_, inputValues) => {
+      const formData = {};
+      // 更新前と変化があった時のみ、formDataに格納する
+      formData["schedule_ids"] = Object.keys(inputValues)
         .filter(name => inputValues[name])
         .map(name => getScheduleIdFromInputName(name));
-      return {
-        "schedule_ids": scheduleIds,
-      };
+
+      return formData;
     },
     judgeCanSubmit: (_, formData) => {
       return formData["schedule_ids"].length > 0;

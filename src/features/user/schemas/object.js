@@ -1,6 +1,6 @@
 import z from "@/lib/zod";
 
-const BelongSchema = z.object({
+export const BelongSchema = z.object({
   "is_member": z.boolean().default(false),
 })
 

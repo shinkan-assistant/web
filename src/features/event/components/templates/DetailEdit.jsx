@@ -14,6 +14,7 @@ import { ResetButton } from "@/base/components/organisms/FormResetButton";
 import { AllCancelButton } from "../organisms/AllCancelButton";
 import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
 import { updateRecord } from "@/base/api/update";
+import { useMemo } from "react";
 
 export default function EventDetailEditTemplate({ event, myUserData, myParticipant, subNavInfos }) {
   const router = useRouter();
@@ -21,8 +22,8 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
 
   const allSchedules = event.schedules;
 
-  const formHook = useForm({
-    inputInfos: allSchedules.reduce((acc, schedule) => {
+  const inputInfos = useMemo(() => {
+    return allSchedules.reduce((acc, schedule) => {
       return {
         [getInputNameFromSchedule(schedule)]: {
           Component: Checkbox,
@@ -31,15 +32,20 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
         },
         ...acc
       }
-    }, {}),
+    }, {});
+  }, [allSchedules, myParticipant]);
+
+  const formHook = useForm({
+    inputInfos,
     Buttons: [ResetButton, AllCancelButton],
-    convertToFormData: (inputValues) => {
-      const scheduleIds = Object.keys(inputValues)
+    convertToFormData: (_, inputValues) => {
+      const formData = {};
+
+      formData["schedule_ids"] = Object.keys(inputValues)
         .filter(name => inputValues[name])
         .map(name => getScheduleIdFromInputName(name));
-      return {
-        "schedule_ids": scheduleIds,
-      };
+      
+      return formData;
     },
     judgeCanSubmit: (initialFormData, formData) => {
       if (initialFormData["schedule_ids"].length !== formData["schedule_ids"].length) return true;

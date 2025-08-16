@@ -1,52 +1,43 @@
 'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useForm({
   inputInfos, convertToFormData, judgeCanSubmit, handleSubmit, Buttons
 }) {
   const inputNames = Object.keys(inputInfos);
-  inputInfos = inputNames.reduce((acc, inputName) => {
-    return {
-      [inputName]: {
-        ...inputInfos[inputName],
-        ref: useRef(null),
-      },
-      ...acc};
+
+  const initialValues = inputNames.reduce((acc, inputName) => {
+    return { ...acc, [inputName]: inputInfos[inputName].initialValue }
   }, {});
 
-  const [inputValues, setInputValues] = inputNames.reduce((acc, inputName) => {
-    const [states, setStates] = acc;
-    const [state, setState] = useState(inputInfos[inputName].initialValue)
-    return [
-      { [inputName]: state, ...states },
-      { [inputName]: setState, ...setStates }
-    ];
-  }, [{}, {}]);
+  const [inputValues, setInputValues] = useState(initialValues);
 
   function onChangeInput(name, {value}) {
-    setInputValues[name](value);
+    const inputValuesTmp = {...inputValues};
+    inputValuesTmp[name] = value;
+    setInputValues(inputValuesTmp);
   }
 
   function changeInputs(updatedInputValues) {
     const updatedInputNames = Object.keys(updatedInputValues);
-    for (let inputName of Object.keys(setInputValues)) {
+    const inputValuesTmp = {...inputValues};
+    for (let inputName of inputNames) {
       if (updatedInputNames.includes(inputName))
-        setInputValues[inputName](updatedInputValues[inputName]);
+        inputValuesTmp[inputName] = updatedInputValues[inputName];
     }
+    setInputValues(inputValuesTmp);
   }
 
-  const initialFormData = convertToFormData(inputNames.reduce((acc, name) => { 
-    return {...acc, [name]: inputInfos[name].initialValue} 
-  }, {}));
+  const initialFormData = convertToFormData(initialValues, initialValues);
   const [formData, setFormData] = useState(initialFormData);
   const [canSubmit, setCanSubmit] = useState(false);
 
   useEffect(() => {
-    const formDataTmp = convertToFormData(inputValues)
+    const formDataTmp = convertToFormData(initialValues, inputValues)
     setFormData(formDataTmp);
     setCanSubmit(judgeCanSubmit(initialFormData, formDataTmp));
-  }, Object.values(inputValues))
+  }, [inputValues])
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);

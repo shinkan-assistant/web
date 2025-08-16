@@ -57,4 +57,4 @@ export const UpdateParticipantSchedulesSchema = z.object({
     })();
 
     return transformForUpdate(data);
-  })
+  });

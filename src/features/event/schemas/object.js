@@ -1,8 +1,8 @@
 import { v4 as uuidV4 } from 'uuid';
-import z from "@/lib/zod";
-import { BelongEnum } from "@/data/enums/user.js";
+import z from "@/lib/zod"
 import { ContactGroupPlatformEnum, EventTypeEnum, FeeTypeEnum, OnlineMeetingPlatformEnum } from "@/features/event/enums/data.js";
 import { DateTimeSchema } from '@/base/schema/object';
+import { BelongSchema } from '@/features/user/schemas/object';
 
 const LocationSchema = z.object({
   name: z.string().min(1),
@@ -11,7 +11,7 @@ const LocationSchema = z.object({
 });
 
 const FeeByBelongSchema = z.object({
-  belong: z.enum(Object.values(BelongEnum)),
+  belong: BelongSchema,
   type: z.enum(Object.values(FeeTypeEnum)),
   fixed: z.number().int().nonnegative().optional(),
   comments: z.string().optional(),
