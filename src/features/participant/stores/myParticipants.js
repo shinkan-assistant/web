@@ -4,19 +4,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "@/lib/firebase/clientApp";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { toRecord } from "@/base/api/utils";
+import { useMyUserData } from "@/features/user/stores/myUserData";
+import { useAllEvents } from "@/features/event/stores/allEvents";
 
 const MyParticipantsContext = createContext(null);
 
-function MyParticipantsProvider({ myUserData, events, children }) {
+function MyParticipantsProvider({ children }) {
+  const myUserData = useMyUserData();
   const [myParticipants, setMyParticipants] = useState(null);
 
   useEffect(() => {
-    // 認証ユーザーが存在しない場合は何もしない
-    if (myUserData === null) {
-      setMyParticipants(null)
-      return;
-    }
-    if (events === null) {
+    if (!myUserData) {
       setMyParticipants(null)
       return;
     }
@@ -38,7 +36,7 @@ function MyParticipantsProvider({ myUserData, events, children }) {
 
     return () => unsubscribe();
 
-  }, [myUserData, events]);
+  }, [myUserData]);
 
   return (
     <MyParticipantsContext.Provider value={myParticipants}>

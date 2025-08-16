@@ -4,10 +4,13 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { getUserDataByEmail } from "../api/get";
 import { db } from "@/lib/firebase/clientApp";
 import { doc, onSnapshot } from "firebase/firestore";
+import { useAuthUser } from "./authUser";
 
 const MyUserDataContext = createContext(null);
 
-function MyUserDataProvider({ authUser, children }) {
+function MyUserDataProvider({ children }) {
+  const authUser = useAuthUser();
+  
   const [myUserData, setMyUserData] = useState(null);
 
   useEffect(() => {

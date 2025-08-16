@@ -4,15 +4,18 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "@/lib/firebase/clientApp";
 import { collection, onSnapshot } from "firebase/firestore";
 import { toRecord } from "@/base/api/utils";
+import { useMyUserData } from "@/features/user/stores/myUserData";
 
 const AllEventsContext = createContext(null);
 
-function AllEventsProvider({ myUserData, children }) {
+function AllEventsProvider({ children }) {
+  const myUserData = useMyUserData();
+
   const [allEvents, setAllEvents] = useState(null);
 
   useEffect(() => {
     // 認証ユーザーが存在しない場合は何もしない
-    if (myUserData === null) {
+    if (!myUserData) {
       setAllEvents(null);
       return;
     }

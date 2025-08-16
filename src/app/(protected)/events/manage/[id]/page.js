@@ -23,6 +23,10 @@ export default function EventManage() {
       setEvent(null);
       return;
     }
+    if (!myUserData["belong"]["is_member"]) {
+      setTargetParticipants(null);
+      return;
+    }
 
     const eventTmp = allEvents.find(e => id === e["id"]);
     if (!eventTmp) 
