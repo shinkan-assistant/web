@@ -1,6 +1,5 @@
 'use client';
 
-import EventHeader from "@/features/event/components/organisms/Header";
 import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import ItemContainer from "@/base/components/containers/Item";
@@ -15,6 +14,7 @@ import { ResetButton } from "@/base/components/organisms/FormResetButton";
 import { createRecord } from "@/base/api/create";
 import { CreateParticipantSchema } from "@/features/participant/schemas/api";
 import { useMemo } from "react";
+import ContentHeader from "@/base/components/molecules/ContentHeader";
 
 export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
   const router = useRouter();
@@ -71,9 +71,10 @@ export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
     <ItemContainer>
       <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
-          <EventHeader 
-            pageMetaInfo={metaInfo}
-            event={event}
+          <ContentHeader 
+            pageInfo={metaInfo}
+            title={event["title"]}
+            subTitle="申し込みフォーム"
             subNavInfos={subNavInfos}
           />
         </div>

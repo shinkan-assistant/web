@@ -1,6 +1,5 @@
 'use client';
 
-import EventHeader from "@/features/event/components/organisms/Header";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import ItemContainer from "@/base/components/containers/Item";
 import { EventPageTypeEnum, EventPageMetaInfo } from "@/features/event/enums/page";
@@ -15,6 +14,7 @@ import { AllCancelButton } from "../organisms/AllCancelButton";
 import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
 import { updateRecord } from "@/base/api/update";
 import { useMemo } from "react";
+import ContentHeader from "@/base/components/molecules/ContentHeader";
 
 export default function EventDetailEditTemplate({ event, myUserData, myParticipant, subNavInfos }) {
   const router = useRouter();
@@ -69,9 +69,10 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
     <ItemContainer>
       <FormContainer hook={formHook} >
         <div className="ml-3 mb-4">
-          <EventHeader
-            pageMetaInfo={metaInfo}
-            event={event}
+          <ContentHeader
+            pageInfo={metaInfo}
+            title={event["title"]}
+            subTitle={"スケジュール変更 / キャンセル"}
             subNavInfos={subNavInfos}
           />
         </div>

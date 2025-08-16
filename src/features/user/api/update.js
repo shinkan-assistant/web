@@ -7,7 +7,6 @@ export async function updateUserData(db, {authUser}) {
   if (!authUser) return;
 
   const myUserData = await getUserDataByEmail(db, {email: authUser.email});
-  console.log(authUser, myUserData);
   
   if (!myUserData) {
     await createUserData(db, {

@@ -1,5 +1,4 @@
 import ItemContainer from "@/base/components/containers/Item";
-import EventHeader from "@/features/event/components/organisms/Header";
 import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
 import { EventPageTypeEnum, EventPageMetaInfo } from "@/features/event/enums/page";
@@ -8,6 +7,7 @@ import { UpdateEventSchema } from "../../schemas/api";
 import useForm from "@/base/hooks/useForm";
 import { ResetButton } from "@/base/components/organisms/FormResetButton";
 import { useMemo } from "react";
+import ContentHeader from "@/base/components/molecules/ContentHeader";
 
 export default function EventManageTemplate({ event, subNavInfos }) {
   const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.manage);
@@ -53,9 +53,10 @@ export default function EventManageTemplate({ event, subNavInfos }) {
   return (
     <ItemContainer>
       <div className="ml-3 mb-4">
-        <EventHeader 
-          pageMetaInfo={metaInfo}
-          event={event}
+        <ContentHeader
+          pageInfo={metaInfo}
+          title={event["title"]}
+          subTitle={"管理画面"}
           subNavInfos={subNavInfos}
         />
       </div>

@@ -1,16 +1,9 @@
 import Link from 'next/link';
-import { EventPageTypeEnum } from "../../enums/page";
 
-function EventTitle({event, pageMetaInfo}) {
-  const subTitle = {
-    [EventPageTypeEnum.apply]: "申し込みフォーム",
-    [EventPageTypeEnum.detailEdit]: "スケジュール変更 / キャンセル",
-    [EventPageTypeEnum.manage]: "管理画面",
-  }[pageMetaInfo.Type] ?? null;
-
+function TitleArea({pageInfo, title, subTitle}) {
   return (
-    <h1 className={`text-gray-900 flex flex-col gap-y-4 ${pageMetaInfo.isList ? "font-bold truncate" : "font-extrabold"}`}>
-      <div className={pageMetaInfo.isList ? "text-2xl" : "text-3xl sm:text-4xl"}>{event.title}</div>
+    <h1 className={`text-gray-900 flex flex-col gap-y-4 ${pageInfo.isList ? "font-bold truncate" : "font-extrabold"}`}>
+      <div className={pageInfo.isList ? "text-2xl" : "text-3xl sm:text-4xl"}>{title}</div>
       {subTitle && <div className="text-xl sm:text-2xl">{subTitle}</div>}
     </h1>
   );
@@ -37,12 +30,12 @@ function SubNavMenu({ infos }) {
   );
 }
 
-export default function EventHeader({pageMetaInfo, event, subNavInfos}) {
+export default function ContentHeader({pageInfo, title, subTitle, subNavInfos}) {
   return (
     <div>
       <div className="flex flex-col space-y-6">
-        <EventTitle event={event} pageMetaInfo={pageMetaInfo} />
-        { !pageMetaInfo.isList && 
+        <TitleArea pageInfo={pageInfo} title={title} subTitle={subTitle} />
+        { !pageInfo.isList && 
           <SubNavMenu infos={subNavInfos} />
         }
       </div>
