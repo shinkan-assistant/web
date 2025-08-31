@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { useMyUserData } from "@/features/user/stores/myUserData";
 import { useAllEvents } from "@/features/event/stores/allEvents";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
+import { ListPageInfo } from "@/base/page/info";
+import { ItemLinkInfo } from "@/base/page/content/infos";
 
 export default function Events() {
   const router = useRouter();
@@ -57,10 +59,28 @@ export default function Events() {
     return <div>読み込み中です</div>
   }
 
+  const pageInfo = new ListPageInfo({
+    titleFunc: ({record}) => record["title"], 
+    itemLink: {
+      [EventFilterEnum.participating]: new ItemLinkInfo({
+        hrefFunc: ({id}) => `/events/detail/${id}`,
+        text: "詳細を見る",
+      }),
+      [EventFilterEnum.apply]: new ItemLinkInfo({
+        hrefFunc: ({id}) => `/events/apply/${id}`,
+        text: "申し込む",
+      }),
+      [EventFilterEnum.manage]: new ItemLinkInfo({
+        hrefFunc: ({id}) => `/events/manage/${id}`,
+        text: "管理する",
+      }),
+    }[filter],
+  });
+
   return (
     <EventsTemplate
+      pageInfo={pageInfo}
       events={targetEvents}
-      filter={filter}
     />
   );
 }

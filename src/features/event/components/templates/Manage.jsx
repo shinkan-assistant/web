@@ -1,17 +1,13 @@
-import ItemContainer from "@/base/content/components/containers/Item";
+import ItemContainer from "@/base/page/content/components/containers/Item";
 import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
-import { EventPageTypeEnum, EventPageMetaInfo } from "@/features/event/enums/page";
 import { TextInput } from "@/base/form/components/atoms/Input";
 import { UpdateEventSchema } from "../../schemas/api";
 import useForm from "@/base/form/hooks/useForm";
 import { ResetButton } from "@/base/form/components/organisms/ResetButton";
 import { useMemo } from "react";
-import ContentHeader from "@/base/content/components/molecules/Header";
 
-export default function EventManageTemplate({ event, subNavInfos }) {
-  const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.manage);
-
+export default function EventManageTemplate({ pageInfo, event }) {
   const inputInfos = useMemo(() => {
     return {
       "rough_location_name": {
@@ -51,27 +47,18 @@ export default function EventManageTemplate({ event, subNavInfos }) {
   });
 
   return (
-    <ItemContainer>
-      <div className="ml-3 mb-4">
-        <ContentHeader
-          pageInfo={metaInfo}
-          title={event["title"]}
-          subTitle={"管理画面"}
-          subNavInfos={subNavInfos}
-        />
-      </div>
-
+    <ItemContainer pageInfo={pageInfo}>
       <div className="mb-8">
         <EventSummary 
-          pageMetaInfo={metaInfo}
+          pageInfo={pageInfo}
           event={event}
           formHook={formHook}
         />
       </div>
 
       <EventScheduleList 
-        pageMetaInfo={metaInfo}
-        allSchedules={event.schedules}
+        pageInfo={pageInfo}
+        allSchedules={event["schedules"]}
         formHook={formHook}
       />
     </ItemContainer>

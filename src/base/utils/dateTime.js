@@ -12,7 +12,7 @@ export function getNowDateTimeStr() {
   return now.toLocaleString('ja-JP', options);
 }
 
-export function formatDateTime(dateTimeString, callback) {
+function formatDateTime(dateTimeString, callback) {
   const [datePart, timePart] = dateTimeString.split(" ");
   const [year, month, date] = datePart.split("/");
   const [hour, minute, second] = timePart.split(":");
@@ -21,3 +21,17 @@ export function formatDateTime(dateTimeString, callback) {
     hour: hour, minute: minute, second: second
   });
 };
+
+export function formatDate(dateTimeString) {
+  return formatDateTime(
+    dateTimeString, 
+    ({year, month, date}) => `${year}年${month}月${date}日`
+  );
+}
+
+export function formatTime(dateTimeString) {
+  return formatDateTime(
+    dateTimeString, 
+    ({hour, minute}) => `${hour}:${minute}`
+  );
+}

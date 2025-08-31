@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { useMyUserData } from "@/features/user/stores/myUserData";
 import { useAllEvents } from "@/features/event/stores/allEvents";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
+import { ItemPageInfo } from "@/base/page/info";
+import { SubNavInfo } from "@/base/page/content/infos";
 
 export default function EventDetailEdit() {
   const router = useRouter();
@@ -42,16 +44,31 @@ export default function EventDetailEdit() {
   if (!myUserData || !event || !myParticipant) {
     return <div>読み込み中です</div>
   }
+
+  const pageInfo = new ItemPageInfo({
+    isForManage: false,
+    isAfterApplying: true,
+    isForm: true,
+    title: event["title"],
+    subTitle: "スケジュール変更 / キャンセル",
+    subNavInfos: [
+      new SubNavInfo({
+        href: `/events?filter=${EventFilterEnum.participating}`, 
+        text: "一覧へ戻る",
+      }),
+      new SubNavInfo({
+        href: `/events/detail/${event.id}`, 
+        text: "編集キャンセル",
+      })
+    ]
+  });
   
   return (
     <EventDetailEditTemplate
+      pageInfo={pageInfo}
       event={event} 
       myUserData={myUserData} 
       myParticipant={myParticipant} 
-      subNavInfos={[
-        {href: `/events/?filter=${EventFilterEnum.participating}`, text: "一覧へ戻る"},
-        {href: `/events/detail/${event.id}`, text: "編集キャンセル"},
-      ]}
     />
   );
 }

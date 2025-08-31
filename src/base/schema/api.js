@@ -1,5 +1,5 @@
 import { v4 as uuidV4 } from 'uuid';
-import { getNowDateTimeStr } from '../utils/funcs/dateTime';
+import { getNowDateTimeStr } from '../utils/dateTime';
 
 export function transformForCreate(data) {
   const nowDateStr = getNowDateTimeStr();

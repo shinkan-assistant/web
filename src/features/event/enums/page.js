@@ -12,7 +12,7 @@ export const EventPageTypeEnum = Object.freeze({
   manage: "manage",
 });
 
-export class EventPageMetaInfo {
+export class EventPageInfo {
   constructor(type) {
     this.type = type;
 

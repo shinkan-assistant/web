@@ -12,7 +12,7 @@ export function AllCancelButton({formHook}) {
     setDisabled(isAllCancel);
   }, [formHook.inputValues])
 
-  function changeAllCancel() { 
+  function onClick() { 
     const updatedInputValues = formHook.inputNames
       .reduce((acc, inputName) => {
         return {
@@ -25,6 +25,6 @@ export function AllCancelButton({formHook}) {
   }
 
   return (
-    <FormButton title="全キャンセル" onClick={changeAllCancel} disabled={disabled} />
+    <FormButton title="全キャンセル" onClick={onClick} disabled={disabled} />
   );
 }

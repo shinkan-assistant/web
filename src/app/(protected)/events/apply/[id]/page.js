@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { useMyUserData } from "@/features/user/stores/myUserData";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
 import { useAllEvents } from "@/features/event/stores/allEvents";
+import { ItemPageInfo } from "@/base/page/info";
+import { ItemContentInfo } from "@/base/page/content/info";
+import { SubNavInfo } from "@/base/page/content/infos";
 
 export default function EventApply() {
   const router = useRouter();
@@ -41,13 +44,25 @@ export default function EventApply() {
     return <div>読み込み中です</div>
   }
   
+  const pageInfo = new ItemPageInfo({
+    isForManage: false,
+    isAfterApplying: false,
+    isForm: true,
+    title: event["title"],
+    subTitle: "申し込みフォーム",
+    subNavInfos: [
+      new SubNavInfo({
+        href: `/events?filter=${EventFilterEnum.apply}`, 
+        text: "一覧へ戻る",
+      })
+    ]
+  });
+
   return (
     <EventApplyTemplate 
+      pageInfo={pageInfo}
       event={event}
       myUserData={myUserData}
-      subNavInfos={[
-        {href: `/events?filter=${EventFilterEnum.apply}`, text: "一覧へ戻る"}
-      ]}
     />
   );
 }

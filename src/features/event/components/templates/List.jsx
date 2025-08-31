@@ -1,36 +1,15 @@
-import { EventPageTypeEnum, EventPageMetaInfo } from "../../enums/page";
-import { ListContainer, ListItemContainer } from "@/base/content/components/containers/List";
+import { ListContainer, ListItemContainer } from "@/base/page/content/components/containers/List";
 import EventSummary from "@/features/event/components/organisms/Summary";
-import EventListItemLink from "@/features/event/components/organisms/ItemLink";
-import ContentHeader from "@/base/content/components/molecules/Header";
 
-export default function EventsTemplate({ events, filter }) {
-  const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.list);
-
+export default function EventsTemplate({ pageInfo, events }) {
   return (
     <ListContainer>
       {events.map((event) => (
-        <ListItemContainer key={event.id} >
-          <div className="mb-4">
-            <ContentHeader
-              pageInfo={metaInfo}
-              title={event["title"]}
-            />
-          </div>
-          
-          <div className="mb-4">
-            <EventSummary 
-              pageMetaInfo={metaInfo}
-              event={event}
-            />
-          </div>
-
-          <div>
-            <EventListItemLink 
-              event={event} 
-              filter={filter}
-            />
-          </div>
+        <ListItemContainer key={event["id"]} pageInfo={pageInfo} record={event} >
+          <EventSummary 
+            pageInfo={pageInfo}
+            event={event}
+          />
         </ListItemContainer>
       ))}
     </ListContainer>

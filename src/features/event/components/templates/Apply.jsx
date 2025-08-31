@@ -2,25 +2,22 @@
 
 import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
-import ItemContainer from "@/base/content/components/containers/Item";
-import { EventPageMetaInfo, EventPageTypeEnum } from "@/features/event/enums/page";
+import ItemContainer from "@/base/page/content/components/containers/Item";
 import FormContainer from "@/base/form/components/containers/Form";
 import { db } from "@/lib/firebase/clientApp";
 import useForm from "@/base/form/hooks/useForm";
 import { useRouter } from "next/navigation";
-import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../utils";
+import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../../utils";
 import { Checkbox } from "@/base/form/components/atoms/Input";
 import { ResetButton } from "@/base/form/components/organisms/ResetButton";
 import { createRecord } from "@/base/api/create";
 import { CreateParticipantSchema } from "@/features/participant/schemas/api";
 import { useMemo } from "react";
-import ContentHeader from "@/base/content/components/molecules/Header";
 
-export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
+export default function EventApplyTemplate({ pageInfo, event, myUserData }) {
   const router = useRouter();
-  const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.apply);
 
-  const allSchedules = event.schedules;
+  const allSchedules = event["schedules"];
 
   const inputInfos = useMemo(() => {
     return allSchedules.reduce((acc, schedule) => {
@@ -68,26 +65,17 @@ export default function EventApplyTemplate({ event, myUserData, subNavInfos }) {
   });
 
   return (
-    <ItemContainer>
+    <ItemContainer pageInfo={pageInfo} >
       <FormContainer hook={formHook} >
-        <div className="ml-3 mb-4">
-          <ContentHeader 
-            pageInfo={metaInfo}
-            title={event["title"]}
-            subTitle="申し込みフォーム"
-            subNavInfos={subNavInfos}
-          />
-        </div>
-
         <div className="mb-8">
           <EventSummary 
-            pageMetaInfo={metaInfo}
+            pageInfo={pageInfo}
             event={event}
           />
         </div>
 
         <EventScheduleList 
-          pageMetaInfo={metaInfo}
+          pageInfo={pageInfo}
           allSchedules={allSchedules}
           belong={myUserData["belong"]}
           formHook={formHook}

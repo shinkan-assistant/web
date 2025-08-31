@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { useMyUserData } from "@/features/user/stores/myUserData";
 import { useAllEvents } from "@/features/event/stores/allEvents";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
+import { ItemPageInfo } from "@/base/page/info";
+import { SubNavInfo } from "@/base/page/content/infos";
 
 export default function EventManage() {
   const router = useRouter();
@@ -45,13 +47,27 @@ export default function EventManage() {
     return <div>読み込み中です</div>
   }
 
+  const pageInfo = new ItemPageInfo({
+    isForManage: true,
+    isForm: true,
+    title: event["title"],
+    subTitle: "管理画面",
+    subNavInfos: [
+      new SubNavInfo({
+        href: `/events?filter=${EventFilterEnum.manage}`, 
+        text: "一覧へ戻る",
+      }),
+      new SubNavInfo({
+        href: `/events/manage/${id}/participants`, 
+        text: "参加者一覧を見る",
+      }),
+    ]
+  });
+
   return (
     <EventManageTemplate 
+      pageInfo={pageInfo}
       event={event}
-      subNavInfos={[
-        {href: `/events/?filter=${EventFilterEnum.manage}`, text: "一覧へ戻る"},
-        {href: `/events/manage/${id}/participants`, text: "参加者一覧を見る"},
-      ]}
     />
   );
 }

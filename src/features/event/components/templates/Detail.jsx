@@ -1,32 +1,20 @@
-import ItemContainer from "@/base/content/components/containers/Item";
+import ItemContainer from "@/base/page/content/components/containers/Item";
 import EventSummary from "@/features/event/components/organisms/Summary";
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
-import { EventPageMetaInfo, EventPageTypeEnum } from "@/features/event/enums/page";
-import ContentHeader from "@/base/content/components/molecules/Header";
 
-export default function EventDetailTemplate({ event, myUserData, myParticipant, subNavInfos }) {
-  const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.detail);
-
+export default function EventDetailTemplate({ pageInfo, event, myUserData, myParticipant }) {
   return (
-    <ItemContainer>
-      <div className="ml-3 mb-4">
-        <ContentHeader
-          pageInfo={metaInfo}
-          title={event["title"]}
-          subNavInfos={subNavInfos}
-        />
-      </div>
-
+    <ItemContainer pageInfo={pageInfo}>
       <div className="mb-8">
         <EventSummary 
-          pageMetaInfo={metaInfo}
+          pageInfo={pageInfo}
           event={event}
         />
       </div>
 
       <EventScheduleList 
-        pageMetaInfo={metaInfo}
-        allSchedules={event.schedules}
+        pageInfo={pageInfo}
+        allSchedules={event["schedules"]}
         belong={myUserData["belong"]} 
         myParticipant={myParticipant}
       />

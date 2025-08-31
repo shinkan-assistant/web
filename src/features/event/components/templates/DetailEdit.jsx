@@ -1,26 +1,24 @@
 'use client';
 
 import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
-import ItemContainer from "@/base/content/components/containers/Item";
-import { EventPageTypeEnum, EventPageMetaInfo } from "@/features/event/enums/page";
+import ItemContainer from "@/base/page/content/components/containers/Item";
+import { EventPageTypeEnum, EventPageInfo } from "@/features/event/enums/page";
 import FormContainer from "@/base/form/components/containers/Form";
 import useForm from "@/base/form/hooks/useForm";
 import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
-import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../utils";
+import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../../utils";
 import { Checkbox } from "@/base/form/components/atoms/Input";
 import { ResetButton } from "@/base/form/components/organisms/ResetButton";
-import { AllCancelButton } from "../organisms/AllCancelButton";
+import { AllCancelButton } from "../atoms/AllCancelButton";
 import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
 import { updateRecord } from "@/base/api/update";
 import { useMemo } from "react";
-import ContentHeader from "@/base/content/components/molecules/Header";
 
-export default function EventDetailEditTemplate({ event, myUserData, myParticipant, subNavInfos }) {
+export default function EventDetailEditTemplate({ pageInfo, event, myUserData, myParticipant }) {
   const router = useRouter();
-  const metaInfo = new EventPageMetaInfo(EventPageTypeEnum.detailEdit);
 
-  const allSchedules = event.schedules;
+  const allSchedules = event["schedules"];
 
   const inputInfos = useMemo(() => {
     return allSchedules.reduce((acc, schedule) => {
@@ -66,19 +64,10 @@ export default function EventDetailEditTemplate({ event, myUserData, myParticipa
   });
 
   return (
-    <ItemContainer>
+    <ItemContainer pageInfo={pageInfo}>
       <FormContainer hook={formHook} >
-        <div className="ml-3 mb-4">
-          <ContentHeader
-            pageInfo={metaInfo}
-            title={event["title"]}
-            subTitle={"スケジュール変更 / キャンセル"}
-            subNavInfos={subNavInfos}
-          />
-        </div>
-
         <EventScheduleList
-          pageMetaInfo={metaInfo}
+          pageInfo={pageInfo}
           allSchedules={allSchedules}
           belong={myUserData["belong"]}
           myParticipant={myParticipant}
