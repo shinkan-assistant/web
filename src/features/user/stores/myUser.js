@@ -6,16 +6,16 @@ import { db } from "@/lib/firebase/clientApp";
 import { doc, onSnapshot } from "firebase/firestore";
 import { useAuthUser } from "./authUser";
 
-const MyUserDataContext = createContext(null);
+const MyUserContext = createContext(null);
 
-function MyUserDataProvider({ children }) {
+function MyUserProvider({ children }) {
   const authUser = useAuthUser();
   
-  const [myUserData, setMyUserData] = useState(null);
+  const [myUser, setMyUser] = useState(null);
 
   useEffect(() => {
     if (!authUser?.email) {
-      setMyUserData(null);
+      setMyUser(null);
       return;
     }
     
@@ -28,7 +28,7 @@ function MyUserDataProvider({ children }) {
       // onSnapshotのリスナーを起動
       unsubscribe = onSnapshot(myUserDocRef, (doc) => {
         if (doc.exists()) {
-          setMyUserData(doc.data());
+          setMyUser(doc.data());
         }
       }, (error) => {
         // エラーハンドリング
@@ -41,14 +41,14 @@ function MyUserDataProvider({ children }) {
   }, [authUser]);
 
   return (
-    <MyUserDataContext.Provider value={myUserData}>
+    <MyUserContext.Provider value={myUser}>
       {children}
-    </MyUserDataContext.Provider>
+    </MyUserContext.Provider>
   );
 }
 
-function useMyUserData() {
-  return useContext(MyUserDataContext);
+function useMyUser() {
+  return useContext(MyUserContext);
 }
 
-export { MyUserDataProvider, useMyUserData };
+export { MyUserProvider, useMyUser };

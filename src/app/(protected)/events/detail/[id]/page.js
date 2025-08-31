@@ -4,8 +4,8 @@ import EventDetailTemplate from "@/features/event/components/templates/Detail";
 import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useMyUserData } from "@/features/user/stores/myUserData";
-import { useAllEvents } from "@/features/event/stores/allEvents";
+import { useMyUser } from "@/features/user/stores/myUser";
+import { useEvents } from "@/features/event/stores/events";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
 import { ItemPageInfo } from "@/base/features/page/info";
 import { SubNavInfo } from "@/base/features/content/components/ui/NavMenu";
@@ -14,20 +14,20 @@ export default function EventDetail() {
   const router = useRouter();
   const { id } = useParams();
 
-  const myUserData = useMyUserData();
-  const allEvents = useAllEvents();
+  const myUser = useMyUser();
+  const events = useEvents();
   const myParticipants = useMyParticipants();
 
   const [event, setEvent] = useState(null);
   const [myParticipant, setMyParticipant] = useState(null);
   
   useEffect(() => {
-    if (!myUserData || !allEvents || !myParticipants) {
+    if (!myUser || !events || !myParticipants) {
       setEvent(null);
       return;
     }
 
-    const eventTmp = allEvents.find(e => id === e["id"]);
+    const eventTmp = events.find(e => id === e["id"]);
     if (!eventTmp) 
       notFound();
     setEvent(eventTmp);
@@ -39,9 +39,9 @@ export default function EventDetail() {
       return;
     }
     setMyParticipant(myParticipantTmp);
-  }, [router, id, myUserData, allEvents, myParticipants]);
+  }, [router, id, myUser, events, myParticipants]);
 
-  if (!myUserData || !event || !myParticipant) {
+  if (!myUser || !event || !myParticipant) {
     return <div>読み込み中です</div>
   }
 
@@ -66,7 +66,7 @@ export default function EventDetail() {
     <EventDetailTemplate 
       pageInfo={pageInfo}
       event={event} 
-      myUserData={myUserData} 
+      myUser={myUser} 
       myParticipant={myParticipant}
     />
   );

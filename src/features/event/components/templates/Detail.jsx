@@ -2,7 +2,7 @@ import ItemContainer from "@/base/features/content/components/layouts/Item";
 import EventSummary from "@/features/event/components/sections/Summary";
 import { EventScheduleList } from "@/features/event/components/sections/ScheduleList";
 
-export default function EventDetailTemplate({ pageInfo, event, myUserData, myParticipant }) {
+export default function EventDetailTemplate({ pageInfo, event, myUser, myParticipant }) {
   return (
     <ItemContainer pageInfo={pageInfo}>
       <div className="mb-8">
@@ -15,7 +15,7 @@ export default function EventDetailTemplate({ pageInfo, event, myUserData, myPar
       <EventScheduleList 
         pageInfo={pageInfo}
         allSchedules={event["schedules"]}
-        belong={myUserData["belong"]} 
+        belong={myUser["belong"]} 
         myParticipant={myParticipant}
       />
     </ItemContainer>

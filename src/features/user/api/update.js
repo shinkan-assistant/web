@@ -6,9 +6,9 @@ import { updateRecord } from "@/base/api/update";
 export async function updateUserData(db, {authUser}) {
   if (!authUser) return;
 
-  const myUserData = await getUserDataByEmail(db, {email: authUser.email});
+  const myUser = await getUserDataByEmail(db, {email: authUser.email});
   
-  if (!myUserData) {
+  if (!myUser) {
     await createUserData(db, {
       email: authUser.email,
       name: authUser.displayName,
@@ -17,10 +17,10 @@ export async function updateUserData(db, {authUser}) {
     return;
   }
 
-  if (!myUserData?.name) {
+  if (!myUser?.name) {
     await updateRecord(db, "users", {
       Schema: UpdateUserSchema,
-      initialData: myUserData,
+      initialData: myUser,
       formData: {
         "name": authUser.displayName,
       },

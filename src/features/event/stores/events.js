@@ -4,19 +4,19 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "@/lib/firebase/clientApp";
 import { collection, onSnapshot } from "firebase/firestore";
 import { toRecord } from "@/base/api/utils";
-import { useMyUserData } from "@/features/user/stores/myUserData";
+import { useMyUser } from "@/features/user/stores/myUser";
 
-const AllEventsContext = createContext(null);
+const EventsContext = createContext(null);
 
-function AllEventsProvider({ children }) {
-  const myUserData = useMyUserData();
+function EventsProvider({ children }) {
+  const myUser = useMyUser();
 
-  const [allEvents, setAllEvents] = useState(null);
+  const [events, setEvents] = useState(null);
 
   useEffect(() => {
     // 認証ユーザーが存在しない場合は何もしない
-    if (!myUserData) {
-      setAllEvents(null);
+    if (!myUser) {
+      setEvents(null);
       return;
     }
     
@@ -27,7 +27,7 @@ function AllEventsProvider({ children }) {
       
       // onSnapshotのリスナーを起動
       unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
-        setAllEvents(querySnapshot.docs.map(doc => toRecord(doc)));
+        setEvents(querySnapshot.docs.map(doc => toRecord(doc)));
       }, (error) => {
         // エラーハンドリング
         console.error("onSnapshot error:", error);
@@ -36,17 +36,17 @@ function AllEventsProvider({ children }) {
 
     return () => unsubscribe();
 
-  }, [myUserData]);
+  }, [myUser]);
 
   return (
-    <AllEventsContext.Provider value={allEvents}>
+    <EventsContext.Provider value={events}>
       {children}
-    </AllEventsContext.Provider>
+    </EventsContext.Provider>
   );
 }
 
-function useAllEvents() {
-  return useContext(AllEventsContext);
+function useEvents() {
+  return useContext(EventsContext);
 }
 
-export { AllEventsProvider, useAllEvents };
+export { EventsProvider, useEvents };

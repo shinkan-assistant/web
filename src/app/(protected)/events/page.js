@@ -4,8 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
 import EventsTemplate from "@/features/event/components/templates/List";
 import { useEffect, useState } from "react";
-import { useMyUserData } from "@/features/user/stores/myUserData";
-import { useAllEvents } from "@/features/event/stores/allEvents";
+import { useMyUser } from "@/features/user/stores/myUser";
+import { useEvents } from "@/features/event/stores/events";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
 import { ListPageInfo } from "@/base/features/page/info";
 import { ItemLinkInfo } from "@/base/features/content/components/ui/ItemLink";
@@ -15,8 +15,8 @@ export default function Events() {
   const searchParams = useSearchParams();
   const filter = searchParams.get("filter");
 
-  const myUserData = useMyUserData();
-  const allEvents = useAllEvents();
+  const myUser = useMyUser();
+  const events = useEvents();
   const myParticipants = useMyParticipants();
 
   const [targetEvents, setTargetEvents] = useState(null);
@@ -27,12 +27,12 @@ export default function Events() {
       return;
     }
 
-    if (!myUserData || !allEvents || !myParticipants) {
+    if (!myUser || !events || !myParticipants) {
       setTargetEvents(null);
       return;
     }
     
-    if (filter === EventsPageFilterEnum.manage && !myUserData["belong"]["is_member"]) {
+    if (filter === EventsPageFilterEnum.manage && !myUser["belong"]["is_member"]) {
       router.push(`/events?filter=${EventsPageFilterEnum.participating}`);
       return;
     }
@@ -45,15 +45,15 @@ export default function Events() {
         return myParticipants.every(mp => e["id"] !== mp["event_id"])
       },
       [EventsPageFilterEnum.manage]: (e) => {
-        if (myUserData["is_admin"]) 
+        if (myUser["is_admin"]) 
           return true;
         return myParticipants.some(mp => e["id"] === mp["event_id"] && mp["is_organizer"]);
       }
     }[filter];
 
-    setTargetEvents(allEvents.filter(targetEventsFilterFunc));
+    setTargetEvents(events.filter(targetEventsFilterFunc));
     
-  }, [router, filter, myUserData, allEvents, myParticipants]);
+  }, [router, filter, myUser, events, myParticipants]);
 
   if (!targetEvents || !filter) {
     return <div>読み込み中です</div>

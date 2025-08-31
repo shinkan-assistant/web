@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
-import { useMyUserData } from '@/features/user/stores/myUserData';
+import { useMyUser } from '@/features/user/stores/myUser';
 
 function NavLink({ href, children }) {
   const pathname = usePathname();
@@ -37,18 +37,18 @@ function NavLink({ href, children }) {
 }
 
 export default function NavMenu() {
-  const myUserData = useMyUserData();
+  const myUser = useMyUser();
 
   const [navLinkInfos, setNavLinkInfos] = useState(null);
 
   useEffect(() => {
-    if (!myUserData) {
+    if (!myUser) {
       setNavLinkInfos(null);
       return;
     }
 
-    const isAdmin = myUserData["is_admin"];
-    const isMember = myUserData["belong"]["is_member"];
+    const isAdmin = myUser["is_admin"];
+    const isMember = myUser["belong"]["is_member"];
 
     const allNavLinkInfos = [
       {
@@ -79,7 +79,7 @@ export default function NavMenu() {
         return true;
       })
     );
-  }, [myUserData?.["email"]]);
+  }, [myUser?.["email"]]);
 
   if (!navLinkInfos) {
     return <></>

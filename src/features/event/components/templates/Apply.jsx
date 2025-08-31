@@ -14,7 +14,7 @@ import { createRecord } from "@/base/api/create";
 import { CreateParticipantSchema } from "@/features/participant/schemas/api";
 import { useMemo } from "react";
 
-export default function EventApplyTemplate({ pageInfo, event, myUserData }) {
+export default function EventApplyTemplate({ pageInfo, event, myUser }) {
   const router = useRouter();
 
   const allSchedules = event["schedules"];
@@ -51,7 +51,7 @@ export default function EventApplyTemplate({ pageInfo, event, myUserData }) {
       await createRecord(db, "participants", {
         Schema: CreateParticipantSchema,
         uniqueData: {
-          "user_email": myUserData["email"],
+          "user_email": myUser["email"],
           "event_id": event["id"],
         },
         otherData: {
@@ -77,7 +77,7 @@ export default function EventApplyTemplate({ pageInfo, event, myUserData }) {
         <EventScheduleList 
           pageInfo={pageInfo}
           allSchedules={allSchedules}
-          belong={myUserData["belong"]}
+          belong={myUser["belong"]}
           formHook={formHook}
         />
       </FormContainer>

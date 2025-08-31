@@ -4,10 +4,10 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthUser } from "@/features/user/stores/authUser";
 import NavMenu from "@/features/shared/components/sections/NavMenu";
-import { MyUserDataProvider, useMyUserData } from "@/features/user/stores/myUserData";
-import { AllEventsProvider, useAllEvents } from "@/features/event/stores/allEvents";
+import { MyUserProvider, useMyUser } from "@/features/user/stores/myUser";
+import { EventsProvider, useEvents } from "@/features/event/stores/events";
 import { MyParticipantsProvider, useMyParticipants } from "@/features/participant/stores/myParticipants";
-import { AllManagingParticipantsProvider } from "@/features/participant/stores/allManagingParticipants";
+import { ParticipantsProvider } from "@/features/participant/stores/participants";
 import { UsersProvider } from "@/features/user/stores/users";
 
 function WithoutProviderLayout({ children }) {
@@ -24,10 +24,10 @@ function WithoutProviderLayout({ children }) {
 }
 
 function WithMyParticipantsLayout({ children }) {
-  const myUserData = useMyUserData();
-  const events = useAllEvents();
+  const myUser = useMyUser();
+  const events = useEvents();
   return (
-    <MyParticipantsProvider myUserData={myUserData} events={events} >
+    <MyParticipantsProvider myUser={myUser} events={events} >
       <WithoutProviderLayout>
         {children}
       </WithoutProviderLayout>
@@ -36,24 +36,24 @@ function WithMyParticipantsLayout({ children }) {
 }
 
 function WithEventsLayout({ children }) {
-  const myUserData = useMyUserData();
+  const myUser = useMyUser();
   return (
-    <AllEventsProvider myUserData={myUserData}>
+    <EventsProvider myUser={myUser}>
       <WithMyParticipantsLayout>
         {children}
       </WithMyParticipantsLayout>
-    </AllEventsProvider>
+    </EventsProvider>
   );
 }
 
-function WithMyUserDataLayout({ children }) {
+function WithMyUserLayout({ children }) {
   const authUser = useAuthUser();
   return (
-    <MyUserDataProvider authUser={authUser}>
+    <MyUserProvider authUser={authUser}>
       <WithEventsLayout>
         {children}
       </WithEventsLayout>
-    </MyUserDataProvider>
+    </MyUserProvider>
   );
 }
 
@@ -68,10 +68,10 @@ export default function ProtectedLayout({ children }) {
   }, [authUser, router]); 
 
   return (
-    <MyUserDataProvider>
-      <AllEventsProvider>
+    <MyUserProvider>
+      <EventsProvider>
         <MyParticipantsProvider>
-          <AllManagingParticipantsProvider>
+          <ParticipantsProvider>
             <UsersProvider>
               <div className="fixed left-0 right-0">
                 <NavMenu />
@@ -80,9 +80,9 @@ export default function ProtectedLayout({ children }) {
                 {children}
               </div>
             </UsersProvider>
-          </AllManagingParticipantsProvider>
+          </ParticipantsProvider>
         </MyParticipantsProvider>
-      </AllEventsProvider>
-    </MyUserDataProvider>
+      </EventsProvider>
+    </MyUserProvider>
   );
 }

@@ -4,17 +4,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "@/lib/firebase/clientApp";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { toRecord } from "@/base/api/utils";
-import { useMyUserData } from "@/features/user/stores/myUserData";
-import { useAllEvents } from "@/features/event/stores/allEvents";
+import { useMyUser } from "@/features/user/stores/myUser";
+import { useEvents } from "@/features/event/stores/events";
 
 const MyParticipantsContext = createContext(null);
 
 function MyParticipantsProvider({ children }) {
-  const myUserData = useMyUserData();
+  const myUser = useMyUser();
   const [myParticipants, setMyParticipants] = useState(null);
 
   useEffect(() => {
-    if (!myUserData) {
+    if (!myUser) {
       setMyParticipants(null)
       return;
     }
@@ -23,7 +23,7 @@ function MyParticipantsProvider({ children }) {
 
     (async() => {
       const collectionRef = collection(db, "participants")
-      const q = query(collectionRef, where("user_email", "==", myUserData.email));
+      const q = query(collectionRef, where("user_email", "==", myUser.email));
       
       // onSnapshotのリスナーを起動
       unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -36,7 +36,7 @@ function MyParticipantsProvider({ children }) {
 
     return () => unsubscribe();
 
-  }, [myUserData]);
+  }, [myUser]);
 
   return (
     <MyParticipantsContext.Provider value={myParticipants}>

@@ -14,7 +14,7 @@ import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas
 import { updateRecord } from "@/base/api/update";
 import { useMemo } from "react";
 
-export default function EventDetailEditTemplate({ pageInfo, event, myUserData, myParticipant }) {
+export default function EventDetailEditTemplate({ pageInfo, event, myUser, myParticipant }) {
   const router = useRouter();
 
   const allSchedules = event["schedules"];
@@ -68,7 +68,7 @@ export default function EventDetailEditTemplate({ pageInfo, event, myUserData, m
         <EventScheduleList
           pageInfo={pageInfo}
           allSchedules={allSchedules}
-          belong={myUserData["belong"]}
+          belong={myUser["belong"]}
           myParticipant={myParticipant}
           formHook={formHook}
         />
