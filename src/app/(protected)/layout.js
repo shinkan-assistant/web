@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthUser } from "@/features/user/stores/authUser";
-import NavMenu from "@/features/shared/components/organisms/NavMenu";
+import NavMenu from "@/features/shared/components/sections/NavMenu";
 import { MyUserDataProvider, useMyUserData } from "@/features/user/stores/myUserData";
 import { AllEventsProvider, useAllEvents } from "@/features/event/stores/allEvents";
 import { MyParticipantsProvider, useMyParticipants } from "@/features/participant/stores/myParticipants";

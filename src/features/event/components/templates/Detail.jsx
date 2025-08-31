@@ -1,6 +1,6 @@
-import ItemContainer from "@/base/page/content/components/containers/Item";
-import EventSummary from "@/features/event/components/organisms/Summary";
-import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
+import ItemContainer from "@/base/features/content/components/layouts/Item";
+import EventSummary from "@/features/event/components/sections/Summary";
+import { EventScheduleList } from "@/features/event/components/sections/ScheduleList";
 
 export default function EventDetailTemplate({ pageInfo, event, myUserData, myParticipant }) {
   return (

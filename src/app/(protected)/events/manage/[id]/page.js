@@ -1,14 +1,14 @@
 'use client';
 
 import EventManageTemplate from "@/features/event/components/templates/Manage";
-import { EventFilterEnum } from "@/features/event/enums/page";
+import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useMyUserData } from "@/features/user/stores/myUserData";
 import { useAllEvents } from "@/features/event/stores/allEvents";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
-import { ItemPageInfo } from "@/base/page/info";
-import { SubNavInfo } from "@/base/page/content/infos";
+import { ItemPageInfo } from "@/base/features/page/info";
+import { SubNavInfo } from "@/base/features/content/components/ui/NavMenu";
 
 export default function EventManage() {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function EventManage() {
     const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
     if (!myUserData["is_admin"] && !myParticipantTmp?.["is_organizer"]) {
       // TODO 通知：アクセスできません
-      router.push(`/events?filter=${EventFilterEnum.manage}`);
+      router.push(`/events?filter=${EventsPageFilterEnum.manage}`);
       return;
     }
   }, [router, id, myUserData, allEvents, myParticipants]);
@@ -54,7 +54,7 @@ export default function EventManage() {
     subTitle: "管理画面",
     subNavInfos: [
       new SubNavInfo({
-        href: `/events?filter=${EventFilterEnum.manage}`, 
+        href: `/events?filter=${EventsPageFilterEnum.manage}`, 
         text: "一覧へ戻る",
       }),
       new SubNavInfo({

@@ -1,5 +1,5 @@
-import { ListContainer, ListItemContainer } from "@/base/page/content/components/containers/List";
-import EventSummary from "@/features/event/components/organisms/Summary";
+import { ListContainer, ListItemContainer } from "@/base/features/content/components/layouts/List";
+import EventSummary from "@/features/event/components/sections/Summary";
 
 export default function EventsTemplate({ pageInfo, events }) {
   return (

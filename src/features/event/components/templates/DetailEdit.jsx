@@ -1,16 +1,15 @@
 'use client';
 
-import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
-import ItemContainer from "@/base/page/content/components/containers/Item";
-import { EventPageTypeEnum, EventPageInfo } from "@/features/event/enums/page";
-import FormContainer from "@/base/form/components/containers/Form";
-import useForm from "@/base/form/hooks/useForm";
+import { EventScheduleList } from "@/features/event/components/sections/ScheduleList";
+import ItemContainer from "@/base/features/content/components/layouts/Item";
+import FormContainer from "@/base/features/form/components/layouts/Form";
+import useForm from "@/base/features/form/hooks/useForm";
 import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../../utils";
-import { Checkbox } from "@/base/form/components/atoms/Input";
-import { ResetButton } from "@/base/form/components/organisms/ResetButton";
-import { AllCancelButton } from "../atoms/AllCancelButton";
+import Checkbox from "@/base/features/form/components/ui/inputs/Checkbox";
+import { ResetButton } from "@/base/features/form/components/ui/subButtons/Reset";
+import { AllCancelButton } from "../ui/AllCancelButton";
 import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
 import { updateRecord } from "@/base/api/update";
 import { useMemo } from "react";

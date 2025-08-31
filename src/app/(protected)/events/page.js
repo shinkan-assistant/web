@@ -1,14 +1,14 @@
 'use client';
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { EventFilterEnum, } from "@/features/event/enums/page";
+import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
 import EventsTemplate from "@/features/event/components/templates/List";
 import { useEffect, useState } from "react";
 import { useMyUserData } from "@/features/user/stores/myUserData";
 import { useAllEvents } from "@/features/event/stores/allEvents";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
-import { ListPageInfo } from "@/base/page/info";
-import { ItemLinkInfo } from "@/base/page/content/infos";
+import { ListPageInfo } from "@/base/features/page/info";
+import { ItemLinkInfo } from "@/base/features/content/components/ui/ItemLink";
 
 export default function Events() {
   const router = useRouter();
@@ -22,8 +22,8 @@ export default function Events() {
   const [targetEvents, setTargetEvents] = useState(null);
 
   useEffect(() => {
-    if (!Object.values(EventFilterEnum).includes(filter)) {
-      router.push(`/events?filter=${EventFilterEnum.participating}`);
+    if (!Object.values(EventsPageFilterEnum).includes(filter)) {
+      router.push(`/events?filter=${EventsPageFilterEnum.participating}`);
       return;
     }
 
@@ -32,19 +32,19 @@ export default function Events() {
       return;
     }
     
-    if (filter === EventFilterEnum.manage && !myUserData["belong"]["is_member"]) {
-      router.push(`/events?filter=${EventFilterEnum.participating}`);
+    if (filter === EventsPageFilterEnum.manage && !myUserData["belong"]["is_member"]) {
+      router.push(`/events?filter=${EventsPageFilterEnum.participating}`);
       return;
     }
 
     const targetEventsFilterFunc = {
-      [EventFilterEnum.participating]: (e) => {
+      [EventsPageFilterEnum.participating]: (e) => {
         return myParticipants.some(mp => e["id"] === mp["event_id"])
       },
-      [EventFilterEnum.apply]: (e) => {
+      [EventsPageFilterEnum.apply]: (e) => {
         return myParticipants.every(mp => e["id"] !== mp["event_id"])
       },
-      [EventFilterEnum.manage]: (e) => {
+      [EventsPageFilterEnum.manage]: (e) => {
         if (myUserData["is_admin"]) 
           return true;
         return myParticipants.some(mp => e["id"] === mp["event_id"] && mp["is_organizer"]);
@@ -62,15 +62,15 @@ export default function Events() {
   const pageInfo = new ListPageInfo({
     titleFunc: ({record}) => record["title"], 
     itemLink: {
-      [EventFilterEnum.participating]: new ItemLinkInfo({
+      [EventsPageFilterEnum.participating]: new ItemLinkInfo({
         hrefFunc: ({id}) => `/events/detail/${id}`,
         text: "詳細を見る",
       }),
-      [EventFilterEnum.apply]: new ItemLinkInfo({
+      [EventsPageFilterEnum.apply]: new ItemLinkInfo({
         hrefFunc: ({id}) => `/events/apply/${id}`,
         text: "申し込む",
       }),
-      [EventFilterEnum.manage]: new ItemLinkInfo({
+      [EventsPageFilterEnum.manage]: new ItemLinkInfo({
         hrefFunc: ({id}) => `/events/manage/${id}`,
         text: "管理する",
       }),

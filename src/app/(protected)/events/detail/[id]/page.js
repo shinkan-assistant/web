@@ -1,14 +1,14 @@
 'use client';
 
 import EventDetailTemplate from "@/features/event/components/templates/Detail";
-import { EventFilterEnum } from "@/features/event/enums/page";
+import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useMyUserData } from "@/features/user/stores/myUserData";
 import { useAllEvents } from "@/features/event/stores/allEvents";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
-import { ItemPageInfo } from "@/base/page/info";
-import { SubNavInfo } from "@/base/page/content/infos";
+import { ItemPageInfo } from "@/base/features/page/info";
+import { SubNavInfo } from "@/base/features/content/components/ui/NavMenu";
 
 export default function EventDetail() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function EventDetail() {
     const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
     if (!myParticipantTmp) {
       // TODO 通知：まだ申し込んでいません
-      router.push(`/events?filter=${EventFilterEnum.participating}`);
+      router.push(`/events?filter=${EventsPageFilterEnum.participating}`);
       return;
     }
     setMyParticipant(myParticipantTmp);
@@ -52,7 +52,7 @@ export default function EventDetail() {
     title: event["title"],
     subNavInfos: [
       new SubNavInfo({
-        href: `/events?filter=${EventFilterEnum.participating}`, 
+        href: `/events?filter=${EventsPageFilterEnum.participating}`, 
         text: "一覧へ戻る",
       }),
       new SubNavInfo({

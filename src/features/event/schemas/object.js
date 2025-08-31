@@ -1,8 +1,11 @@
 import { v4 as uuidV4 } from 'uuid';
 import z from "@/lib/zod"
-import { ContactGroupPlatformEnum, EventTypeEnum, FeeTypeEnum, OnlineMeetingPlatformEnum } from "@/features/event/enums/data.js";
 import { DateTimeSchema } from '@/base/schema/object';
 import { BelongSchema } from '@/features/user/schemas/object';
+import EventTypeEnum from '../const/enums/type';
+import FeeTypeEnum from '../const/enums/feeType';
+import ContactGroupPlatformEnum from '../const/enums/contactGroupPlatform';
+import OnlineMeetingPlatformEnum from '../const/enums/onlineMeetingPlatform';
 
 const LocationSchema = z.object({
   name: z.string().min(1),

@@ -1,10 +1,10 @@
-import ItemContainer from "@/base/page/content/components/containers/Item";
-import EventSummary from "@/features/event/components/organisms/Summary";
-import { EventScheduleList } from "@/features/event/components/organisms/ScheduleList";
-import { TextInput } from "@/base/form/components/atoms/Input";
+import ItemContainer from "@/base/features/content/components/layouts/Item";
+import EventSummary from "@/features/event/components/sections/Summary";
+import { EventScheduleList } from "@/features/event/components/sections/ScheduleList";
+import TextInput from "@/base/features/form/components/ui/inputs/Text";
 import { UpdateEventSchema } from "../../schemas/api";
-import useForm from "@/base/form/hooks/useForm";
-import { ResetButton } from "@/base/form/components/organisms/ResetButton";
+import useForm from "@/base/features/form/hooks/useForm";
+import { ResetButton } from "@/base/features/form/components/ui/subButtons/Reset";
 import { useMemo } from "react";
 
 export default function EventManageTemplate({ pageInfo, event }) {

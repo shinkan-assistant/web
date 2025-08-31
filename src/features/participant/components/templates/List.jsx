@@ -1,7 +1,7 @@
 'use client';
 
-import ItemContainer from "@/base/page/content/components/containers/Item";
-import StatusBadge from "../atoms/StatusBadge";
+import ItemContainer from "@/base/features/content/components/layouts/Item";
+import StatusBadge from "../ui/StatusBadge";
 
 // ヘルパー関数: 「参加者×スケジュール」の単位で表示用データを作成する
 const createParticipantScheduleRows = (participants, event, users) => {

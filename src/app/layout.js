@@ -1,5 +1,5 @@
 import "./globals.css";
-import Header from "@/features/shared/components/organisms/Header";
+import Header from "@/features/shared/components/sections/Header";
 import { AuthUserProvider } from "@/features/user/stores/authUser";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 

@@ -2,14 +2,13 @@
 
 import { notFound, useParams, useRouter } from "next/navigation";
 import EventApplyTemplate from "@/features/event/components/templates/Apply";
-import { EventFilterEnum } from "@/features/event/enums/page";
+import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
 import { useEffect, useState } from "react";
 import { useMyUserData } from "@/features/user/stores/myUserData";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
 import { useAllEvents } from "@/features/event/stores/allEvents";
-import { ItemPageInfo } from "@/base/page/info";
-import { ItemContentInfo } from "@/base/page/content/info";
-import { SubNavInfo } from "@/base/page/content/infos";
+import { ItemPageInfo } from "@/base/features/page/info";
+import { SubNavInfo } from "@/base/features/content/components/ui/NavMenu";
 
 export default function EventApply() {
   const router = useRouter();
@@ -35,7 +34,7 @@ export default function EventApply() {
     const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
     if (myParticipantTmp) {
       // TODO 通知：すでに申し込んでいます
-      router.push(`/events?filter=${EventFilterEnum.apply}`);
+      router.push(`/events?filter=${EventsPageFilterEnum.apply}`);
       return;
     }
   }, [router, id, myUserData, allEvents, myParticipants]);
@@ -52,7 +51,7 @@ export default function EventApply() {
     subTitle: "申し込みフォーム",
     subNavInfos: [
       new SubNavInfo({
-        href: `/events?filter=${EventFilterEnum.apply}`, 
+        href: `/events?filter=${EventsPageFilterEnum.apply}`, 
         text: "一覧へ戻る",
       })
     ]

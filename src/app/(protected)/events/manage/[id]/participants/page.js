@@ -40,7 +40,7 @@ export default function ParticipantListPage() {
     const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
     if (!myUserData["is_admin"] && !myParticipantTmp?.["is_organizer"]) {
       // TODO 通知：アクセスできません
-      router.push(`/events?filter=${EventFilterEnum.manage}`);
+      router.push(`/events?filter=${EventsPageFilterEnum.manage}`);
       return;
     }
 

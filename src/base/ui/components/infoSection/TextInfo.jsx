@@ -1,3 +1,5 @@
+import FormInput from "@/base/features/form/components/ui/Input";
+
 export default function TextInfo({name, label, value, isEdit, formHook}) {
   return (
     <div>
@@ -5,7 +7,7 @@ export default function TextInfo({name, label, value, isEdit, formHook}) {
       <span className="font-semibold px-1">:</span>
       {!isEdit
       ? <span>{value}</span>
-      : <Input name={name} formHook={formHook} />
+      : <FormInput name={name} formHook={formHook} />
       }
     </div>
   );
