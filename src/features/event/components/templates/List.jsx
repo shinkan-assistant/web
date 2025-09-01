@@ -1,5 +1,5 @@
 import { ListContainer, ListItemContainer } from "@/base/features/content/components/layouts/List";
-import EventSummary from "@/features/event/components/sections/Summary";
+import EventSummary from "@/features/event/components/ui/summary";
 
 export default function EventsTemplate({ pageInfo, events }) {
   return (

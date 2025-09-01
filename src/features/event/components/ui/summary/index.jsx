@@ -1,7 +1,7 @@
-import { Location } from "../ui/fields/Location";
-import HeldDate from "../ui/fields/HeldDate";
-import ContactGroup from "../ui/fields/ContactGroup";
-import OnlineMeetingInfo from "../ui/fields/OnlineMeetingInfo";
+import RoughLocationName from "./RoughLocationName";
+import HeldDate from "./HeldDate";
+import ContactGroup from "../scheduleList/ContactGroup";
+import OnlineMeetingInfo from "../scheduleList/OnlineMeetingInfo";
 import { UI_SIZE } from "@/base/ui/const/enums/uiSize";
 import { ContentTypeEnum } from "@/base/features/content/const/enums/type";
 
@@ -19,8 +19,8 @@ export default function EventSummary({pageInfo, event, formHook }) {
           schedules={event["schedules"]}
           size={UI_SIZE.LG}
         />
-        <Location 
-          locationName={event["rough_location_name"]}
+        <RoughLocationName
+          roughLocationName={event["rough_location_name"]}
           size={UI_SIZE.LG}
         />
         {(pageInfo.contentType === ContentTypeEnum.item || pageInfo.isForManage || pageInfo.isBeforeApplying) && 

@@ -1,7 +1,7 @@
 'use client';
 
-import EventSummary from "@/features/event/components/sections/Summary";
-import { EventScheduleList } from "@/features/event/components/sections/ScheduleList";
+import EventSummary from "@/features/event/components/ui/summary";
+import { EventScheduleList } from "@/features/event/components/ui/scheduleList";
 import ItemContainer from "@/base/features/content/components/layouts/Item";
 import FormContainer from "@/base/features/form/components/layouts/Form";
 import { db } from "@/lib/firebase/clientApp";

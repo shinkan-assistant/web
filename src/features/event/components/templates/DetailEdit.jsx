@@ -1,6 +1,6 @@
 'use client';
 
-import { EventScheduleList } from "@/features/event/components/sections/ScheduleList";
+import { EventScheduleList } from "@/features/event/components/ui/scheduleList";
 import ItemContainer from "@/base/features/content/components/layouts/Item";
 import FormContainer from "@/base/features/form/components/layouts/Form";
 import useForm from "@/base/features/form/hooks/useForm";
@@ -8,7 +8,7 @@ import { db } from "@/lib/firebase/clientApp";
 import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../../utils";
 import { ResetButton } from "@/base/features/form/components/ui/subButtons/Reset";
-import { AllCancelButton } from "../ui/AllCancelButton";
+import { AllCancelButton } from "../ui/form/AllCancelButton";
 import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
 import { updateRecord } from "@/base/api/update";
 import { useMemo } from "react";

@@ -1,6 +1,6 @@
 import ItemContainer from "@/base/features/content/components/layouts/Item";
-import EventSummary from "@/features/event/components/sections/Summary";
-import { EventScheduleList } from "@/features/event/components/sections/ScheduleList";
+import EventSummary from "@/features/event/components/ui/summary";
+import { EventScheduleList } from "@/features/event/components/ui/scheduleList";
 import { UpdateEventSchema } from "../../schemas/api";
 import useForm from "@/base/features/form/hooks/useForm";
 import { ResetButton } from "@/base/features/form/components/ui/subButtons/Reset";
