@@ -22,7 +22,6 @@ function LocationBase({isDetailed, location, disabled, size}) {
       <TextInfo 
         label="場所"
         value={location?.["name"] ?? "オンライン開催"}
-        isEdit={false}
       />
   
       {isDetailed &&
@@ -31,7 +30,6 @@ function LocationBase({isDetailed, location, disabled, size}) {
             <TextInfo 
               label="住所" 
               value={location["address"]} 
-              isEdit={false} 
             />
           }
       

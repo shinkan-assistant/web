@@ -30,14 +30,12 @@ export default function Fee({feesByBelong, belong, disabled, size}) {
       <TextInfo
         label="参加費"
         value={feeInfo["type"] === FeeTypeEnum.fixed ? `¥${feeInfo["fixed"]}` : feeInfo["type"]}
-        isEdit={false}
       />
 
       {feeInfo.comment &&
         <TextInfo
           label="注記"
           value={feeInfo["comment"]}
-          isEdit={false}
         />
       }
     </InfoSection>

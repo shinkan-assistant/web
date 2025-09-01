@@ -8,7 +8,6 @@ import { db } from "@/lib/firebase/clientApp";
 import useForm from "@/base/features/form/hooks/useForm";
 import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../../utils";
-import Checkbox from "@/base/features/form/components/ui/inputs/Checkbox";
 import { ResetButton } from "@/base/features/form/components/ui/subButtons/Reset";
 import { createRecord } from "@/base/api/create";
 import { CreateParticipantSchema } from "@/features/participant/schemas/api";
@@ -23,7 +22,6 @@ export default function EventApplyTemplate({ pageInfo, event, myUser }) {
     return allSchedules.reduce((acc, schedule) => {
       return {
         [getInputNameFromSchedule(schedule)]: {
-          Component: Checkbox,
           label: "参加しますか？",
           initialValue: false,
         },
@@ -35,7 +33,7 @@ export default function EventApplyTemplate({ pageInfo, event, myUser }) {
   const formHook = useForm({
     inputInfos,
     Buttons: [ResetButton],
-    convertToFormData: (_, inputValues) => {
+    generateFormData: (_, inputValues) => {
       const formData = {};
       // 更新前と変化があった時のみ、formDataに格納する
       formData["schedule_ids"] = Object.keys(inputValues)

@@ -1,6 +1,4 @@
-export default function Checkbox({name, label, value, onChange}) {
-  const id = name;
-
+export default function Checkbox({id, name, label, value, onChange}) {
   return (
     <div className="flex items-center justify-center">
       <input

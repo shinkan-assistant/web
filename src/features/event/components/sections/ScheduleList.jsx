@@ -1,10 +1,10 @@
 import { getInputNameFromSchedule, judgeIsParticipating } from "../../utils";
-import FormInput from "@/base/features/form/components/ui/Input";
 import StatusBadgeList from "@/base/ui/components/StatusBadgeList";
 import { DetailedLocation } from "../ui/fields/Location";
 import { UI_SIZE } from "@/base/ui/const/enums/uiSize";
 import TimeRange from "../ui/fields/TimeRange";
 import Fee from "../ui/fields/Fee";
+import Checkbox from "@/base/features/form/components/ui/inputs/Checkbox";
 
 function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
   const scheduleForParticipant = myParticipant?.schedules.find(ps => ps["id"] === schedule["id"]) ?? null;
@@ -78,7 +78,7 @@ function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
         
         {!pageInfo.isForManage && pageInfo.isForm &&
           <div className="mt-4">
-            <FormInput name={getInputNameFromSchedule(schedule)} formHook={formHook} />
+            <Checkbox {...formHook.getInputProps(getInputNameFromSchedule(schedule))} />
           </div>
         }
       </div>

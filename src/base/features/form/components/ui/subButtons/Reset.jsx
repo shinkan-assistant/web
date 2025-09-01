@@ -7,23 +7,19 @@ export function ResetButton({formHook}) {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    const { inputNames, inputInfos, inputValues } = formHook;
-    const isInitialValues = inputNames
-      .every(name => inputValues[name] === inputInfos[name].initialValue);
+    const isInitialValues = formHook.inputNames.every(
+      name => formHook.inputValues[name] === formHook.initialValues[name]);
     setDisabled(isInitialValues);
   }, Object.values(formHook.inputValues))
 
   function reset() { 
-    const { inputNames, inputInfos } = formHook;
-    formHook.changeInputs(
-      inputNames.reduce((acc, name) => {
-        return {
-          [name]: inputInfos[name].initialValue,
-          ...acc,
-        }
-      }, {})
-    );
     setDisabled(true);
+
+    const updatedInputValues = {};
+    for (let name of formHook.inputNames) {
+      updatedInputValues[name] = formHook.initialValues[name];
+    }
+    formHook.changeInputValues(updatedInputValues);
   }
 
   return (

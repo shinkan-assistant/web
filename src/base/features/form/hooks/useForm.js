@@ -3,23 +3,35 @@
 import { useEffect, useState } from "react";
 
 export default function useForm({
-  inputInfos, convertToFormData, judgeCanSubmit, handleSubmit, Buttons
+  inputInfos, generateFormData, judgeCanSubmit, handleSubmit, Buttons
 }) {
   const inputNames = Object.keys(inputInfos);
 
-  const initialValues = inputNames.reduce((acc, inputName) => {
-    return { ...acc, [inputName]: inputInfos[inputName].initialValue }
-  }, {});
+  const initialValues = {};
+  for (let inputName of inputNames) {
+    initialValues[inputName] = inputInfos[inputName].initialValue;
+  }
 
   const [inputValues, setInputValues] = useState(initialValues);
 
-  function onChangeInput(name, {value}) {
-    const inputValuesTmp = {...inputValues};
-    inputValuesTmp[name] = value;
-    setInputValues(inputValuesTmp);
-  }
+  function getInputProps(name) {
+    if (!inputNames.includes(name))
+      return null;
 
-  function changeInputs(updatedInputValues) {
+    return {
+      id: name,
+      name: name,
+      label: inputInfos[name].label,
+      value: inputValues[name],
+      onChange: function (name, {value}) {
+        const inputValuesTmp = {...inputValues};
+        inputValuesTmp[name] = value;
+        setInputValues(inputValuesTmp);
+      }
+    }
+  };
+
+  function changeInputValues(updatedInputValues) {
     const updatedInputNames = Object.keys(updatedInputValues);
     const inputValuesTmp = {...inputValues};
     for (let inputName of inputNames) {
@@ -29,12 +41,13 @@ export default function useForm({
     setInputValues(inputValuesTmp);
   }
 
-  const initialFormData = convertToFormData(initialValues, initialValues);
+  const initialFormData = generateFormData(initialValues, initialValues);
   const [formData, setFormData] = useState(initialFormData);
+
   const [canSubmit, setCanSubmit] = useState(false);
 
   useEffect(() => {
-    const formDataTmp = convertToFormData(initialValues, inputValues)
+    const formDataTmp = generateFormData(initialValues, inputValues)
     setFormData(formDataTmp);
     setCanSubmit(judgeCanSubmit(initialFormData, formDataTmp));
   }, [inputValues])
@@ -61,14 +74,14 @@ export default function useForm({
 
   return {
     inputNames,
-    inputInfos, 
-    Buttons,
+    initialValues, 
     inputValues, 
+    getInputProps,
+    Buttons,
+    changeInputValues,
     canSubmit,
     isProcessing, 
-    error,
-    onChangeInput, 
-    changeInputs,
+    error, 
     onSubmit, 
   };
 }

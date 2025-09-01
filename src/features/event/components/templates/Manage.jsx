@@ -1,7 +1,6 @@
 import ItemContainer from "@/base/features/content/components/layouts/Item";
 import EventSummary from "@/features/event/components/sections/Summary";
 import { EventScheduleList } from "@/features/event/components/sections/ScheduleList";
-import TextInput from "@/base/features/form/components/ui/inputs/Text";
 import { UpdateEventSchema } from "../../schemas/api";
 import useForm from "@/base/features/form/hooks/useForm";
 import { ResetButton } from "@/base/features/form/components/ui/subButtons/Reset";
@@ -11,7 +10,6 @@ export default function EventManageTemplate({ pageInfo, event }) {
   const inputInfos = useMemo(() => {
     return {
       "rough_location_name": {
-        Component: TextInput,
         initialValue: event["rough_location_name"],
       }
     }
@@ -20,7 +18,7 @@ export default function EventManageTemplate({ pageInfo, event }) {
   const formHook = useForm({
     inputInfos,
     Buttons: [ResetButton],
-    convertToFormData: (initialValues, inputValues) => {
+    generateFormData: (initialValues, inputValues) => {
       const formData = {};
 
       for (let key of ["rough_location_name"]) {

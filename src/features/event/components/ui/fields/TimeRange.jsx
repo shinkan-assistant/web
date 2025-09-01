@@ -12,10 +12,16 @@ export default function TimeRange({timeRange, disabled, size}) {
       disabled={disabled}
       size={size}
     >
-      <TextInfo label="開始" value={formatTime(timeRange["start_at"])} isEdit={false} />
+      <TextInfo 
+        label="開始"
+        value={formatTime(timeRange["start_at"])}
+      />
 
       {existsEndAt &&
-        <TextInfo label="終了" value={formatTime(timeRange["end_at"])} isEdit={false} />
+        <TextInfo 
+          label="終了"
+          value={formatTime(timeRange["end_at"])}
+        />
       }
     </InfoSection>
   );

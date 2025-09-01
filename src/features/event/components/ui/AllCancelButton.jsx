@@ -7,21 +7,19 @@ export function AllCancelButton({formHook}) {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    const isAllCancel =formHook.inputNames
-      .every(inputName => !formHook.inputValues[inputName]);
+    const isAllCancel = formHook.inputNames.every(
+      name => !formHook.inputValues[name]);
     setDisabled(isAllCancel);
   }, [formHook.inputValues])
 
   function onClick() { 
-    const updatedInputValues = formHook.inputNames
-      .reduce((acc, inputName) => {
-        return {
-          [inputName]: false,
-          ...acc,
-        }
-      }, {});
     setDisabled(true);
-    formHook.changeInputs(updatedInputValues);
+
+    const updatedInputValues = {};
+    for (let name of formHook.inputNames) {
+      updatedInputValues[name] = false;
+    }
+    formHook.changeInputValues(updatedInputValues);
   }
 
   return (

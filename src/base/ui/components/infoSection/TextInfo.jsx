@@ -1,13 +1,13 @@
-import FormInput from "@/base/features/form/components/ui/Input";
+import TextInput from "@/base/features/form/components/ui/inputs/Text";
 
-export default function TextInfo({name, label, value, isEdit, formHook}) {
+export default function TextInfo({label, value, inputProps}) {
   return (
     <div>
-      <span className="font-semibold">{label}</span>
+      <span className="font-semibold">{inputProps?.label ?? label}</span>
       <span className="font-semibold px-1">:</span>
-      {!isEdit
+      {!inputProps
       ? <span>{value}</span>
-      : <FormInput name={name} formHook={formHook} />
+      : <TextInput {...inputProps} />
       }
     </div>
   );

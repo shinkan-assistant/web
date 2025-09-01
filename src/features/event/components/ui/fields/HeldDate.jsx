@@ -13,7 +13,6 @@ export default function HeldDate({schedules, disabled, size}) {
       <TextInfo 
         label="開催日"
         value={formatDate(schedules[0]["time_range"]["start_at"])}
-        isEdit={false}
       />
     </InfoSection>
   );
