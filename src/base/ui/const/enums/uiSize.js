@@ -1,5 +1,6 @@
-export const UI_SIZE = Object.freeze({
+const uiSizeEnum = Object.freeze({
   LG: "large",
   MD: "medium",
   SM: "small",
 });
+export default uiSizeEnum;

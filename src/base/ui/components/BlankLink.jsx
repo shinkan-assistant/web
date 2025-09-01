@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { UI_SIZE } from "../const/enums/uiSize";
+import uiSizeEnum from "../const/enums/uiSize";
 
 export default function BlankLink({ href, disabled, size, children }) {
   const paddingClassName = {
-    [UI_SIZE.LG]: "px-3 py-2",
-    [UI_SIZE.MD]: "px-2 py-1",
-    [UI_SIZE.SM]: "px-1 py-[2px]",
+    [uiSizeEnum.LG]: "px-3 py-2",
+    [uiSizeEnum.MD]: "px-2 py-1",
+    [uiSizeEnum.SM]: "px-1 py-[2px]",
   }[size];
 
   // 無効状態に応じて異なるクラス名を適用

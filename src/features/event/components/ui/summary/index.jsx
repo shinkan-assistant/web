@@ -2,8 +2,8 @@ import RoughLocationName from "./RoughLocationName";
 import HeldDate from "./HeldDate";
 import ContactGroup from "../scheduleList/ContactGroup";
 import OnlineMeetingInfo from "../scheduleList/OnlineMeetingInfo";
-import { UI_SIZE } from "@/base/ui/const/enums/uiSize";
-import { ContentTypeEnum } from "@/base/features/content/const/enums/type";
+import uiSizeEnum from "@/base/ui/const/enums/uiSize";
+import ContentTypeEnum from "@/base/features/content/const/enums/type";
 
 export default function EventSummary({pageInfo, event, formHook }) {
   return (
@@ -17,11 +17,11 @@ export default function EventSummary({pageInfo, event, formHook }) {
       <div className={pageInfo.contentType === ContentTypeEnum.list ? "space-y-2" : "space-y-4"}> {/* 各情報ブロック間のスペースを統一 */}
         <HeldDate
           schedules={event["schedules"]}
-          size={UI_SIZE.LG}
+          size={uiSizeEnum.LG}
         />
         <RoughLocationName
           roughLocationName={event["rough_location_name"]}
-          size={UI_SIZE.LG}
+          size={uiSizeEnum.LG}
         />
         {(pageInfo.contentType === ContentTypeEnum.item || pageInfo.isForManage || pageInfo.isBeforeApplying) && 
           <>

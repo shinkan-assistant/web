@@ -2,13 +2,13 @@ import BlankLink from "@/base/ui/components/BlankLink";
 import { LocationIcon } from "@/base/ui/components/icons";
 import InfoSection from "@/base/ui/components/infoSection";
 import TextInfo from "@/base/ui/components/infoSection/TextInfo";
-import { UI_SIZE } from "@/base/ui/const/enums/uiSize";
+import uiSizeEnum from "@/base/ui/const/enums/uiSize";
 
 export default function DetailedLocation({location, disabled, size}) {
   let blankLinkSize;
   blankLinkSize = {
-    [UI_SIZE.LG]: UI_SIZE.MD,
-    [UI_SIZE.MD]: UI_SIZE.SM,
+    [uiSizeEnum.LG]: uiSizeEnum.MD,
+    [uiSizeEnum.MD]: uiSizeEnum.SM,
   }[size];
 
   return (

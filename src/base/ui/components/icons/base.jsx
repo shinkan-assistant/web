@@ -1,10 +1,10 @@
-import { UI_SIZE } from "../../const/enums/uiSize";
+import uiSizeEnum from "../../const/enums/uiSize";
 
 function BaseIcon({disabled, statefulColorClassNames, size, children}) {
   const colorClassName = !disabled ? statefulColorClassNames.enabled : statefulColorClassNames.disabled;
   const sizeClassName = {
-    [UI_SIZE.LG]: "w-6 h-6",
-    [UI_SIZE.MD]: "w-5 h-5",
+    [uiSizeEnum.LG]: "w-6 h-6",
+    [uiSizeEnum.MD]: "w-5 h-5",
   }[size];
 
   return (

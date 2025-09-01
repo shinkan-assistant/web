@@ -1,5 +1,5 @@
 import BlankLink from "@/base/ui/components/BlankLink";
-import { UI_SIZE } from "@/base/ui/const/enums/uiSize";
+import uiSizeEnum from "@/base/ui/const/enums/uiSize";
 
 function OnlineMeetingPlatform({platform}) {
   return (
@@ -42,7 +42,7 @@ export default function OnlineMeetingInfo({onlineMeetingInfo}) {
       }
 
       <div className="mt-3">
-        <BlankLink href={onlineMeetingInfo["meeting_url"]} size={UI_SIZE.LG} >
+        <BlankLink href={onlineMeetingInfo["meeting_url"]} size={uiSizeEnum.LG} >
           <span>
             <svg 
               className="w-5 h-5 mr-2"

@@ -1,4 +1,4 @@
-import { ContentTypeEnum } from "../../../const/enums/type";
+import ContentTypeEnum from "../../../const/enums/type";
 
 export default function ContentTitleArea({contentType, title, subTitle}) {
   const containerAdditionalClassName = {

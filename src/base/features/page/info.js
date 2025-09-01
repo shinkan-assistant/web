@@ -1,4 +1,4 @@
-import { ContentTypeEnum } from "../content/const/enums/type";
+import ContentTypeEnum from "../content/const/enums/type";
 
 class PageInfoBase {
   constructor({contentType}) {

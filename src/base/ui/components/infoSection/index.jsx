@@ -1,9 +1,9 @@
-import { UI_SIZE } from "../../const/enums/uiSize";
+import uiSizeEnum from "../../const/enums/uiSize";
 
 export default function InfoSection({Icon, disabled, size, children}) {
   const textSizeClassName = {
-    [UI_SIZE.LG]: "text-lg",
-    [UI_SIZE.MD]: "text-sm",
+    [uiSizeEnum.LG]: "text-lg",
+    [uiSizeEnum.MD]: "text-sm",
   }[size];
 
   return (

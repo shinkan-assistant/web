@@ -1,6 +1,6 @@
 import { getInputNameFromSchedule, judgeIsParticipating } from "../../../utils";
 import StatusBadgeList from "@/base/ui/components/StatusBadgeList";
-import { UI_SIZE } from "@/base/ui/const/enums/uiSize";
+import uiSizeEnum from "@/base/ui/const/enums/uiSize";
 import TimeRange from "./TimeRange";
 import Fee from "./Fee";
 import Checkbox from "@/base/features/form/components/ui/inputs/Checkbox";
@@ -57,14 +57,14 @@ function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
           <TimeRange 
             timeRange={schedule["time_range"]}
             disabled={disabled}
-            size={UI_SIZE.MD}
+            size={uiSizeEnum.MD}
           />
 
           {(pageInfo.isAfterApplying && !!schedule["location"]) && 
             <DetailedLocation
               location={schedule["location"]}
               disabled={disabled}
-              size={UI_SIZE.MD}
+              size={uiSizeEnum.MD}
             />
           }
 
@@ -72,7 +72,7 @@ function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
             feesByBelong={schedule["fees_by_belong"]} 
             belong={belong}
             disabled={disabled}
-            size={UI_SIZE.MD}
+            size={uiSizeEnum.MD}
           />
         </div>
         
