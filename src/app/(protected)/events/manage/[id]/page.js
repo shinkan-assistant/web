@@ -37,7 +37,6 @@ export default function EventManage() {
 
     const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
     if (!myUser["is_admin"] && !myParticipantTmp?.["is_organizer"]) {
-      // TODO 通知：アクセスできません
       router.push(`/events?filter=${EventsPageFilterEnum.manage}`);
       return;
     }

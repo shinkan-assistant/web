@@ -30,14 +30,15 @@ export default function EventDetail() {
     const eventTmp = events.find(e => id === e["id"]);
     if (!eventTmp) 
       notFound();
-    setEvent(eventTmp);
 
     const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
     if (!myParticipantTmp) {
-      // TODO 通知：まだ申し込んでいません
+      toast.warn(`まだ${eventTmp["title"]}に申し込んでいません`);
       router.push(`/events?filter=${EventsPageFilterEnum.participating}`);
       return;
     }
+    
+    setEvent(eventTmp);
     setMyParticipant(myParticipantTmp);
   }, [router, id, myUser, events, myParticipants]);
 

@@ -40,7 +40,7 @@ export default function EventManageTemplate({ pageInfo, event }) {
         initialData: event,
         formData: formData,
       });
-      // TODO 上から通知バーを出すようにする
+      toast.warn(`${event["title"]}の編集が完了しました`);
     },
   });
 

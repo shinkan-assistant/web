@@ -9,6 +9,7 @@ import { useMyParticipants } from "@/features/participant/stores/myParticipants"
 import { useEvents } from "@/features/event/stores/events";
 import { ItemPageInfo } from "@/base/features/page/info";
 import { SubNavInfo } from "@/base/features/content/components/ui/NavMenu";
+import { toast } from "react-toastify";
 
 export default function EventApply() {
   const router = useRouter();
@@ -29,14 +30,15 @@ export default function EventApply() {
     const eventTmp = events.find(e => id === e["id"]);
     if (!eventTmp) 
       notFound();
-    setEvent(eventTmp);
 
     const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
     if (myParticipantTmp) {
-      // TODO 通知：すでに申し込んでいます
+      toast.warn(`すでに${eventTmp["title"]}に申し込んでいます`);
       router.push(`/events?filter=${EventsPageFilterEnum.apply}`);
       return;
     }
+
+    setEvent(eventTmp);
   }, [router, id, myUser, events, myParticipants]);
 
   if (!myUser || !event) {

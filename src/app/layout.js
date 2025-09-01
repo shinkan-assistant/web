@@ -2,6 +2,7 @@ import "./globals.css";
 import Header from "@/features/shared/components/sections/Header";
 import { AuthUserProvider } from "@/features/user/stores/authUser";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "Gatherlynx",
@@ -18,6 +19,7 @@ export default async function RootLayout({ children }) {
           <div className="fixed top-0 left-0 right-0 z-50">
             <Header title={metadata.title}/>
           </div>
+          <ToastContainer />
 
           <div className="pt-[74px]">
             {children}

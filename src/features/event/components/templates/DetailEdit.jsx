@@ -12,6 +12,7 @@ import { AllCancelButton } from "../ui/form/AllCancelButton";
 import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
 import { updateRecord } from "@/base/api/update";
 import { useMemo } from "react";
+import { toast } from "react-toastify";
 
 export default function EventDetailEditTemplate({ pageInfo, event, myUser, myParticipant }) {
   const router = useRouter();
@@ -50,12 +51,15 @@ export default function EventDetailEditTemplate({ pageInfo, event, myUser, myPar
       return false;
     },
     handleSubmit: async function (formData) {
+      const isAllCancel = formData["schedule_ids"].length === 0;
+
       await updateRecord(db, "participants", {
         Schema: UpdateParticipantSchedulesSchema,
         initialData: myParticipant,
         formData: formData,
       });
-      // TODO 上から通知バーを出すようにする
+      
+      toast.info(isAllCancel ? `${event["title"]}のキャンセルが完了しました` : `${event["title"]}のスケジュールの変更が完了しました`);
       router.push(`/events/detail/${event["id"]}`);
     },
   });
