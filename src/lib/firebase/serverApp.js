@@ -9,32 +9,28 @@ import fs from 'fs';
 import 'dotenv/config';
 import { convertUserImpl2AuthUser } from "@/features/user/utils";
 
-let serviceAccount;
-try {
-  // ローカルの場合
-  if (process.env.GOOGLE_APP_CREDENTIALS_LOCAL_PATH) {
-    const serviceAccountPath = process.env.GOOGLE_APP_CREDENTIALS_LOCAL_PATH;
-    const absoluteServiceAccountPath = path.resolve(serviceAccountPath);
-    const serviceAccountJson = fs.readFileSync(absoluteServiceAccountPath, 'utf8');
-    serviceAccount = JSON.parse(serviceAccountJson);
-  } 
-  // サーバーの場合
-  else {
-    serviceAccount = JSON.parse(process.env.GOOGLE_APP_CREDENTIALS_SERVER_JSON);
-  }
-} catch (error) {
-  console.error('エラー: サービスアカウントキーの読み込みに失敗しました。');
-  console.error('パスを確認するか、ファイルが正しいJSON形式であるか確認してください。');
-  console.error(error);
-  process.exit(1);
-}
-
 // Firebase Admin SDKの初期化
 if (!getApps().length) {
-  initializeApp({
-    credential: cert(serviceAccount), // Admin SDKのサービスアカウントキー
-    // ... firebaseConfigから他の設定も追加
-  });
+  // ローカルでの初期化の場合
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS_LOCAL_PATH) {
+    let serviceAccount;
+    try {
+      const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS_LOCAL_PATH;
+      const absoluteServiceAccountPath = path.resolve(serviceAccountPath);
+      const serviceAccountJson = fs.readFileSync(absoluteServiceAccountPath, 'utf8');
+      serviceAccount = JSON.parse(serviceAccountJson);
+    } catch (error) {
+      console.error('エラー: サービスアカウントキーの読み込みに失敗しました。');
+      console.error('パスを確認するか、ファイルが正しいJSON形式であるか確認してください。');
+      console.error(error);
+      process.exit(1);
+    }
+    initializeApp({credential: cert(serviceAccount)});
+  }
+  // サーバーでの初期化の場合
+  else {
+    initializeApp();
+  }
 }
 
 // 認証ユーザーを返す関数
