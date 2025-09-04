@@ -18,3 +18,5 @@ env:
     secret: projects/615781396074/secrets/FIREBASE_MESSAGING_SENDER_ID/versions/latest
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
     secret: projects/615781396074/secrets/FIREBASE_APP_ID/versions/latest
+  - variable: GOOGLE_APP_CREDENTIALS_SERVER_JSON
+    secret: projects/615781396074/secrets/GOOGLE_APP_CREDENTIALS_SERVER_JSON/versions/latest

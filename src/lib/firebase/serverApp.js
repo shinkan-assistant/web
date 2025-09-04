@@ -9,13 +9,19 @@ import fs from 'fs';
 import 'dotenv/config';
 import { convertUserImpl2AuthUser } from "@/features/user/utils";
 
-const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-
 let serviceAccount;
 try {
-  const absoluteServiceAccountPath = path.resolve(serviceAccountPath);
-  const serviceAccountFile = fs.readFileSync(absoluteServiceAccountPath, 'utf8');
-  serviceAccount = JSON.parse(serviceAccountFile);
+  // ローカルの場合
+  if (process.env.GOOGLE_APP_CREDENTIALS_LOCAL_PATH) {
+    const serviceAccountPath = process.env.GOOGLE_APP_CREDENTIALS_LOCAL_PATH;
+    const absoluteServiceAccountPath = path.resolve(serviceAccountPath);
+    const serviceAccountJson = fs.readFileSync(absoluteServiceAccountPath, 'utf8');
+    serviceAccount = JSON.parse(serviceAccountJson);
+  } 
+  // サーバーの場合
+  else {
+    serviceAccount = JSON.parse(process.env.GOOGLE_APP_CREDENTIALS_SERVER_JSON);
+  }
 } catch (error) {
   console.error('エラー: サービスアカウントキーの読み込みに失敗しました。');
   console.error('パスを確認するか、ファイルが正しいJSON形式であるか確認してください。');

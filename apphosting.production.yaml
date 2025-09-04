@@ -18,5 +18,7 @@ env:
     secret: projects/gatherlynx-57286/secrets/FIREBASE_MESSAGING_SENDER_ID/versions/latest
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
     secret: projects/gatherlynx-57286/secrets/FIREBASE_APP_ID/versions/latest
+  - variable: GOOGLE_APP_CREDENTIALS_SERVER_JSON
+    secret: projects/gatherlynx-57286/secrets/GOOGLE_APP_CREDENTIALS_SERVER_JSON/versions/latest
   - variable: NODE_ENV
     value: production
