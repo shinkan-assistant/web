@@ -1,10 +1,10 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { getUserDataByEmail } from "../api/get";
 import { db } from "@/lib/firebase/clientApp";
 import { doc, onSnapshot } from "firebase/firestore";
 import { useAuthUser } from "./authUser";
+import { getRecord } from "@/base/api/get";
 
 const MyUserContext = createContext(null);
 
@@ -22,7 +22,7 @@ function MyUserProvider({ children }) {
     let unsubscribe = () => {};
 
     (async() => {
-      const { id } = await getUserDataByEmail(db, {email: authUser.email});
+      const { id } = await getRecord(db, "users", {uniqueData: {"email": authUser.email}});
       const myUserDocRef = doc(db, 'users', id);
       
       // onSnapshotのリスナーを起動

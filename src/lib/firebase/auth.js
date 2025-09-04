@@ -5,8 +5,7 @@ import {
   onIdTokenChanged as _onIdTokenChanged,
 } from "firebase/auth";
 
-import { auth, db } from "./clientApp";
-import { updateUserData } from "@/features/user/api/update";
+import { auth } from "./clientApp";
 import { convertUserImpl2AuthUser } from "@/features/user/utils";
 
 export function onAuthStateChanged(cb) {
@@ -33,13 +32,6 @@ export async function signInWithGoogle() {
       default:
         console.error("Googleによる認証に失敗しました", error);
     }
-  }
-
-  try {
-    await updateUserData(db, {authUser});
-  } catch (error) {
-    console.error("ユーザーデータの更新に失敗しました", error);
-    signOut();
   }
 }
 

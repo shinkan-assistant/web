@@ -1,13 +1,8 @@
+import { MetadataProvider } from "@/features/shared/stores/metadata";
 import "./globals.css";
-import Header from "@/features/shared/components/sections/Header";
 import { AuthUserProvider } from "@/features/user/stores/authUser";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 import { ToastContainer } from "react-toastify";
-
-export const metadata = {
-  title: "Gatherlynx",
-  description: "Web Application for New Welcome",
-};
 
 export default async function RootLayout({ children }) {
   const { authUser } = await getAuthenticatedAppForUser();
@@ -15,16 +10,12 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="ja">
       <body>
-        <AuthUserProvider initialAuthUser={authUser}>
-          <div className="fixed top-0 left-0 right-0 z-50">
-            <Header title={metadata.title}/>
-          </div>
-          <ToastContainer />
-
-          <div className="pt-[74px]">
+        <MetadataProvider>
+          <AuthUserProvider initialAuthUser={authUser}>
+            <ToastContainer />
             {children}
-          </div>
-        </AuthUserProvider>
+          </AuthUserProvider>
+        </MetadataProvider>
       </body>
     </html>
   );

@@ -9,6 +9,7 @@ import { useEvents } from "@/features/event/stores/events";
 import { useMyParticipants } from "@/features/participant/stores/myParticipants";
 import { ItemPageInfo } from "@/base/features/page/info";
 import { SubNavInfo } from "@/base/features/content/components/ui/NavMenu";
+import { toast } from "react-toastify";
 
 export default function EventDetail() {
   const router = useRouter();
