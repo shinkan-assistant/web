@@ -126,7 +126,7 @@ function UnAuthorizedHeader() {
               className="block"
             />
           </div>
-          <span className="gsi-material-button-contents ml-2">ログイン（登録）</span>
+          <span className="gsi-material-button-contents ml-2">ログイン</span>
         </div>
       </button>
     </HeaderContainer>

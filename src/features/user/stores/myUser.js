@@ -22,8 +22,10 @@ function MyUserProvider({ children }) {
     let unsubscribe = () => {};
 
     (async() => {
-      const { id } = await getRecord(db, "users", {uniqueData: {"email": authUser.email}});
-      const myUserDocRef = doc(db, 'users', id);
+      const initialMyUser = await getRecord(db, "users", {uniqueData: {"email": authUser.email}});
+      if (!initialMyUser) return;
+
+      const myUserDocRef = doc(db, 'users', initialMyUser.id);
       
       // onSnapshotのリスナーを起動
       unsubscribe = onSnapshot(myUserDocRef, (doc) => {

@@ -23,21 +23,19 @@ export default function ProtectedLayout({ children }) {
   }, [authUser, router]); 
 
   return (
-    <MyUserProvider>
-      <EventsProvider>
-        <MyParticipantsProvider>
-          <ParticipantsProvider>
-            <UsersProvider>
-              <PageLayout
-                Header={AuthorizedHeader}
-                NavMenu={NavMenu}
-              >
-                {children}
-              </PageLayout>
-            </UsersProvider>
-          </ParticipantsProvider>
-        </MyParticipantsProvider>
-      </EventsProvider>
-    </MyUserProvider>
-  );
+    <EventsProvider>
+      <MyParticipantsProvider>
+        <ParticipantsProvider>
+          <UsersProvider>
+            <PageLayout
+              Header={AuthorizedHeader}
+              NavMenu={NavMenu}
+            >
+              {children}
+            </PageLayout>
+          </UsersProvider>
+        </ParticipantsProvider>
+      </MyParticipantsProvider>
+    </EventsProvider>
+);
 }

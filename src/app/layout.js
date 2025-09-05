@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthUserProvider } from "@/features/user/stores/authUser";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 import { ToastContainer } from "react-toastify";
+import { MyUserProvider } from "@/features/user/stores/myUser";
 
 export default async function RootLayout({ children }) {
   const { authUser } = await getAuthenticatedAppForUser();
@@ -12,8 +13,10 @@ export default async function RootLayout({ children }) {
       <body>
         <MetadataProvider>
           <AuthUserProvider initialAuthUser={authUser}>
-            <ToastContainer />
-            {children}
+            <MyUserProvider>
+              <ToastContainer />
+              {children}
+            </MyUserProvider>
           </AuthUserProvider>
         </MetadataProvider>
       </body>

@@ -110,7 +110,6 @@ async function initializeData() {
     process.exit(-1);
   }
   const envName = process.argv[2];
-  console.log(envName);
 
   const db = initDb();
 

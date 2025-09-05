@@ -5,8 +5,10 @@ import {
   onIdTokenChanged as _onIdTokenChanged,
 } from "firebase/auth";
 
-import { auth } from "./clientApp";
+import { auth, db } from "./clientApp";
 import { convertUserImpl2AuthUser } from "@/features/user/utils";
+import { getRecord } from "@/base/api/get";
+import { toast } from "react-toastify";
 
 export function onAuthStateChanged(cb) {
   return _onAuthStateChanged(auth, cb);
@@ -17,12 +19,11 @@ export function onIdTokenChanged(cb) {
 }
 
 export async function signInWithGoogle() {
-  const provider = new GoogleAuthProvider();
-
-  let authUser = null;
+  // Googleによる認証
+  let signInResult = null;
   try {
-    const result = await signInWithPopup(auth, provider);
-    authUser = convertUserImpl2AuthUser(result.user);
+    const provider = new GoogleAuthProvider();
+    signInResult = await signInWithPopup(auth, provider);
   } catch (error) {
     // ユーザーがポップアップを閉じた、またはキャンセルされた場合はエラーを無視する
     switch (error.code) {
@@ -30,8 +31,20 @@ export async function signInWithGoogle() {
       case "auth/cancelled-popup-request":
         break;
       default:
-        console.error("Googleによる認証に失敗しました", error);
+        toast.warn("Googleの認証に失敗しました");
     }
+  }
+
+  // Google認証に通ってない場合は
+  if (!signInResult.user) {
+    toast.warn("Googleの認証に失敗しました");
+  }
+
+  // 次はユーザーデータがあるかを確認する
+  const myUser = await getRecord(db, "users", { uniqueData: {"email": signInResult.user.email} });
+  if (!myUser) {
+    toast.warn("既存のユーザーでサインインしてください");
+    await signOut();
   }
 }
 
