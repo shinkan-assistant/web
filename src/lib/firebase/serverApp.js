@@ -10,7 +10,7 @@ import 'dotenv/config';
 import { convertUserImpl2AuthUser } from "@/features/user/utils";
 
 // Firebase Admin SDKの初期化
-if (!getApps().length) {
+if (getApps().length === 0) {
   // ローカルでの初期化の場合
   if (process.env.GOOGLE_APPLICATION_CREDENTIALS_LOCAL_PATH) {
     let serviceAccount;
