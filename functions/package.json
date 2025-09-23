@@ -2,10 +2,12 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
     "lint": "eslint . --fix",
-    "serve:production": "firebase emulators:start --only functions --project gatherlynx-57286",
-    "serve:staging": "firebase emulators:start --only functions --project gatherlynxstaging",
-    "shell": "firebase functions:shell",
+    "serve:production": "npm run build && firebase emulators:start --only functions --project gatherlynx-57286",
+    "serve:staging": "npm run build && firebase emulators:start --only functions --project gatherlynxstaging",
+    "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy:production": "firebase deploy --only functions --project gatherlynx-57286",
     "deploy:staging": "firebase deploy --only functions --project gatherlynxstaging",
@@ -14,7 +16,7 @@
   "engines": {
     "node": "20"
   },
-  "main": "index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "cors": "^2.8.5",
     "eslint-config-next": "^15.5.2",
@@ -26,7 +28,8 @@
     "eslint": "8.56.0",
     "eslint-config-google": "^0.14.0",
     "firebase-functions-test": "^3.1.0",
-    "ts-migrate": "^0.1.35"
+    "ts-migrate": "^0.1.35",
+    "typescript": "^5.7.3"
   },
   "private": true
 }

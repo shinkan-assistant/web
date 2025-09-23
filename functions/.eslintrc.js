@@ -1,28 +1,22 @@
 module.exports = {
+  root: true,
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
   env: {
-    es6: true,
-    node: true,
+    browser: true,
+    es2021: true,
   },
   parserOptions: {
-    "ecmaVersion": 2018,
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: "./tsconfig.json",
+    tsconfigRootDir: __dirname,
   },
+  ignorePatterns: ["dist"],
   extends: [
-    "eslint:recommended",
-    "google",
   ],
   rules: {
-    "no-restricted-globals": ["error", "name", "length"],
-    "prefer-arrow-callback": "error",
-    "quotes": ["error", "double", {"allowTemplateLiterals": true}],
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/quotes": ["error", "double"],
   },
-  overrides: [
-    {
-      files: ["**/*.spec.*"],
-      env: {
-        mocha: true,
-      },
-      rules: {},
-    },
-  ],
-  globals: {},
 };
