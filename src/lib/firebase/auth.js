@@ -6,7 +6,6 @@ import {
 } from "firebase/auth";
 
 import { auth, db } from "./clientApp";
-import { convertUserImpl2AuthUser } from "@/features/user/utils";
 import { getRecord } from "@/base/api/get";
 import { toast } from "react-toastify";
 
@@ -36,7 +35,7 @@ export async function signInWithGoogle() {
   }
 
   // Google認証に通ってない場合は
-  if (!signInResult.user) {
+  if (!signInResult?.user) {
     toast.warn("Googleの認証に失敗しました");
   }
 

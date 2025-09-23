@@ -104,9 +104,9 @@ function AuthorizedHeader() {
 }
 
 function UnAuthorizedHeader() {
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    signInWithGoogle();
+    await signInWithGoogle();
   };
 
   return (
