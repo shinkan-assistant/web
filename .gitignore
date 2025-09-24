@@ -34,7 +34,7 @@ yarn-error.log*
 .env
 
 # secret data
-.secret_data_branches
+.secrets
 
 # vercel
 .vercel
