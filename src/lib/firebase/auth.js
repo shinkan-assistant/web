@@ -5,9 +5,9 @@ import {
   onIdTokenChanged as _onIdTokenChanged,
 } from "firebase/auth";
 
-import { auth, db } from "./clientApp";
-import { getRecord } from "@/backend/gateways/db/get";
+import { auth } from "./clientApp";
 import { toast } from "react-toastify";
+import userGateway from "@/gateway/user";
 
 export function onAuthStateChanged(cb) {
   return _onAuthStateChanged(auth, cb);
@@ -40,8 +40,7 @@ export async function signInWithGoogle() {
   }
 
   // 次はユーザーデータがあるかを確認する
-  const myUser = await getRecord(db, "users", { uniqueData: {"email": signInResult.user.email} });
-  if (!myUser) {
+  if (!await userGateway.exists({email: signInResult.user.email})) {
     toast.warn("既存のユーザーでサインインしてください");
     await signOut();
   }

@@ -1,8 +1,13 @@
-export function applyEventRoute({userEmail, eventId, scheduleIds}) {
-  // 権限管理
-  applyEvent({userEmail, eventId, scheduleIds});
-}
+import controller from "@/backend/controllers/participant";
 
-export function updateEventScheduleRoute({userEmail, eventId, updatedScheduleIds}) {
-  updateEventSchedule({userEmail, eventId, updatedScheduleIds});
+export default class ParticipantAPI {
+  static async applyEvent({userEmail, eventId, scheduleIds}) {
+    // TODO 権限確認
+    await controller.applyEvent({userEmail, eventId, scheduleIds});
+  }
+
+  static async updateSchedules({myParticipant, formData}) {
+    // TODO 権限確認
+    await controller.updateSchedules({myParticipant, formData});
+  }
 }

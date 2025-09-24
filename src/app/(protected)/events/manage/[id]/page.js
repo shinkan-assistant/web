@@ -1,14 +1,14 @@
 'use client';
 
-import EventManageTemplate from "@/features/event/components/templates/Manage";
-import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
+import EventManageTemplate from "@/components/event/templates/Manage";
+import EventsPageFilterEnum from "@/components/event/enums/listPageFilter";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useMyUser } from "@/features/user/stores/myUser";
-import { useEvents } from "@/features/event/stores/events";
-import { useMyParticipants } from "@/features/participant/stores/myParticipants";
-import { ItemPageInfo } from "@/base/features/page/info";
-import { SubNavInfo } from "@/base/features/content/components/ui/NavMenu";
+import { useMyUser } from "@/stores/contexts/myUser";
+import { useEvents } from "@/stores/contexts/events";
+import { useMyParticipants } from "@/stores/contexts/myParticipants";
+import { ItemPageInfo } from "@/components/base/page/info";
+import { SubNavInfo } from "@/components/base/content/ui/NavMenu";
 
 export default function EventManage() {
   const router = useRouter();

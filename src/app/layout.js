@@ -1,9 +1,9 @@
-import { MetadataProvider } from "@/features/shared/stores/metadata";
+import { MetadataProvider } from "@/stores/consts/metadata";
 import "./globals.css";
-import { AuthUserProvider } from "@/features/user/stores/authUser";
+import { AuthUserProvider } from "@/stores/sessions/authUser";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 import { ToastContainer } from "react-toastify";
-import { MyUserProvider } from "@/features/user/stores/myUser";
+import { MyUserProvider } from "@/stores/contexts/myUser";
 
 export default async function RootLayout({ children }) {
   const { authUser } = await getAuthenticatedAppForUser();

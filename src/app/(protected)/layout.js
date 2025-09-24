@@ -2,15 +2,15 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthUser } from "@/features/user/stores/authUser";
-import NavMenu from "@/features/shared/components/sections/NavMenu";
-import { MyUserProvider } from "@/features/user/stores/myUser";
-import { EventsProvider } from "@/features/event/stores/events";
-import { MyParticipantsProvider } from "@/features/participant/stores/myParticipants";
-import { ParticipantsProvider } from "@/features/participant/stores/participants";
-import { UsersProvider } from "@/features/user/stores/users";
-import PageLayout from "@/base/features/page/components/layout";
-import { AuthorizedHeader } from "@/features/shared/components/sections/Header";
+import { useAuthUser } from "@/stores/sessions/authUser";
+import NavMenu from "@/components/shared/sections/NavMenu";
+import { MyUserProvider } from "@/stores/contexts/myUser";
+import { EventsProvider } from "@/stores/contexts/events";
+import { MyParticipantsProvider } from "@/stores/contexts/myParticipants";
+import { ParticipantsProvider } from "@/stores/contexts/participants";
+import { UsersProvider } from "@/stores/contexts/users";
+import PageLayout from "@/components/base/page/layout";
+import { AuthorizedHeader } from "@/components/shared/sections/Header";
 
 export default function ProtectedLayout({ children }) {
   const router = useRouter();

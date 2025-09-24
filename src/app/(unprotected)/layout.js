@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
-import { useAuthUser } from "@/features/user/stores/authUser";
-import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
-import PageLayout from "@/base/features/page/components/layout";
-import { UnAuthorizedHeader } from "@/features/shared/components/sections/Header";
+import { useAuthUser } from "@/stores/sessions/authUser";
+import EventsPageFilterEnum from "@/components/event/enums/listPageFilter";
+import PageLayout from "@/components/base/page/layout";
+import { UnAuthorizedHeader } from "@/components/shared/sections/Header";
 
 export default function UnprotectedLayout({ children }) {
   const authUser = useAuthUser();

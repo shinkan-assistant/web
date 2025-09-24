@@ -7,7 +7,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import path from 'path';
 import fs from 'fs';
 import 'dotenv/config';
-import { convertUserImpl2AuthUser } from "@/features/user/utils";
+import { convertUserImpl2AuthUser } from "@/components/user/utils";
 
 // Firebase Admin SDKの初期化
 if (getApps().length === 0) {

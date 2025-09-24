@@ -1,14 +1,14 @@
 'use client';
 
 import { useRouter, useSearchParams } from "next/navigation";
-import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
-import EventsTemplate from "@/features/event/components/templates/List";
+import EventsPageFilterEnum from "@/components/event/enums/listPageFilter";
+import EventsTemplate from "@/components/event/templates/List";
 import { useEffect, useState } from "react";
-import { useMyUser } from "@/features/user/stores/myUser";
-import { useEvents } from "@/features/event/stores/events";
-import { useMyParticipants } from "@/features/participant/stores/myParticipants";
-import { ListPageInfo } from "@/base/features/page/info";
-import { ItemLinkInfo } from "@/base/features/content/components/ui/ItemLink";
+import { useMyUser } from "@/stores/contexts/myUser";
+import { useEvents } from "@/stores/contexts/events";
+import { useMyParticipants } from "@/stores/contexts/myParticipants";
+import { ListPageInfo } from "@/components/base/page/info";
+import { ItemLinkInfo } from "@/components/base/content/ui/ItemLink";
 
 export default function Events() {
   const router = useRouter();

@@ -1,14 +1,14 @@
 'use client';
 
 import { notFound, useParams, useRouter } from "next/navigation";
-import EventDetailEditTemplate from "@/features/event/components/templates/DetailEdit";
-import EventsPageFilterEnum from "@/features/event/const/enums/listPageFilter";
+import EventDetailEditTemplate from "@/components/event/templates/DetailEdit";
+import EventsPageFilterEnum from "@/components/event/enums/listPageFilter";
 import { useEffect, useState } from "react";
-import { useMyUser } from "@/features/user/stores/myUser";
-import { useEvents } from "@/features/event/stores/events";
-import { useMyParticipants } from "@/features/participant/stores/myParticipants";
-import { ItemPageInfo } from "@/base/features/page/info";
-import { SubNavInfo } from "@/base/features/content/components/ui/NavMenu";
+import { useMyUser } from "@/stores/contexts/myUser";
+import { useEvents } from "@/stores/contexts/events";
+import { useMyParticipants } from "@/stores/contexts/myParticipants";
+import { ItemPageInfo } from "@/components/base/page/info";
+import { SubNavInfo } from "@/components/base/content/ui/NavMenu";
 
 export default function EventDetailEdit() {
   const router = useRouter();
