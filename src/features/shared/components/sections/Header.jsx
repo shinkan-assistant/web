@@ -8,10 +8,10 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useAuthUser } from "@/features/user/stores/authUser";
 import { useMyUser } from "@/features/user/stores/myUser";
-import { getMetadata } from "@/features/shared/stores/metadata";
+import { useMetadata } from "@/features/shared/stores/metadata";
 
 function HeaderContainer({children}) {
-  const { title } = getMetadata();
+  const { title } = useMetadata();
 
   return (
     <header className="bg-sky-600 px-4 py-4 flex items-center justify-center">

@@ -17,8 +17,8 @@ function MetadataProvider({ children }) {
   );
 }
 
-function getMetadata() {
+function useMetadata() {
   return useContext(MetadataContext);
 }
 
-export { MetadataProvider, getMetadata };
+export { MetadataProvider, useMetadata };
