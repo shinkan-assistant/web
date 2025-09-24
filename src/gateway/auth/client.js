@@ -1,13 +1,16 @@
 import {
+  getAuth,
   GoogleAuthProvider,
   signInWithPopup,
   onAuthStateChanged as _onAuthStateChanged,
   onIdTokenChanged as _onIdTokenChanged,
 } from "firebase/auth";
-
-import { auth } from "./clientApp";
+import { firebaseApp } from "../../lib/firebase/clientApp";
 import { toast } from "react-toastify";
-import userGateway from "@/gateway/user";
+import userGateway from "@/gateway/backend/user";
+
+// TODO try-catch 作りたい（アカウント消された時は、ここで、Bad Request と出る）
+const auth = getAuth(firebaseApp);
 
 export function onAuthStateChanged(cb) {
   return _onAuthStateChanged(auth, cb);

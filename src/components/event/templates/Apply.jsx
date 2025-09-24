@@ -10,7 +10,7 @@ import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../utils";
 import { ResetButton } from "@/components/base/form/ui/subButtons/Reset";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
-import participantGateway from "@/gateway/participant";
+import participantGateway from "@/gateway/backend/participant";
 
 export default function EventApplyTemplate({ pageInfo, event, myUser }) {
   const router = useRouter();

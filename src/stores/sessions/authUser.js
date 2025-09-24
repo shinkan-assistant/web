@@ -1,6 +1,6 @@
 'use client';
 
-import { onIdTokenChanged } from '@/lib/firebase/auth';
+import { onIdTokenChanged } from '@/gateway/auth/client';
 import { createContext, useEffect, useContext, useState } from 'react';
 import { setCookie, deleteCookie } from "cookies-next";
 import { convertUserImpl2AuthUser } from '../../components/user/utils';

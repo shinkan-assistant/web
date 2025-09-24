@@ -4,7 +4,7 @@ import Image from "next/image";
 import {
   signInWithGoogle,
   signOut,
-} from "@/lib/firebase/auth";
+} from "@/gateway/auth/client";
 import { useEffect, useRef, useState } from "react";
 import { useAuthUser } from "@/stores/sessions/authUser";
 import { useMyUser } from "@/stores/contexts/myUser";

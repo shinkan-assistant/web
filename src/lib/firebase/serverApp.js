@@ -1,13 +1,10 @@
 import "server-only";
 
-import { cookies } from "next/headers";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
-import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import path from 'path';
 import fs from 'fs';
 import 'dotenv/config';
-import { convertUserImpl2AuthUser } from "@/components/user/utils";
 
 // Firebase Admin SDKの初期化
 if (getApps().length === 0) {
@@ -30,22 +27,6 @@ if (getApps().length === 0) {
   // サーバーでの初期化の場合
   else {
     initializeApp();
-  }
-}
-
-// 認証ユーザーを返す関数
-export async function getAuthenticatedAppForUser() {
-  const authIdToken = (await cookies()).get("__session")?.value;
-
-  try {
-    // Admin SDKを使ってIDトークンを検証
-    const decodedToken = await getAuth().verifyIdToken(authIdToken);
-    const userImpl = await getAuth().getUser(decodedToken.uid);
-    const authUser = convertUserImpl2AuthUser(userImpl);
-    return { authUser };
-  } catch (error) {
-    // トークンが無効または存在しない場合はnullを返す
-    return { authUser: null };
   }
 }
 

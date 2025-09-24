@@ -4,7 +4,7 @@ import { EventScheduleList } from "@/components/event/ui/scheduleList";
 import useForm from "@/components/base/form/hooks/useForm";
 import { ResetButton } from "@/components/base/form/ui/subButtons/Reset";
 import { useMemo } from "react";
-import eventGateway from "@/gateway/event";
+import eventGateway from "@/gateway/backend/event";
 
 export default function EventManageTemplate({ pageInfo, event }) {
   const inputInfos = useMemo(() => {
