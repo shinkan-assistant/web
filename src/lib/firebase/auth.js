@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 
 import { auth, db } from "./clientApp";
-import { getRecord } from "@/base/api/get";
+import { getRecord } from "@/backend/gateways/db/get";
 import { toast } from "react-toastify";
 
 export function onAuthStateChanged(cb) {

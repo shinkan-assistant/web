@@ -1,6 +1,6 @@
-import z from "@/lib/zod";
+import z from "@/backend/lib/zod";
 import ParticipantSchema from "./object";
-import { transformForCreate, transformForUpdate } from "../../../base/schema/api";
+import { transformForCreate, transformForUpdate } from "../../base/schema/api";
 import { judgeIsParticipating } from "@/features/event/utils";
 import { getNowDateTimeStr } from "@/base/utils/dateTime";
 

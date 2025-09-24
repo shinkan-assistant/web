@@ -1,11 +1,11 @@
 import { v4 as uuidV4 } from 'uuid';
-import z from "@/lib/zod"
-import { DateTimeSchema } from '@/base/schema/object';
-import { BelongSchema } from '@/features/user/schemas/object';
-import EventTypeEnum from '../const/enums/type';
-import FeeTypeEnum from '../const/enums/feeType';
-import ContactGroupPlatformEnum from '../const/enums/contactGroupPlatform';
-import OnlineMeetingPlatformEnum from '../const/enums/onlineMeetingPlatform';
+import z from "@/backend/lib/zod"
+import { DateTimeSchema } from '@/backend/features/base/schema/object';
+import { BelongSchema } from '@/backend/features/user/schemas/object';
+import EventTypeEnum from '../../../data/enums/event/type';
+import FeeTypeEnum from '../../../data/enums/event/feeType';
+import ContactGroupPlatformEnum from '../../../data/enums/event/contactGroupPlatform';
+import OnlineMeetingPlatformEnum from '../../../data/enums/event/onlineMeetingPlatform';
 
 const LocationSchema = z.object({
   name: z.string().min(1),

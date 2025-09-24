@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "@/lib/firebase/clientApp";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { toRecord } from "@/base/api/utils";
+import { toRecord } from "@/backend/gateways/db/utils";
 import { useMyUser } from "@/features/user/stores/myUser";
 import { useMyParticipants } from "./myParticipants";
 

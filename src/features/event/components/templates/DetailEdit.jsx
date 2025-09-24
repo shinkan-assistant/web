@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../../utils";
 import { ResetButton } from "@/base/features/form/components/ui/subButtons/Reset";
 import { AllCancelButton } from "../ui/form/AllCancelButton";
-import { UpdateParticipantSchedulesSchema } from "@/features/participant/schemas/api";
-import { updateRecord } from "@/base/api/update";
+import { UpdateParticipantSchedulesSchema } from "@/backend/features/participant/schemas/api";
+import { updateRecord } from "@/backend/gateways/db/update";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
 

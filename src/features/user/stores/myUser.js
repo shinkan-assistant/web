@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "@/lib/firebase/clientApp";
 import { doc, onSnapshot } from "firebase/firestore";
 import { useAuthUser } from "./authUser";
-import { getRecord } from "@/base/api/get";
+import { getRecord } from "@/backend/gateways/db/get";
 
 const MyUserContext = createContext(null);
 

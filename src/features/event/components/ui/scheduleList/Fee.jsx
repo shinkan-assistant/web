@@ -1,6 +1,6 @@
 import InfoSection from "@/base/ui/components/infoSection";
 import TextInfo from "@/base/ui/components/infoSection/TextInfo";
-import FeeTypeEnum from "../../../const/enums/feeType";
+import FeeTypeEnum from "../../../../../backend/data/enums/event/feeType";
 import { FeeIcon } from "@/base/ui/components/icons";
 
 export default function Fee({feesByBelong, belong, disabled, size}) {

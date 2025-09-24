@@ -9,8 +9,8 @@ import useForm from "@/base/features/form/hooks/useForm";
 import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../../utils";
 import { ResetButton } from "@/base/features/form/components/ui/subButtons/Reset";
-import { createRecord } from "@/base/api/create";
-import { CreateParticipantSchema } from "@/features/participant/schemas/api";
+import { createRecord } from "@/backend/gateways/db/create";
+import { CreateParticipantSchema } from "@/backend/features/participant/schemas/api";
 import { useMemo } from "react";
 
 export default function EventApplyTemplate({ pageInfo, event, myUser }) {

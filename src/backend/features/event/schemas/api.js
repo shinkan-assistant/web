@@ -1,5 +1,5 @@
-import z from "@/lib/zod";
-import { transformForUpdate } from "../../../base/schema/api";
+import z from "@/backend/lib/zod";
+import { transformForUpdate } from "../../base/schema/api";
 import EventSchema from "./object";
 
 export const UpdateEventSchema = z.object({

@@ -1,6 +1,6 @@
-import z from "@/lib/zod";
-import PaymentMethodEnum from "../const/enums/paymentMethod";
-import { DateTimeSchema } from "@/base/schema/object";
+import z from "@/backend/lib/zod";
+import PaymentMethodEnum from "../../../data/enums/participant/paymentMethod";
+import { DateTimeSchema } from "@/backend/features/base/schema/object";
 
 const CancelSchema = z.object({
   issued_at: DateTimeSchema,

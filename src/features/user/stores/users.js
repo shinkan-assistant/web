@@ -5,7 +5,7 @@ import { db } from "@/lib/firebase/clientApp";
 import { onSnapshot, collection } from "firebase/firestore";
 import { useParticipants } from "@/features/participant/stores/participants";
 import { useMyUser } from "./myUser";
-import { toRecord } from "@/base/api/utils";
+import { toRecord } from "@/backend/gateways/db/utils";
 
 const UsersContext = createContext(null);
 
