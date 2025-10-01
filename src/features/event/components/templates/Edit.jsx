@@ -1,6 +1,6 @@
 import ItemContainer from "@/helpers/components/layouts/templates/item";
 import EventSummary from "@/features/event/components/contents/summary";
-import { EventScheduleList } from "@/features/event/components/contents/schedules";
+import { Schedules } from "@/features/event/components/contents/schedules";
 import useForm from "@/helpers/components/layouts/contents/form/hooks/useForm";
 import { ResetButton } from "@/helpers/components/layouts/contents/form/ui/subButtons/Reset";
 import { useMemo } from "react";
@@ -50,10 +50,9 @@ export default function EventEditTemplate({ pageInfo, event }) {
         />
       </div>
 
-      <EventScheduleList 
-        pageInfo={pageInfo}
-        allSchedules={event["schedules"]}
-        formHook={formHook}
+      <Schedules 
+        event={event}
+        editFormHook={formHook}
       />
     </ItemContainer>
   );

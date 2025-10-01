@@ -3,22 +3,22 @@ import TextInfo from "@/helpers/components/ui/info/text";
 import FeeTypeEnum from "../../../../../../backend/data/enums/event/feeType";
 import { FeeIcon } from "@/helpers/components/ui/icons";
 
-export default function Fee({feesByBelong, belong, disabled, size}) {
-  let feeInfo;
+export default function Fee({feesByBelong, belong, editFormHook, disabled, size}) {
+  let fee;
   if (feesByBelong === undefined || feesByBelong.length === 0) {
-    feeInfo = {type: FeeTypeEnum.free};
+    fee = {type: FeeTypeEnum.free};
   }
   else {
-    for (let feeInfoTmp of feesByBelong) {
-      if (JSON.stringify(feeInfoTmp["belong"]) === JSON.stringify(belong)) {
-        feeInfo = feeInfoTmp;
+    for (let feeTmp of feesByBelong) {
+      if (JSON.stringify(feeTmp["belong"]) === JSON.stringify(belong)) {
+        fee = feeTmp;
         break;
       }
     }
   }
 
-  if (!feeInfo) {
-    feeInfo = Object.values(feesByBelong)[0];
+  if (!fee) {
+    fee = Object.values(feesByBelong)[0];
   }
 
   return (
@@ -29,13 +29,13 @@ export default function Fee({feesByBelong, belong, disabled, size}) {
     >
       <TextInfo
         label="参加費"
-        value={feeInfo["type"] === FeeTypeEnum.fixed ? `¥${feeInfo["fixed"]}` : feeInfo["type"]}
+        value={fee["type"] === FeeTypeEnum.fixed ? `¥${fee["fixed"]}` : fee["type"]}
       />
 
-      {feeInfo.comment &&
+      {fee.comment &&
         <TextInfo
           label="注記"
-          value={feeInfo["comment"]}
+          value={fee["comment"]}
         />
       }
     </InfoArea>

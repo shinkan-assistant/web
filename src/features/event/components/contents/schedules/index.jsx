@@ -6,28 +6,31 @@ import Fee from "./ui/Fee";
 import Checkbox from "@/helpers/components/layouts/contents/form/ui/inputs/Checkbox";
 import DetailedLocation from "./ui/Location";
 
-function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
-  const scheduleForParticipant = myParticipant?.schedules.find(ps => ps["id"] === schedule["id"]) ?? null;
-
-  let disabled;
-  if (pageInfo.isForManage) {
-    disabled = false;
-  } else {
-    if (pageInfo.isForm) {
-      disabled = !formHook.inputValues[getInputNameFromSchedule(schedule)];
-    } else {
-      disabled = !judgeIsParticipating(schedule, {myParticipant});
-    }
+function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormHook}) {
+  // 参加状態のステータスバッジ
+  let statuses;
+  if (myParticipant && !editFormHook) {
+    const scheduleForParticipant = myParticipant?.schedules
+      .find(ps => ps["id"] === schedule["id"]) ?? null;
+    statuses = [
+      {fieldName: "cancel", title: "キャンセル済み"},
+      {fieldName: "attendance", title: "出席済み"},
+      {fieldName: "payment", title: "支払い済み"},
+    ].filter(
+      status => scheduleForParticipant?.hasOwnProperty(status.fieldName)
+    );
   }
-
-  const statuses = [
-    {fieldName: "cancel", title: "キャンセル済み"},
-    {fieldName: "attendance", title: "出席済み"},
-    {fieldName: "payment", title: "支払い済み"},
-  ]
-  .filter(
-    status => scheduleForParticipant?.hasOwnProperty(status.fieldName)
-  );
+  
+  // 暗めに表示するかどうか（checkFormHookは入力に合わせて変化させる）
+  let disabled;
+  if (editFormHook) 
+    disabled = false;
+  else {
+    if (checkFormHook)
+      disabled = !checkFormHook.inputValues[getInputNameFromSchedule(schedule)];
+    else 
+      disabled = !judgeIsParticipating(schedule, {myParticipant});
+  }
 
   return (
     <div className={`${!disabled ? "bg-white" : "bg-gray-100"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
@@ -38,14 +41,15 @@ function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
       </div>
 
       <div className={!disabled ? "text-gray-700" : "text-gray-400"}>
-        {(!pageInfo.isForManage && pageInfo.isAfterApplying && !!scheduleForParticipant) && 
+        {(statuses && statuses.length > 0) && 
           <StatusBadgeList 
             statuses={statuses}
             disabled={disabled}
           />
         }
         
-        {schedule.description && (
+        {schedule["description"] && (
+          // UI部品に置き換え可能
           <div className="mt-2">
             <p className="text-base leading-relaxed">
               {schedule["description"]}
@@ -60,7 +64,7 @@ function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
             size={uiSizeEnum.MD}
           />
 
-          {(pageInfo.isAfterApplying && !!schedule["location"]) && 
+          {(myParticipant && schedule["location"]) && 
             <DetailedLocation
               location={schedule["location"]}
               disabled={disabled}
@@ -70,15 +74,16 @@ function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
 
           <Fee
             feesByBelong={schedule["fees_by_belong"]} 
-            belong={belong}
+            belong={!editFormHook && myUser["belong"]}
+            editFormHook={editFormHook}
             disabled={disabled}
             size={uiSizeEnum.MD}
           />
         </div>
         
-        {!pageInfo.isForManage && pageInfo.isForm &&
+        {checkFormHook &&
           <div className="mt-4">
-            <Checkbox {...formHook.getInputProps(getInputNameFromSchedule(schedule))} />
+            <Checkbox {...checkFormHook.getInputProps(getInputNameFromSchedule(schedule))} />
           </div>
         }
       </div>
@@ -86,27 +91,31 @@ function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
   );
 }
 
-
-export function EventScheduleList({
-  pageInfo, allSchedules, belong, myParticipant, formHook
+export function Schedules({
+  myUser,
+  event,
+  myParticipant,
+  editFormHook,
+  checkFormHook,
 }) {
   return (
     <div>
-      {!(!pageInfo.isForManage && pageInfo.isAfterApplying && pageInfo.isForm) && (
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">
+      {!checkFormHook && (
+        // UI部品に置き換え可能
+        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">
           スケジュール
-        </h2>
+        </h3>
       )}
 
       <div className="space-y-6">
-        {allSchedules.map((schedule) => (
+        {event["schedules"].map((schedule) => (
           <ScheduleItem 
             key={schedule["id"]}
-            pageInfo={pageInfo}
             schedule={schedule}
-            belong={belong}
+            myUser={myUser}
             myParticipant={myParticipant}
-            formHook={formHook}
+            editFormHook={editFormHook}
+            checkFormHook={checkFormHook}
           />
         ))}
       </div>

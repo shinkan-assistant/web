@@ -1,7 +1,7 @@
 'use client';
 
 import EventSummary from "@/features/event/components/contents/summary";
-import { EventScheduleList } from "@/features/event/components/contents/schedules";
+import { Schedules } from "@/features/event/components/contents/schedules";
 import ItemContainer from "@/helpers/components/layouts/templates/item";
 import FormContainer from "@/helpers/components/layouts/contents/form";
 import useForm from "@/helpers/components/layouts/contents/form/hooks/useForm";
@@ -65,11 +65,10 @@ export default function EventApplyTemplate({ pageInfo, event, myUser }) {
           />
         </div>
 
-        <EventScheduleList 
-          pageInfo={pageInfo}
-          allSchedules={allSchedules}
-          belong={myUser["belong"]}
-          formHook={formHook}
+        <Schedules 
+          event={event}
+          myUser={myUser}
+          checkFormHook={formHook}
         />
       </FormContainer>
     </ItemContainer>

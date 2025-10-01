@@ -1,6 +1,6 @@
 'use client';
 
-import { EventScheduleList } from "@/features/event/components/contents/schedules";
+import { Schedules } from "@/features/event/components/contents/schedules";
 import ItemContainer from "@/helpers/components/layouts/templates/item";
 import FormContainer from "@/helpers/components/layouts/contents/form";
 import useForm from "@/helpers/components/layouts/contents/form/hooks/useForm";
@@ -86,12 +86,11 @@ export default function EventConfirmTemplate({ pageInfo, event, myUser, myPartic
   return (
     <ItemContainer pageInfo={pageInfo}>
       <FormContainer hook={formHook} >
-        <EventScheduleList
-          pageInfo={pageInfo}
-          allSchedules={allSchedules}
-          belong={myUser["belong"]}
+        <Schedules
+          event={event}
+          myUser={myUser}
           myParticipant={myParticipant}
-          formHook={formHook}
+          checkFormHook={formHook}
         />
       </FormContainer>
     </ItemContainer>

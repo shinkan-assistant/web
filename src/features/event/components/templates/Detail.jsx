@@ -1,6 +1,6 @@
 import ItemContainer from "@/helpers/components/layouts/templates/item";
 import EventSummary from "@/features/event/components/contents/summary";
-import { EventScheduleList } from "@/features/event/components/contents/schedules";
+import { Schedules } from "@/features/event/components/contents/schedules";
 
 export default function EventDetailTemplate({ pageInfo, event, myUser, myParticipant }) {
   return (
@@ -12,10 +12,9 @@ export default function EventDetailTemplate({ pageInfo, event, myUser, myPartici
         />
       </div>
 
-      <EventScheduleList 
-        pageInfo={pageInfo}
-        allSchedules={event["schedules"]}
-        belong={myUser["belong"]} 
+      <Schedules 
+        event={event}
+        myUser={myUser}
         myParticipant={myParticipant}
       />
     </ItemContainer>
