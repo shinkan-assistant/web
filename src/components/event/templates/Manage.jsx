@@ -1,10 +1,10 @@
-import ItemContainer from "@/components/base/content/layouts/Item";
+import ItemContainer from "@/helpers/bases/content/layouts/Item";
 import EventSummary from "@/components/event/ui/summary";
 import { EventScheduleList } from "@/components/event/ui/scheduleList";
-import useForm from "@/components/base/form/hooks/useForm";
-import { ResetButton } from "@/components/base/form/ui/subButtons/Reset";
+import useForm from "@/helpers/bases/form/hooks/useForm";
+import { ResetButton } from "@/helpers/bases/form/ui/subButtons/Reset";
 import { useMemo } from "react";
-import eventGateway from "@/gateway/backend/event";
+import eventGateway from "@/helpers/api/event";
 
 export default function EventManageTemplate({ pageInfo, event }) {
   const inputInfos = useMemo(() => {

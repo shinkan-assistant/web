@@ -2,15 +2,15 @@
 
 import EventSummary from "@/components/event/ui/summary";
 import { EventScheduleList } from "@/components/event/ui/scheduleList";
-import ItemContainer from "@/components/base/content/layouts/Item";
-import FormContainer from "@/components/base/form/layouts/Form";
-import useForm from "@/components/base/form/hooks/useForm";
+import ItemContainer from "@/helpers/bases/content/layouts/Item";
+import FormContainer from "@/helpers/bases/form/layouts/Form";
+import useForm from "@/helpers/bases/form/hooks/useForm";
 import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../utils";
-import { ResetButton } from "@/components/base/form/ui/subButtons/Reset";
+import { ResetButton } from "@/helpers/bases/form/ui/subButtons/Reset";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
-import participantGateway from "@/gateway/backend/participant";
+import participantGateway from "@/helpers/api/participant";
 
 export default function EventApplyTemplate({ pageInfo, event, myUser }) {
   const router = useRouter();

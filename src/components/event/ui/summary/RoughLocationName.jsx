@@ -1,6 +1,6 @@
-import { LocationIcon } from "@/components/base/ui/components/icons";
-import InfoSection from "@/components/base/ui/components/infoSection";
-import TextInfo from "@/components/base/ui/components/infoSection/TextInfo";
+import { LocationIcon } from "@/helpers/bases/ui/icons";
+import InfoSection from "@/helpers/bases/ui/infoSection";
+import TextInfo from "@/helpers/bases/ui/infoSection/TextInfo";
 
 export default function RoughLocationName({roughLocationName, disabled, size}) {
   return (

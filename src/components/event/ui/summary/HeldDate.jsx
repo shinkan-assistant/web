@@ -1,7 +1,7 @@
-import { formatDate } from "@/components/base/utils/dateTime";
-import { DateIcon } from "@/components/base/ui/components/icons";
-import InfoSection from "@/components/base/ui/components/infoSection";
-import TextInfo from "@/components/base/ui/components/infoSection/TextInfo";
+import { formatDate } from "@/helpers/utils/dateTime";
+import { DateIcon } from "@/helpers/bases/ui/icons";
+import InfoSection from "@/helpers/bases/ui/infoSection";
+import TextInfo from "@/helpers/bases/ui/infoSection/TextInfo";
 
 export default function HeldDate({schedules, disabled, size}) {
   return (

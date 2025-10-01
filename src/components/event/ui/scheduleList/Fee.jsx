@@ -1,7 +1,7 @@
-import InfoSection from "@/components/base/ui/components/infoSection";
-import TextInfo from "@/components/base/ui/components/infoSection/TextInfo";
+import InfoSection from "@/helpers/bases/ui/infoSection";
+import TextInfo from "@/helpers/bases/ui/infoSection/TextInfo";
 import FeeTypeEnum from "../../../../backend/data/enums/event/feeType";
-import { FeeIcon } from "@/components/base/ui/components/icons";
+import { FeeIcon } from "@/helpers/bases/ui/icons";
 
 export default function Fee({feesByBelong, belong, disabled, size}) {
   let feeInfo;

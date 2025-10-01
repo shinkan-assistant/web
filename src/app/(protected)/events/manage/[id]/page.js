@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
-import { ItemPageInfo } from "@/components/base/page/info";
-import { SubNavInfo } from "@/components/base/content/ui/NavMenu";
+import { ItemPageInfo } from "@/helpers/bases/page/info";
+import { SubNavInfo } from "@/helpers/bases/content/ui/NavMenu";
 
 export default function EventManage() {
   const router = useRouter();

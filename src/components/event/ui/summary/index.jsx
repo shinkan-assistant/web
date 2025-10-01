@@ -2,8 +2,8 @@ import RoughLocationName from "./RoughLocationName";
 import HeldDate from "./HeldDate";
 import ContactGroup from "../scheduleList/ContactGroup";
 import OnlineMeetingInfo from "../scheduleList/OnlineMeetingInfo";
-import uiSizeEnum from "@/components/base/ui/const/enums/uiSize";
-import ContentTypeEnum from "@/components/base/content/enums/type";
+import uiSizeEnum from "@/helpers/bases/ui/const/enums/uiSize";
+import ContentTypeEnum from "@/helpers/bases/content/enums/type";
 
 export default function EventSummary({pageInfo, event, formHook }) {
   return (

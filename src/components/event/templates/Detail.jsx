@@ -1,4 +1,4 @@
-import ItemContainer from "@/components/base/content/layouts/Item";
+import ItemContainer from "@/helpers/bases/content/layouts/Item";
 import EventSummary from "@/components/event/ui/summary";
 import { EventScheduleList } from "@/components/event/ui/scheduleList";
 

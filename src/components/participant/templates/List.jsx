@@ -1,6 +1,6 @@
 'use client';
 
-import ItemContainer from "@/components/base/content/layouts/Item";
+import ItemContainer from "@/helpers/bases/content/layouts/Item";
 import StatusBadge from "../ui/StatusBadge";
 
 // ヘルパー関数: 「参加者×スケジュール」の単位で表示用データを作成する

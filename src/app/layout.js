@@ -1,7 +1,7 @@
 import { MetadataProvider } from "@/stores/consts/metadata";
 import "./globals.css";
 import { AuthUserProvider } from "@/stores/sessions/authUser";
-import { getAuthUser } from "@/gateway/auth/server";
+import { getAuthUser } from "@/helpers/auth/server";
 import { ToastContainer } from "react-toastify";
 import { MyUserProvider } from "@/stores/contexts/myUser";
 

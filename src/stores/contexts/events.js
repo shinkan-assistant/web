@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { db } from "@/lib/firebase/clientApp";
 import { collection, onSnapshot } from "firebase/firestore";
-import { toRecord } from "@/backend/gateways/db/base/utils";
+import { toRecord } from "@/backend/helpers/db/utils";
 import { useMyUser } from "@/stores/contexts/myUser";
 
 const EventsContext = createContext(null);

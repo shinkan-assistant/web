@@ -1,7 +1,7 @@
-import { formatTime } from "@/components/base/utils/dateTime";
-import { TimeIcon } from "@/components/base/ui/components/icons";
-import InfoSection from "@/components/base/ui/components/infoSection";
-import TextInfo from "@/components/base/ui/components/infoSection/TextInfo";
+import { formatTime } from "@/helpers/utils/dateTime";
+import { TimeIcon } from "@/helpers/bases/ui/icons";
+import InfoSection from "@/helpers/bases/ui/infoSection";
+import TextInfo from "@/helpers/bases/ui/infoSection/TextInfo";
 
 export default function TimeRange({timeRange, disabled, size}) {
   const existsEndAt = !!timeRange.end_at;

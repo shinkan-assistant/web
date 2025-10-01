@@ -1,9 +1,9 @@
 import { getInputNameFromSchedule, judgeIsParticipating } from "../../utils";
-import StatusBadgeList from "@/components/base/ui/components/StatusBadgeList";
-import uiSizeEnum from "@/components/base/ui/const/enums/uiSize";
+import StatusBadgeList from "@/helpers/bases/ui/StatusBadgeList";
+import uiSizeEnum from "@/helpers/bases/ui/const/enums/uiSize";
 import TimeRange from "./TimeRange";
 import Fee from "./Fee";
-import Checkbox from "@/components/base/form/ui/inputs/Checkbox";
+import Checkbox from "@/helpers/bases/form/ui/inputs/Checkbox";
 import DetailedLocation from "./Location";
 
 function ScheduleItem({pageInfo, schedule, belong, myParticipant, formHook}) {
