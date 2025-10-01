@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import { firebaseApp } from "../../lib/firebase/clientApp";
 import { toast } from "react-toastify";
-import userGateway from "@/helpers/api/user";
+import userGateway from "@/features/user/api";
 
 // TODO try-catch 作りたい（アカウント消された時は、ここで、Bad Request と出る）
 const auth = getAuth(firebaseApp);

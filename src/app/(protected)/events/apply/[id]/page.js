@@ -1,14 +1,14 @@
 'use client';
 
 import { notFound, useParams, useRouter } from "next/navigation";
-import EventApplyTemplate from "@/components/event/templates/Apply";
-import EventsPageFilterEnum from "@/components/event/enums/listPageFilter";
+import EventApplyTemplate from "@/features/event/components/templates/Apply";
+import EventsPageFilterEnum from "@/features/event/components/const/listPageFilterEnum";
 import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { useEvents } from "@/stores/contexts/events";
-import { ItemPageInfo } from "@/helpers/bases/page/info";
-import { SubNavInfo } from "@/helpers/bases/content/ui/NavMenu";
+import { ItemPageInfo } from "@/helpers/components/layouts/main/base/config";
+import { SubNavInfo } from "@/helpers/components/layouts/main/base/ui/header/NavMenu";
 import { toast } from "react-toastify";
 
 export default function EventApply() {

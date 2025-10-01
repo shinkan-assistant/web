@@ -2,7 +2,7 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { getAuth } from "firebase-admin/auth";
-import { convertUserImpl2AuthUser } from "@/components/user/utils";
+import { convertUserImpl2AuthUser } from "@/helpers/auth/utils";
 
 // 認証ユーザーを返す関数
 export async function getAuthUser() {

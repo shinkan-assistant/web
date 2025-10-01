@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import { useAuthUser } from "@/stores/sessions/authUser";
-import EventsPageFilterEnum from "@/components/event/enums/listPageFilter";
-import PageLayout from "@/helpers/bases/page/layout";
-import { UnAuthorizedHeader } from "@/helpers/bases/shared/Header";
+import EventsPageFilterEnum from "@/features/event/components/const/listPageFilterEnum";
+import SubRootLayout from "@/helpers/components/layouts/page";
+import { UnAuthorizedHeader } from "@/helpers/components/layouts/page/areas/Header";
 
 export default function UnprotectedLayout({ children }) {
   const authUser = useAuthUser();
@@ -17,10 +17,10 @@ export default function UnprotectedLayout({ children }) {
   }, [authUser]);
 
   return (
-    <PageLayout
+    <SubRootLayout
       Header={UnAuthorizedHeader}
     >
       {children}
-    </PageLayout>
+    </SubRootLayout>
   );
 }

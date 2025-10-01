@@ -3,14 +3,13 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthUser } from "@/stores/sessions/authUser";
-import NavMenu from "@/helpers/bases/shared/NavMenu";
-import { MyUserProvider } from "@/stores/contexts/myUser";
+import NavMenu from "@/helpers/components/layouts/page/areas/NavMenu";
 import { EventsProvider } from "@/stores/contexts/events";
 import { MyParticipantsProvider } from "@/stores/contexts/myParticipants";
 import { ParticipantsProvider } from "@/stores/contexts/participants";
 import { UsersProvider } from "@/stores/contexts/users";
-import PageLayout from "@/helpers/bases/page/layout";
-import { AuthorizedHeader } from "@/helpers/bases/shared/Header";
+import SubRootLayout from "@/helpers/components/layouts/page";
+import { AuthorizedHeader } from "@/helpers/components/layouts/page/areas/Header";
 
 export default function ProtectedLayout({ children }) {
   const router = useRouter();
@@ -27,12 +26,12 @@ export default function ProtectedLayout({ children }) {
       <MyParticipantsProvider>
         <ParticipantsProvider>
           <UsersProvider>
-            <PageLayout
+            <SubRootLayout
               Header={AuthorizedHeader}
               NavMenu={NavMenu}
             >
               {children}
-            </PageLayout>
+            </SubRootLayout>
           </UsersProvider>
         </ParticipantsProvider>
       </MyParticipantsProvider>

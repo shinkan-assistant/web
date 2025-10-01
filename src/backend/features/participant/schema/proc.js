@@ -1,7 +1,7 @@
 import z from "@/backend/lib/zod";
 import ParticipantSchema from "./data";
 import { transformForCreate, transformForUpdate } from "../../../helpers/schema/api";
-import { judgeIsParticipating } from "@/components/event/utils";
+import { judgeIsParticipating } from "@/features/event/components/utils";
 import { getNowDateTimeStr } from "@/helpers/utils/dateTime";
 
 export const CreateParticipantSchema = ParticipantSchema

@@ -3,7 +3,7 @@
 import { onIdTokenChanged } from '@/helpers/auth/client';
 import { createContext, useEffect, useContext, useState } from 'react';
 import { setCookie, deleteCookie } from "cookies-next";
-import { convertUserImpl2AuthUser } from '../../components/user/utils';
+import { convertUserImpl2AuthUser } from '../../helpers/auth/utils';
 
 const AuthUserContext = createContext(null);
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEvents } from "@/stores/contexts/events";
-import ParticipantListTemplate from "@/components/participant/templates/List";
+import ParticipantListTemplate from "@/features/participant/components/templates/List";
 import { useParticipants } from "@/stores/contexts/participants";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { useMyUser } from "@/stores/contexts/myUser";
