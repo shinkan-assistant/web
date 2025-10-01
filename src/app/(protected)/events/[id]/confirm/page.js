@@ -58,7 +58,7 @@ export default function EventDetailEdit() {
         text: "一覧へ戻る",
       }),
       new SubNavInfo({
-        href: `/events/detail/${event.id}`, 
+        href: `/events/${event.id}`, 
         text: "編集キャンセル",
       })
     ]

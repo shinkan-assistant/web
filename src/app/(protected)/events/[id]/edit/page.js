@@ -57,7 +57,7 @@ export default function EventManage() {
         text: "一覧へ戻る",
       }),
       new SubNavInfo({
-        href: `/events/manage/${id}/participants`, 
+        href: `/events/${id}/participants`, 
         text: "参加者一覧を見る",
       }),
     ]

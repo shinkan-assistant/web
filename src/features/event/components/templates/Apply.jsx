@@ -51,7 +51,7 @@ export default function EventApplyTemplate({ pageInfo, event, myUser }) {
         scheduleIds: formData["schedule_ids"],
       });
       toast.warn(`${event["title"]}の申し込みが完了しました`);
-      router.push(`/events/detail/${event["id"]}`);
+      router.push(`/events/${event["id"]}`);
     }
   });
 

@@ -58,7 +58,7 @@ export default function EventDetail() {
         text: "一覧へ戻る",
       }),
       new SubNavInfo({
-        href: `/events/detail/${event.id}/edit`, 
+        href: `/events/${event.id}/confirm`, 
         text: "スケジュール変更 / キャンセル",
       })
     ]

@@ -54,7 +54,7 @@ export default function EventDetailEditTemplate({ pageInfo, event, myUser, myPar
       await participantGateway.updateSchedules({myParticipant, formData});
       
       toast.info(isAllCancel ? `${event["title"]}のキャンセルが完了しました` : `${event["title"]}のスケジュールの変更が完了しました`);
-      router.push(`/events/detail/${event["id"]}`);
+      router.push(`/events/${event["id"]}`);
     },
   });
 

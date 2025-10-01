@@ -67,7 +67,7 @@ export default function NavMenu() {
         isOnlyForAdmin: false, isOnlyForMember: true
       },
       {
-        href: "/users", 
+        href: "/circle/members", 
         title: "ユーザー管理", 
         isOnlyForAdmin: true
       },

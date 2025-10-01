@@ -63,15 +63,15 @@ export default function Events() {
     titleFunc: ({record}) => record["title"], 
     itemLink: {
       [EventsPageFilterEnum.participating]: new ItemLinkInfo({
-        hrefFunc: ({id}) => `/events/detail/${id}`,
+        hrefFunc: ({id}) => `/events/${id}`,
         text: "詳細を見る",
       }),
       [EventsPageFilterEnum.apply]: new ItemLinkInfo({
-        hrefFunc: ({id}) => `/events/apply/${id}`,
+        hrefFunc: ({id}) => `/events/${id}/apply`,
         text: "申し込む",
       }),
       [EventsPageFilterEnum.manage]: new ItemLinkInfo({
-        hrefFunc: ({id}) => `/events/manage/${id}`,
+        hrefFunc: ({id}) => `/events/${id}/edit`,
         text: "管理する",
       }),
     }[filter],
