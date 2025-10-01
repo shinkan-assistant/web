@@ -1,18 +1,43 @@
 'use client';
 
-import { EventScheduleList } from "@/features/event/components/contents/scheduleList";
-import ItemContainer from "@/helpers/components/layouts/main/item";
+import { EventScheduleList } from "@/features/event/components/contents/schedules";
+import ItemContainer from "@/helpers/components/layouts/templates/item";
 import FormContainer from "@/helpers/components/layouts/contents/form";
 import useForm from "@/helpers/components/layouts/contents/form/hooks/useForm";
+import FormButton from "@/helpers/components/layouts/contents/form/ui/subButtons/Base";
 import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../utils";
 import { ResetButton } from "@/helpers/components/layouts/contents/form/ui/subButtons/Reset";
-import { AllCancelButton } from "../contents/form/ui/AllCancelButton";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
 import participantGateway from "@/features/participant/api";
+import { useEffect, useState } from "react";
 
-export default function EventDetailEditTemplate({ pageInfo, event, myUser, myParticipant }) {
+function AllCancelButton({formHook}) {
+  const [disabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    const isAllCancel = formHook.inputNames.every(
+      name => !formHook.inputValues[name]);
+    setDisabled(isAllCancel);
+  }, [formHook.inputValues])
+
+  function onClick() { 
+    setDisabled(true);
+
+    const updatedInputValues = {};
+    for (let name of formHook.inputNames) {
+      updatedInputValues[name] = false;
+    }
+    formHook.changeInputValues(updatedInputValues);
+  }
+
+  return (
+    <FormButton title="全キャンセル" onClick={onClick} disabled={disabled} />
+  );
+}
+
+export default function EventConfirmTemplate({ pageInfo, event, myUser, myParticipant }) {
   const router = useRouter();
 
   const allSchedules = event["schedules"];

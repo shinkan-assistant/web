@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
-import { ListPageInfo } from "@/helpers/components/layouts/main/base/config";
-import { ItemLinkInfo } from "@/helpers/components/layouts/main/list/ui/ItemLink";
+import { ListPageInfo } from "@/helpers/components/layouts/templates/base/config";
+import { ItemLinkInfo } from "@/helpers/components/layouts/templates/list/ui/ItemLink";
 
 export default function Events() {
   const router = useRouter();

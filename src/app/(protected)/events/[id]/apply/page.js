@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { useEvents } from "@/stores/contexts/events";
-import { ItemPageInfo } from "@/helpers/components/layouts/main/base/config";
-import { SubNavInfo } from "@/helpers/components/layouts/main/base/ui/header/NavMenu";
+import { ItemPageInfo } from "@/helpers/components/layouts/templates/base/config";
+import { SubNavInfo } from "@/helpers/components/layouts/templates/base/ui/header/NavMenu";
 import { toast } from "react-toastify";
 
 export default function EventApply() {

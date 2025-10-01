@@ -1,4 +1,4 @@
-import { ListContainer, ListItemContainer } from "@/helpers/components/layouts/main/list";
+import { ListContainer, ListItemContainer } from "@/helpers/components/layouts/templates/list";
 import EventSummary from "@/features/event/components/contents/summary";
 
 export default function EventsTemplate({ pageInfo, events }) {

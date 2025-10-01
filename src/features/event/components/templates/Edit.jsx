@@ -1,12 +1,12 @@
-import ItemContainer from "@/helpers/components/layouts/main/item";
+import ItemContainer from "@/helpers/components/layouts/templates/item";
 import EventSummary from "@/features/event/components/contents/summary";
-import { EventScheduleList } from "@/features/event/components/contents/scheduleList";
+import { EventScheduleList } from "@/features/event/components/contents/schedules";
 import useForm from "@/helpers/components/layouts/contents/form/hooks/useForm";
 import { ResetButton } from "@/helpers/components/layouts/contents/form/ui/subButtons/Reset";
 import { useMemo } from "react";
 import eventGateway from "@/features/event/api";
 
-export default function EventManageTemplate({ pageInfo, event }) {
+export default function EventEditTemplate({ pageInfo, event }) {
   const inputInfos = useMemo(() => {
     return {
       "rough_location_name": {
