@@ -1,4 +1,4 @@
-export default function StatusBadge({ status, disabled }) {
+function StatusBadge({ status, disabled }) {
   // 状態ごとのクラス名をオブジェクトにまとめる
   const borderClasses = {
     enabled: "border-gray-300",
@@ -12,6 +12,20 @@ export default function StatusBadge({ status, disabled }) {
       className={`inline-flex items-center border bg-white ${borderColorClassName} text-xs font-semibold px-2.5 py-0.5 rounded-full`}
     >
       {status.title}
+    </div>
+  );
+}
+
+export default function StatusBadgeArea({statuses, disabled}) {
+  if (statuses.length === 0) {
+    return <></>;
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {statuses.map(status => (
+        <StatusBadge key={status.fieldName} status={status} disabled={disabled} />
+      ))}
     </div>
   );
 }

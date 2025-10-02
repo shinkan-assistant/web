@@ -1,5 +1,5 @@
 import { getInputNameFromSchedule, judgeIsParticipating } from "../../utils";
-import StatusBadgeList from "@/helpers/components/ui/statusBadgeArea";
+import StatusBadgeArea from "@/helpers/components/ui/design/StatusBadgeArea";
 import TimeRange from "./ui/TimeRange";
 import Fee from "./ui/Fee";
 import Checkbox from "@/helpers/components/layouts/contents/form/ui/inputs/Checkbox";
@@ -41,7 +41,7 @@ function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormH
 
       <div className={!disabled ? "text-gray-700" : "text-gray-400"}>
         {(statuses && statuses.length > 0) && 
-          <StatusBadgeList 
+          <StatusBadgeArea 
             statuses={statuses}
             disabled={disabled}
           />

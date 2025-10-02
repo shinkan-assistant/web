@@ -1,8 +1,7 @@
-import BlankLink from "@/helpers/components/ui/blankLink";
-import { LocationIcon } from "@/helpers/components/ui/icons";
-import TextInfoArea from "@/helpers/components/ui/infoArea";
-import TextInfo from "@/helpers/components/ui/textInfo";
-import uiSizeEnum from "@/helpers/components/ui/uiSizeEnum";
+import BlankLink from "@/helpers/components/ui/design/BlankLink";
+import TextInfoArea, {TextInfo} from "@/helpers/components/ui/design/TextInfoArea";
+import uiSizeEnum from "@/helpers/components/ui/const/sizeEnum";
+import LocationIcon from "@/helpers/components/ui/design/icons/location";
 
 export default function Location({location, disabled}) {
   return (

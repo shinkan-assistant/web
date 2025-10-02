@@ -1,8 +1,7 @@
-import TextInfoArea from "@/helpers/components/ui/infoArea";
-import TextInfo from "@/helpers/components/ui/textInfo";
+import TextInfoArea, {TextInfo} from "@/helpers/components/ui/design/TextInfoArea";
 import FeeTypeEnum from "../../../../../../backend/data/enums/event/feeType";
-import { FeeIcon } from "@/helpers/components/ui/icons";
-import uiSizeEnum from "@/helpers/components/ui/uiSizeEnum";
+import uiSizeEnum from "@/helpers/components/ui/const/sizeEnum";
+import FeeIcon from "@/helpers/components/ui/design/icons/fee";
 
 export default function Fee({feesByBelong, belong, editFormHook, disabled}) {
   let fee;

@@ -1,8 +1,7 @@
 import { formatDate } from "@/helpers/utils/dateTime";
-import { DateIcon } from "@/helpers/components/ui/icons";
-import TextInfo from "@/helpers/components/ui/textInfo";
-import TextInfoArea from "@/helpers/components/ui/infoArea";
-import uiSizeEnum from "@/helpers/components/ui/uiSizeEnum";
+import TextInfoArea, {TextInfo} from "@/helpers/components/ui/design/TextInfoArea";
+import uiSizeEnum from "@/helpers/components/ui/const/sizeEnum";
+import DateIcon from "@/helpers/components/ui/design/icons/date";
 
 export default function HeldDate({event}) {
   return (

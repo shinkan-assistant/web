@@ -1,5 +1,5 @@
-import BlankLink from "@/helpers/components/ui/blankLink";
-import uiSizeEnum from "@/helpers/components/ui/uiSizeEnum";
+import BlankLink from "@/helpers/components/ui/design/BlankLink";
+import uiSizeEnum from "@/helpers/components/ui/const/sizeEnum";
 
 function OnlineMeetingPlatform({platform}) {
   return (

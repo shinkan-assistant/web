@@ -1,4 +1,4 @@
-import uiSizeEnum from "../../uiSizeEnum";
+import uiSizeEnum from "../../../const/sizeEnum";
 
 function BaseIcon({disabled, statefulColorClassNames, size, children}) {
   const colorClassName = !disabled ? statefulColorClassNames.enabled : statefulColorClassNames.disabled;
@@ -20,7 +20,7 @@ function BaseIcon({disabled, statefulColorClassNames, size, children}) {
   )
 }
 
-export function createIcon(IconPath, statefulColorClassNames) {
+export default function createIcon(IconPath, statefulColorClassNames) {
   return function Icon({ disabled, size }) {
     return (
       <BaseIcon
