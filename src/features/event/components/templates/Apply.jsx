@@ -3,11 +3,11 @@
 import Summary from "@/features/event/components/contents/summary";
 import { Schedules } from "@/features/event/components/contents/schedules";
 import ItemContainer from "@/helpers/components/layouts/templates/item";
-import FormContainer from "@/helpers/components/layouts/contents/form";
-import useForm from "@/helpers/components/layouts/contents/form/hooks/useForm";
+import FormContainer from "@/helpers/components/layouts/templates/form";
+import useForm from "@/helpers/components/layouts/templates/form/hooks/useForm";
 import { useRouter } from "next/navigation";
-import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../utils";
-import { ResetButton } from "@/helpers/components/layouts/contents/form/ui/subButtons/Reset";
+import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../contents/schedules/utils";
+import { ResetButton } from "@/helpers/components/layouts/templates/form/ui/subButtons/Reset";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
 import participantGateway from "@/features/participant/api";
@@ -50,7 +50,7 @@ export default function EventApplyTemplate({ pageInfo, event, myUser }) {
         eventId: event["id"],
         scheduleIds: formData["schedule_ids"],
       });
-      toast.warn(`${event["title"]}の申し込みが完了しました`);
+      toast.info(`${event["title"]}の申し込みが完了しました`);
       router.push(`/events/${event["id"]}`);
     }
   });

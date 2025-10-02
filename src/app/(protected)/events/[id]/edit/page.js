@@ -1,7 +1,6 @@
 'use client';
 
 import EventManageTemplate from "@/features/event/components/templates/Edit";
-import EventsPageFilterEnum from "@/features/event/components/const/listPageFilterEnum";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
@@ -9,6 +8,7 @@ import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { ItemPageInfo } from "@/helpers/components/layouts/templates/base/config";
 import { SubNavInfo } from "@/helpers/components/layouts/templates/base/ui/header/NavMenu";
+import { EventsPageFilterEnum } from "@/features/event/components/templates/List";
 
 export default function EventManage() {
   const router = useRouter();

@@ -1,9 +1,9 @@
-import { getInputNameFromSchedule, judgeIsParticipating } from "../../utils";
-import StatusBadgeArea from "@/helpers/components/ui/design/StatusBadgeArea";
-import TimeRange from "./ui/TimeRange";
-import Fee from "./ui/Fee";
-import Checkbox from "@/helpers/components/layouts/contents/form/ui/inputs/Checkbox";
-import Location from "./ui/Location";
+import { getInputNameFromSchedule, judgeIsParticipating } from "./utils";
+import StatusBadgeArea from "@/helpers/components/ui/statusBadgeArea";
+import TimeRange from "./TimeRange";
+import Fee from "./Fee";
+import Checkbox from "@/helpers/components/layouts/templates/form/ui/inputs/Checkbox";
+import Location from "./Location";
 
 function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormHook}) {
   // 参加状態のステータスバッジ

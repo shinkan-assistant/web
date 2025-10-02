@@ -1,6 +1,6 @@
 'use client';
 
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../statusBadge";
 
 const ScheduleDetail = ({ schedule, event }) => {
   const hasAttended = !!schedule.attendance;

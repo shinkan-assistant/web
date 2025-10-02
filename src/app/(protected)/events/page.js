@@ -1,8 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from "next/navigation";
-import EventsPageFilterEnum from "@/features/event/components/const/listPageFilterEnum";
-import EventsTemplate from "@/features/event/components/templates/List";
+import EventsTemplate, { EventsPageFilterEnum } from "@/features/event/components/templates/List";
 import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";

@@ -1,8 +1,8 @@
 import ItemContainer from "@/helpers/components/layouts/templates/item";
 import Summary from "@/features/event/components/contents/summary";
 import { Schedules } from "@/features/event/components/contents/schedules";
-import useForm from "@/helpers/components/layouts/contents/form/hooks/useForm";
-import { ResetButton } from "@/helpers/components/layouts/contents/form/ui/subButtons/Reset";
+import useForm from "@/helpers/components/layouts/templates/form/hooks/useForm";
+import { ResetButton } from "@/helpers/components/layouts/templates/form/ui/subButtons/Reset";
 import { useMemo } from "react";
 import eventGateway from "@/features/event/api";
 

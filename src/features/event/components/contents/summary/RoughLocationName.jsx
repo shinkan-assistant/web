@@ -1,6 +1,6 @@
-import TextInfoArea, {TextInfo} from "@/helpers/components/ui/design/TextInfoArea";
-import uiSizeEnum from "@/helpers/components/ui/const/sizeEnum";
-import LocationIcon from "@/helpers/components/ui/design/icons/location";
+import TextInfoArea, {TextInfo} from "@/helpers/components/ui/textInfoArea";
+import uiSizeEnum from "@/helpers/components/ui/base/config/sizeEnum";
+import LocationIcon from "@/helpers/components/ui/icons/location";
 
 export default function RoughLocationName({roughLocationName}) {
   return (

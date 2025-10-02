@@ -1,7 +1,7 @@
-import RoughLocationName from "./ui/RoughLocationName";
-import HeldDate from "./ui/HeldDate";
-import ContactGroup from "../schedules/ui/ContactGroup";
-import OnlineMeetingInfo from "../schedules/ui/OnlineMeetingInfo";
+import RoughLocationName from "./RoughLocationName";
+import HeldDate from "./HeldDate";
+import ContactGroup from "../schedules/ContactGroup";
+import OnlineMeetingInfo from "../schedules/OnlineMeetingInfo";
 
 export default function Summary({event, myParticipant, isItemPage, editFormHook}) {
   return (

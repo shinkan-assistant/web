@@ -8,6 +8,7 @@ import { useMyUser } from "@/stores/contexts/myUser";
 import { useUsers } from "@/stores/contexts/users";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { EventsPageFilterEnum } from "@/features/event/components/templates/List";
 
 export default function ParticipantListPage() {
   const router = useRouter();

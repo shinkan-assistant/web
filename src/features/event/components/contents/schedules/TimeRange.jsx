@@ -1,7 +1,7 @@
 import { formatTime } from "@/helpers/utils/dateTime";
-import TextInfoArea, {TextInfo} from "@/helpers/components/ui/design/TextInfoArea";
-import uiSizeEnum from "@/helpers/components/ui/const/sizeEnum";
-import TimeIcon from "@/helpers/components/ui/design/icons/time";
+import TextInfoArea, {TextInfo} from "@/helpers/components/ui/textInfoArea";
+import uiSizeEnum from "@/helpers/components/ui/base/config/sizeEnum";
+import TimeIcon from "@/helpers/components/ui/icons/time";
 
 export default function TimeRange({timeRange, disabled}) {
   const existsEndAt = !!timeRange.end_at;

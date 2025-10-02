@@ -1,7 +1,6 @@
 'use client';
 
 import EventDetailTemplate from "@/features/event/components/templates/Detail";
-import EventsPageFilterEnum from "@/features/event/components/const/listPageFilterEnum";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
@@ -10,6 +9,7 @@ import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { ItemPageInfo } from "@/helpers/components/layouts/templates/base/config";
 import { SubNavInfo } from "@/helpers/components/layouts/templates/base/ui/header/NavMenu";
 import { toast } from "react-toastify";
+import { EventsPageFilterEnum } from "@/features/event/components/templates/List";
 
 export default function EventDetail() {
   const router = useRouter();

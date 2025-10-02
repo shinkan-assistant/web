@@ -1,5 +1,5 @@
-import BlankLink from "@/helpers/components/ui/design/BlankLink";
-import uiSizeEnum from "@/helpers/components/ui/const/sizeEnum";
+import BlankLink from "@/helpers/components/ui/blankLink";
+import uiSizeEnum from "@/helpers/components/ui/base/config/sizeEnum";
 
 export default function ContactGroup({contactGroup}) {
   return (

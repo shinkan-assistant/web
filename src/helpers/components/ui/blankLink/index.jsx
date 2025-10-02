@@ -1,5 +1,5 @@
 import Link from "next/link";
-import uiSizeEnum from "../const/sizeEnum";
+import uiSizeEnum from "../base/config/sizeEnum";
 
 export default function BlankLink({ href, disabled, size, children }) {
   const paddingClassName = {

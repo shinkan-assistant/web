@@ -2,12 +2,12 @@
 
 import { Schedules } from "@/features/event/components/contents/schedules";
 import ItemContainer from "@/helpers/components/layouts/templates/item";
-import FormContainer from "@/helpers/components/layouts/contents/form";
-import useForm from "@/helpers/components/layouts/contents/form/hooks/useForm";
-import FormButton from "@/helpers/components/layouts/contents/form/ui/subButtons/Base";
+import FormContainer from "@/helpers/components/layouts/templates/form";
+import useForm from "@/helpers/components/layouts/templates/form/hooks/useForm";
+import FormButton from "@/helpers/components/layouts/templates/form/ui/subButtons/Base";
 import { useRouter } from "next/navigation";
-import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../utils";
-import { ResetButton } from "@/helpers/components/layouts/contents/form/ui/subButtons/Reset";
+import { getInputNameFromSchedule, getScheduleIdFromInputName, judgeIsParticipating } from "../contents/schedules/utils";
+import { ResetButton } from "@/helpers/components/layouts/templates/form/ui/subButtons/Reset";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
 import participantGateway from "@/features/participant/api";
