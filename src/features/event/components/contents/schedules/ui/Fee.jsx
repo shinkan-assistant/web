@@ -1,9 +1,10 @@
-import InfoArea from "@/helpers/components/ui/infoArea";
-import TextInfo from "@/helpers/components/ui/info/text";
+import TextInfoArea from "@/helpers/components/ui/infoArea";
+import TextInfo from "@/helpers/components/ui/textInfo";
 import FeeTypeEnum from "../../../../../../backend/data/enums/event/feeType";
 import { FeeIcon } from "@/helpers/components/ui/icons";
+import uiSizeEnum from "@/helpers/components/ui/uiSizeEnum";
 
-export default function Fee({feesByBelong, belong, editFormHook, disabled, size}) {
+export default function Fee({feesByBelong, belong, editFormHook, disabled}) {
   let fee;
   if (feesByBelong === undefined || feesByBelong.length === 0) {
     fee = {type: FeeTypeEnum.free};
@@ -22,10 +23,10 @@ export default function Fee({feesByBelong, belong, editFormHook, disabled, size}
   }
 
   return (
-    <InfoArea
+    <TextInfoArea
       Icon={FeeIcon}
       disabled={disabled}
-      size={size}
+      size={uiSizeEnum.MD}
     >
       <TextInfo
         label="参加費"
@@ -38,6 +39,6 @@ export default function Fee({feesByBelong, belong, editFormHook, disabled, size}
           value={fee["comment"]}
         />
       }
-    </InfoArea>
+    </TextInfoArea>
   );
 }

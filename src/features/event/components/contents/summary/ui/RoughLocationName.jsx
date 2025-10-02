@@ -1,18 +1,18 @@
 import { LocationIcon } from "@/helpers/components/ui/icons";
-import InfoArea from "@/helpers/components/ui/infoArea";
-import TextInfo from "@/helpers/components/ui/info/text";
+import TextInfoArea from "@/helpers/components/ui/infoArea";
+import TextInfo from "@/helpers/components/ui/textInfo";
+import uiSizeEnum from "@/helpers/components/ui/uiSizeEnum";
 
-export default function RoughLocationName({roughLocationName, disabled, size}) {
+export default function RoughLocationName({roughLocationName}) {
   return (
-    <InfoArea
+    <TextInfoArea
       Icon={LocationIcon}
-      disabled={disabled}
-      size={size}
+      size={uiSizeEnum.LG}
     >
       <TextInfo 
         label="場所"
         value={roughLocationName ?? "オンライン開催"}
       />
-    </InfoArea>
+    </TextInfoArea>
   );
 }

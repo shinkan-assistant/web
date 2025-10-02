@@ -1,14 +1,14 @@
 import { ListContainer, ListItemContainer } from "@/helpers/components/layouts/templates/list";
-import EventSummary from "@/features/event/components/contents/summary";
+import Summary from "@/features/event/components/contents/summary";
 
 export default function EventsTemplate({ pageInfo, events }) {
   return (
     <ListContainer>
       {events.map((event) => (
         <ListItemContainer key={event["id"]} pageInfo={pageInfo} record={event} >
-          <EventSummary 
-            pageInfo={pageInfo}
+          <Summary 
             event={event}
+            isItemPage={false}
           />
         </ListItemContainer>
       ))}

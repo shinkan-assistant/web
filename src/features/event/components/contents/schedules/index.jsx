@@ -1,10 +1,9 @@
 import { getInputNameFromSchedule, judgeIsParticipating } from "../../utils";
 import StatusBadgeList from "@/helpers/components/ui/statusBadgeArea";
-import uiSizeEnum from "@/helpers/components/ui/uiSizeEnum";
 import TimeRange from "./ui/TimeRange";
 import Fee from "./ui/Fee";
 import Checkbox from "@/helpers/components/layouts/contents/form/ui/inputs/Checkbox";
-import DetailedLocation from "./ui/Location";
+import Location from "./ui/Location";
 
 function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormHook}) {
   // 参加状態のステータスバッジ
@@ -61,14 +60,12 @@ function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormH
           <TimeRange 
             timeRange={schedule["time_range"]}
             disabled={disabled}
-            size={uiSizeEnum.MD}
           />
 
           {(myParticipant && schedule["location"]) && 
-            <DetailedLocation
+            <Location
               location={schedule["location"]}
               disabled={disabled}
-              size={uiSizeEnum.MD}
             />
           }
 
@@ -77,7 +74,6 @@ function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormH
             belong={!editFormHook && myUser["belong"]}
             editFormHook={editFormHook}
             disabled={disabled}
-            size={uiSizeEnum.MD}
           />
         </div>
         

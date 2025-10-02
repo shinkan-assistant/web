@@ -1,6 +1,6 @@
 'use client';
 
-import EventSummary from "@/features/event/components/contents/summary";
+import Summary from "@/features/event/components/contents/summary";
 import { Schedules } from "@/features/event/components/contents/schedules";
 import ItemContainer from "@/helpers/components/layouts/templates/item";
 import FormContainer from "@/helpers/components/layouts/contents/form";
@@ -59,9 +59,9 @@ export default function EventApplyTemplate({ pageInfo, event, myUser }) {
     <ItemContainer pageInfo={pageInfo} >
       <FormContainer hook={formHook} >
         <div className="mb-8">
-          <EventSummary 
-            pageInfo={pageInfo}
+          <Summary
             event={event}
+            isItemPage={true}
           />
         </div>
 

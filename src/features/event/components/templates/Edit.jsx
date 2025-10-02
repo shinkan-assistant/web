@@ -1,5 +1,5 @@
 import ItemContainer from "@/helpers/components/layouts/templates/item";
-import EventSummary from "@/features/event/components/contents/summary";
+import Summary from "@/features/event/components/contents/summary";
 import { Schedules } from "@/features/event/components/contents/schedules";
 import useForm from "@/helpers/components/layouts/contents/form/hooks/useForm";
 import { ResetButton } from "@/helpers/components/layouts/contents/form/ui/subButtons/Reset";
@@ -43,10 +43,10 @@ export default function EventEditTemplate({ pageInfo, event }) {
   return (
     <ItemContainer pageInfo={pageInfo}>
       <div className="mb-8">
-        <EventSummary 
-          pageInfo={pageInfo}
+        <Summary 
           event={event}
-          formHook={formHook}
+          isItemPage={true}
+          editFormHook={formHook}
         />
       </div>
 

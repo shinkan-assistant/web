@@ -1,16 +1,17 @@
 import { formatTime } from "@/helpers/utils/dateTime";
 import { TimeIcon } from "@/helpers/components/ui/icons";
-import InfoArea from "@/helpers/components/ui/infoArea";
-import TextInfo from "@/helpers/components/ui/info/text";
+import TextInfoArea from "@/helpers/components/ui/infoArea";
+import TextInfo from "@/helpers/components/ui/textInfo";
+import uiSizeEnum from "@/helpers/components/ui/uiSizeEnum";
 
-export default function TimeRange({timeRange, disabled, size}) {
+export default function TimeRange({timeRange, disabled}) {
   const existsEndAt = !!timeRange.end_at;
   
   return (
-    <InfoArea
+    <TextInfoArea
       Icon={TimeIcon}
       disabled={disabled}
-      size={size}
+      size={uiSizeEnum.MD}
     >
       <TextInfo 
         label="開始"
@@ -23,6 +24,6 @@ export default function TimeRange({timeRange, disabled, size}) {
           value={formatTime(timeRange["end_at"])}
         />
       }
-    </InfoArea>
+    </TextInfoArea>
   );
 }
