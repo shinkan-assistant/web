@@ -3,23 +3,18 @@
 import { useEffect, useState } from "react";
 import FormButton from "./Base";
 
-export function ResetButton({formHook}) {
+export function ResetButton({formMethods}) {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    const isInitialValues = formHook.inputNames.every(
-      name => formHook.inputValues[name] === formHook.initialValues[name]);
+    const isInitialValues = Object.keys(formMethods.inputValues).every(
+      name => formMethods.inputValues[name] === formMethods.defaultValues[name]);
     setDisabled(isInitialValues);
-  }, Object.values(formHook.inputValues))
+  }, Object.values(formMethods.inputValues))
 
   function reset() { 
     setDisabled(true);
-
-    const updatedInputValues = {};
-    for (let name of formHook.inputNames) {
-      updatedInputValues[name] = formHook.initialValues[name];
-    }
-    formHook.changeInputValues(updatedInputValues);
+    formMethods.reset();
   }
 
   return (

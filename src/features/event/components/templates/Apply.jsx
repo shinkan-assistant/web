@@ -2,8 +2,8 @@
 
 import Summary from "@/features/event/components/contents/summary";
 import { Schedules } from "@/features/event/components/contents/schedules";
-import ItemContainer from "@/helpers/components/layouts/templates/item";
-import FormContainer from "@/helpers/components/layouts/templates/form";
+import ItemTemplateLayout from "@/helpers/components/layouts/templates/item";
+import FormTemplateLayout from "@/helpers/components/layouts/templates/form";
 import useForm from "@/helpers/components/layouts/templates/form/hooks/useForm";
 import { useRouter } from "next/navigation";
 import { getInputNameFromSchedule, getScheduleIdFromInputName } from "../contents/schedules/utils";
@@ -17,7 +17,7 @@ export default function EventApplyTemplate({ pageInfo, event, myUser }) {
 
   const allSchedules = event["schedules"];
 
-  const inputInfos = useMemo(() => {
+  const formMethods = useForm(useMemo(() => {
     return allSchedules.reduce((acc, schedule) => {
       return {
         [getInputNameFromSchedule(schedule)]: {
@@ -27,37 +27,35 @@ export default function EventApplyTemplate({ pageInfo, event, myUser }) {
         ...acc
       }
     }, {});
-  }, [allSchedules]);
-
-  const formHook = useForm({
-    inputInfos,
-    Buttons: [ResetButton],
-    generateFormData: (_, inputValues) => {
-      const formData = {};
-      // 更新前と変化があった時のみ、formDataに格納する
-      formData["schedule_ids"] = Object.keys(inputValues)
-        .filter(name => inputValues[name])
-        .map(name => getScheduleIdFromInputName(name));
-
-      return formData;
-    },
-    judgeCanSubmit: (_, formData) => {
-      return formData["schedule_ids"].length > 0;
-    },
-    handleSubmit: async function (formData) {
-      await participantGateway.applyEvent({
-        userEmail: myUser["email"],
-        eventId: event["id"],
-        scheduleIds: formData["schedule_ids"],
-      });
-      toast.info(`${event["title"]}の申し込みが完了しました`);
-      router.push(`/events/${event["id"]}`);
-    }
-  });
+  }, [allSchedules]));
 
   return (
-    <ItemContainer pageInfo={pageInfo} >
-      <FormContainer hook={formHook} >
+    <ItemTemplateLayout pageInfo={pageInfo} >
+      <FormTemplateLayout 
+        methods={formMethods} 
+        Buttons={[ResetButton]} 
+        genFormData={() => {
+          const formData = {};
+          // 更新前と変化があった時のみ、formDataに格納する
+          formData["schedule_ids"] = Object.keys(formMethods.inputValues)
+            .filter(name => formMethods.inputValues[name])
+            .map(name => getScheduleIdFromInputName(name));
+    
+          return formData;
+        }}
+        judgeCanSubmit={(_, formData) => {
+          return formData["schedule_ids"].length > 0;
+        }}
+        onSubmit={async function (formData) {
+          await participantGateway.applyEvent({
+            userEmail: myUser["email"],
+            eventId: event["id"],
+            scheduleIds: formData["schedule_ids"],
+          });
+          toast.info(`${event["title"]}の申し込みが完了しました`);
+          router.push(`/events/${event["id"]}`);
+        }}
+      >
         <div className="mb-8">
           <Summary
             event={event}
@@ -68,9 +66,9 @@ export default function EventApplyTemplate({ pageInfo, event, myUser }) {
         <Schedules 
           event={event}
           myUser={myUser}
-          checkFormHook={formHook}
+          checkFormHook={formMethods}
         />
-      </FormContainer>
-    </ItemContainer>
+      </FormTemplateLayout>
+    </ItemTemplateLayout>
   );
 }

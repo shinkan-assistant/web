@@ -79,7 +79,7 @@ function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormH
         
         {checkFormHook &&
           <div className="mt-4">
-            <Checkbox {...checkFormHook.getInputProps(getInputNameFromSchedule(schedule))} />
+            <Checkbox {...checkFormHook.register(getInputNameFromSchedule(schedule))} />
           </div>
         }
       </div>

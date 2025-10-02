@@ -1,6 +1,6 @@
 'use client';
 
-import ItemContainer from "@/helpers/components/layouts/templates/item";
+import ItemTemplateLayout from "@/helpers/components/layouts/templates/item";
 import StatusBadge from "../contents/statusBadge";
 
 // ヘルパー関数: 「参加者×スケジュール」の単位で表示用データを作成する
@@ -41,7 +41,7 @@ export default function ParticipantListTemplate({participants, event, users}) {
   const participantRows = createParticipantScheduleRows(participants, event, users);
 
   return (
-    <ItemContainer>
+    <ItemTemplateLayout>
       <div className="mb-4">
         <h2 className="text-2xl font-bold text-gray-800">参加者詳細一覧</h2>
         <p className="text-gray-600">スケジュールごとの参加状況</p>
@@ -82,6 +82,6 @@ export default function ParticipantListTemplate({participants, event, users}) {
           </tbody>
         </table>
       </div>
-    </ItemContainer>
+    </ItemTemplateLayout>
   );
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import FormButtonArea from "./ui/SubButtonList";
 
 function FormSubmitButton({canSubmit, isProcessing}) {
@@ -19,14 +20,46 @@ function FormSubmitButton({canSubmit, isProcessing}) {
   );
 }
 
-export default function FormContainer({hook, children}) {
+export default function FormTemplateLayout({
+  methods, Buttons, genFormData, judgeCanSubmit, onSubmit, children
+}) {
+  // リロードしても値が変わらないように、わざとstateで持たせている
+  // *これやらないと、postDataの更新とともに値が変化してしまう
+  const [initialFormData] = useState(genFormData());
+  const [formData, setFormData] = useState(initialFormData);
+  const [canSubmit, setCanSubmit] = useState(false);
+  useEffect(() => {
+    const formDataTmp = genFormData()
+    setFormData(formDataTmp);
+    setCanSubmit(judgeCanSubmit(initialFormData, formDataTmp));
+  }, [methods.inputValues]);
+
+  const [isProcessing, setIsProcessing] = useState(false);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setIsProcessing(true);
+    methods.setError(null);
+
+    try {
+      await onSubmit(formData)
+    }
+    catch (error) {
+      // TODO エラーを格納
+      methods.setError(error);
+      console.error(error);
+    } finally {
+      // 処理の成功・失敗に関わらず、ローディング状態を終了
+      setIsProcessing(false);
+    }
+  };
+
   return (
-    <form onSubmit={hook.onSubmit} className="space-y-6">
+    <form onSubmit={(e) => handleSubmit(e)} className="space-y-6">
       {children}
-      <FormButtonArea hook={hook} />
+      <FormButtonArea Buttons={Buttons} methods={methods}  />
       <FormSubmitButton 
-        canSubmit={hook.canSubmit}
-        isProcessing={hook.isProcessing}
+        canSubmit={canSubmit}
+        isProcessing={isProcessing}
       />
     </form>
   );

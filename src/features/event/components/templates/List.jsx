@@ -1,4 +1,4 @@
-import { ListContainer, ListItemContainer } from "@/helpers/components/layouts/templates/list";
+import { ListTemplateLayout, ListItemTemplateLayout } from "@/helpers/components/layouts/templates/list";
 import Summary from "@/features/event/components/contents/summary";
 
 export const EventsPageFilterEnum = Object.freeze({
@@ -9,15 +9,15 @@ export const EventsPageFilterEnum = Object.freeze({
 
 export default function EventsTemplate({ pageInfo, events }) {
   return (
-    <ListContainer>
+    <ListTemplateLayout>
       {events.map((event) => (
-        <ListItemContainer key={event["id"]} pageInfo={pageInfo} record={event} >
+        <ListItemTemplateLayout key={event["id"]} pageInfo={pageInfo} record={event} >
           <Summary 
             event={event}
             isItemPage={false}
           />
-        </ListItemContainer>
+        </ListItemTemplateLayout>
       ))}
-    </ListContainer>
+    </ListTemplateLayout>
   );
 }

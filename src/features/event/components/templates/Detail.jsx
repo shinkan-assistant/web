@@ -1,10 +1,10 @@
-import ItemContainer from "@/helpers/components/layouts/templates/item";
+import ItemTemplateLayout from "@/helpers/components/layouts/templates/item";
 import Summary from "@/features/event/components/contents/summary";
 import { Schedules } from "@/features/event/components/contents/schedules";
 
 export default function EventDetailTemplate({ pageInfo, event, myUser, myParticipant }) {
   return (
-    <ItemContainer pageInfo={pageInfo}>
+    <ItemTemplateLayout pageInfo={pageInfo}>
       <div className="mb-8">
         <Summary 
           event={event}
@@ -18,6 +18,6 @@ export default function EventDetailTemplate({ pageInfo, event, myUser, myPartici
         myUser={myUser}
         myParticipant={myParticipant}
       />
-    </ItemContainer>
+    </ItemTemplateLayout>
   );
 }

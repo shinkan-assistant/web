@@ -1,8 +1,8 @@
 'use client';
 
 import { Schedules } from "@/features/event/components/contents/schedules";
-import ItemContainer from "@/helpers/components/layouts/templates/item";
-import FormContainer from "@/helpers/components/layouts/templates/form";
+import ItemTemplateLayout from "@/helpers/components/layouts/templates/item";
+import FormTemplateLayout from "@/helpers/components/layouts/templates/form";
 import useForm from "@/helpers/components/layouts/templates/form/hooks/useForm";
 import FormButton from "@/helpers/components/layouts/templates/form/ui/subButtons/Base";
 import { useRouter } from "next/navigation";
@@ -13,23 +13,23 @@ import { toast } from "react-toastify";
 import participantGateway from "@/features/participant/api";
 import { useEffect, useState } from "react";
 
-function AllCancelButton({formHook}) {
+function AllCancelButton({formMethods}) {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    const isAllCancel = formHook.inputNames.every(
-      name => !formHook.inputValues[name]);
+    const isAllCancel = Object.keys(formMethods.inputValues).every(
+      name => !formMethods.inputValues[name]);
     setDisabled(isAllCancel);
-  }, [formHook.inputValues])
+  }, [formMethods.inputValues])
 
   function onClick() { 
     setDisabled(true);
 
     const updatedInputValues = {};
-    for (let name of formHook.inputNames) {
+    for (let name of Object.keys(formMethods.inputValues)) {
       updatedInputValues[name] = false;
     }
-    formHook.changeInputValues(updatedInputValues);
+    formMethods.reset(updatedInputValues);
   }
 
   return (
@@ -42,7 +42,7 @@ export default function EventConfirmTemplate({ pageInfo, event, myUser, myPartic
 
   const allSchedules = event["schedules"];
 
-  const inputInfos = useMemo(() => {
+  const formMethods = useForm(useMemo(() => {
     return allSchedules.reduce((acc, schedule) => {
       return {
         [getInputNameFromSchedule(schedule)]: {
@@ -52,47 +52,43 @@ export default function EventConfirmTemplate({ pageInfo, event, myUser, myPartic
         ...acc
       }
     }, {});
-  }, [allSchedules, myParticipant]);
-
-  const formHook = useForm({
-    inputInfos,
-    Buttons: [ResetButton, AllCancelButton],
-    generateFormData: (initialValues, inputValues) => {
-      const formData = {};
-
-      formData["schedule_ids"] = Object.keys(inputValues)
-        .filter(name => inputValues[name])
-        .map(name => getScheduleIdFromInputName(name));
-      
-      return formData;
-    },
-    judgeCanSubmit: (initialFormData, formData) => {
-      if (initialFormData["schedule_ids"].length !== formData["schedule_ids"].length) return true;
-      for (let scheduleId of formData["schedule_ids"]) {
-        if (!initialFormData['schedule_ids'].includes(scheduleId)) return true;
-      }
-      return false;
-    },
-    handleSubmit: async function (formData) {
-      const isAllCancel = formData["schedule_ids"].length === 0;
-
-      await participantGateway.updateSchedules({myParticipant, formData});
-      
-      toast.info(isAllCancel ? `${event["title"]}のキャンセルが完了しました` : `${event["title"]}のスケジュールの変更が完了しました`);
-      router.push(`/events/${event["id"]}`);
-    },
-  });
+  }, [allSchedules, myParticipant]));
 
   return (
-    <ItemContainer pageInfo={pageInfo}>
-      <FormContainer hook={formHook} >
+    <ItemTemplateLayout pageInfo={pageInfo}>
+      <FormTemplateLayout 
+        methods={formMethods} 
+        Buttons={[ResetButton, AllCancelButton]}
+        genFormData={() => {
+          const formData = {};
+          formData["schedule_ids"] = Object.keys(formMethods.inputValues)
+            .filter(name => formMethods.inputValues[name])
+            .map(name => getScheduleIdFromInputName(name));
+          return formData;
+        }}
+        judgeCanSubmit={(initialFormData, formData) => {
+          if (initialFormData["schedule_ids"].length !== formData["schedule_ids"].length) return true;
+          for (let scheduleId of formData["schedule_ids"]) {
+            if (!initialFormData['schedule_ids'].includes(scheduleId)) return true;
+          }
+          return false;
+        }}
+        onSubmit={async function (formData) {
+          const isAllCancel = formData["schedule_ids"].length === 0;
+    
+          await participantGateway.updateSchedules({myParticipant, formData});
+          
+          toast.info(isAllCancel ? `${event["title"]}のキャンセルが完了しました` : `${event["title"]}のスケジュールの変更が完了しました`);
+          router.push(`/events/${event["id"]}`);
+        }}
+      >
         <Schedules
           event={event}
           myUser={myUser}
           myParticipant={myParticipant}
-          checkFormHook={formHook}
+          checkFormHook={formMethods}
         />
-      </FormContainer>
-    </ItemContainer>
+      </FormTemplateLayout>
+    </ItemTemplateLayout>
   );
 }
