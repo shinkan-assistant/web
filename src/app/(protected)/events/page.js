@@ -7,7 +7,7 @@ import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { ListPageInfo } from "@/helpers/components/layouts/templates/base/config";
-import { ItemLinkInfo } from "@/helpers/components/layouts/templates/list/ui/ItemLink";
+import { ItemLinkInfo } from "@/helpers/components/layouts/templates/list/ItemLink";
 
 export default function Events() {
   const router = useRouter();

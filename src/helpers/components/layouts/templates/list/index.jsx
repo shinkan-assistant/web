@@ -1,4 +1,4 @@
-import ItemLink from "./ui/ItemLink";
+import ItemLink from "./ItemLink";
 import ContentHeader from "../base/ui/header";
 
 export function ListItemTemplateLayout({ pageInfo, record, children }) {
