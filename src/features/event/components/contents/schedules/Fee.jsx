@@ -3,7 +3,7 @@ import FeeTypeEnum from "../../../../../backend/data/enums/event/feeType";
 import uiSizeEnum from "@/helpers/components/ui/base/config/sizeEnum";
 import FeeIcon from "@/helpers/components/ui/icons/fee";
 
-export default function Fee({feesByBelong, belong, editFormHook, disabled}) {
+export default function Fee({feesByBelong, belong, useForEditForm, disabled}) {
   let fee;
   if (feesByBelong === undefined || feesByBelong.length === 0) {
     fee = {type: FeeTypeEnum.free};

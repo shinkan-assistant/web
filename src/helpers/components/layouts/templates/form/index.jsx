@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import FormButtonArea from "./ui/SubButtonList";
+import { FormProvider, useFormContext } from "react-hook-form";
+
+import FormUtilButtonArea from "./utilButtonArea";
+import ItemTemplateLayout from "../item";
 
 function FormSubmitButton({canSubmit, isProcessing}) {
   return (
@@ -20,32 +23,42 @@ function FormSubmitButton({canSubmit, isProcessing}) {
   );
 }
 
-export default function FormTemplateLayout({
-  methods, Buttons, genFormData, judgeCanSubmit, onSubmit, children
+function FormTemplateLayoutInner({
+  Buttons, 
+  genFormData, 
+  judgeCanSubmit, 
+  onSubmit, 
+  children
 }) {
   // リロードしても値が変わらないように、わざとstateで持たせている
   // *これやらないと、postDataの更新とともに値が変化してしまう
-  const [initialFormData] = useState(genFormData());
+  const { watch, getValues, setError } = useFormContext();
+  
+  const [initialFormData] = useState(genFormData(getValues));
   const [formData, setFormData] = useState(initialFormData);
   const [canSubmit, setCanSubmit] = useState(false);
+
   useEffect(() => {
-    const formDataTmp = genFormData()
-    setFormData(formDataTmp);
-    setCanSubmit(judgeCanSubmit(initialFormData, formDataTmp));
-  }, [methods.inputValues]);
+    const subscription = watch(() => {
+      const formDataTmp = genFormData(getValues())
+      setFormData(formDataTmp);
+      setCanSubmit(judgeCanSubmit(initialFormData, formDataTmp));
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const [isProcessing, setIsProcessing] = useState(false);
   async function handleSubmit(e) {
     e.preventDefault();
     setIsProcessing(true);
-    methods.setError(null);
+    setError(null);
 
     try {
       await onSubmit(formData)
     }
     catch (error) {
       // TODO エラーを格納
-      methods.setError(error);
+      setError(error);
       console.error(error);
     } finally {
       // 処理の成功・失敗に関わらず、ローディング状態を終了
@@ -56,7 +69,7 @@ export default function FormTemplateLayout({
   return (
     <form onSubmit={(e) => handleSubmit(e)} className="space-y-6">
       {children}
-      <FormButtonArea Buttons={Buttons} methods={methods}  />
+      <FormUtilButtonArea Buttons={Buttons}  />
       <FormSubmitButton 
         canSubmit={canSubmit}
         isProcessing={isProcessing}
@@ -64,3 +77,29 @@ export default function FormTemplateLayout({
     </form>
   );
 }
+
+export default function FormTemplateLayout({
+  pageInfo,
+  methods,
+  Buttons, 
+  genFormData, 
+  judgeCanSubmit, 
+  onSubmit, 
+  children
+}) {
+  return (
+    <ItemTemplateLayout pageInfo={pageInfo} >
+      <FormProvider {...methods}>
+        <FormTemplateLayoutInner
+          Buttons={Buttons} 
+          genFormData={genFormData} 
+          judgeCanSubmit={judgeCanSubmit}
+          onSubmit={onSubmit}
+        >
+          {children}
+        </FormTemplateLayoutInner>
+      </FormProvider>
+    </ItemTemplateLayout>
+  );
+}
+

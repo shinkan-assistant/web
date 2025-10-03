@@ -9,15 +9,13 @@ export default function EventEditTemplate({ pageInfo, event }) {
         <Summary 
           event={event}
           isItemPage={true}
-          // 一旦適当な値を入れておく
-          editFormHook={true}
+          useForEditForm
         />
       </div>
 
       <Schedules 
         event={event}
-        // 一旦適当な値を入れておく
-        editFormHook={true}
+        useForEditForm
       />
     </ItemTemplateLayout>
   );

@@ -1,14 +1,26 @@
+import { useFormContext } from "react-hook-form";
+
 import { getInputNameFromSchedule, judgeIsParticipating } from "./utils";
 import StatusBadgeArea from "@/helpers/components/ui/statusBadgeArea";
 import TimeRange from "./TimeRange";
 import Fee from "./Fee";
-import Checkbox from "@/helpers/components/layouts/templates/form/ui/inputs/Checkbox";
+import Checkbox from "@/helpers/components/layouts/templates/form/inputs/Checkbox";
 import Location from "./Location";
 
-function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormHook}) {
+function ScheduleItem({
+  schedule, 
+  myUser, 
+  myParticipant, 
+  useForCheckForm, 
+  useForEditForm,  
+}) {
+  let getValues;
+  if (useForCheckForm || useForEditForm)
+    getValues = useFormContext().getValues;
+
   // 参加状態のステータスバッジ
   let statuses;
-  if (myParticipant && !editFormHook) {
+  if (myParticipant && !useForEditForm) {
     const scheduleForParticipant = myParticipant?.schedules
       .find(ps => ps["id"] === schedule["id"]) ?? null;
     statuses = [
@@ -20,14 +32,14 @@ function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormH
     );
   }
   
-  // 暗めに表示するかどうか（checkFormHookは入力に合わせて変化させる）
+  // 暗めに表示するかどうか（checkFormは入力に合わせて変化させる）
   let disabled;
-  if (editFormHook) 
+  if (useForEditForm) 
     disabled = false;
   else {
-    if (checkFormHook)
-      disabled = !checkFormHook.inputValues[getInputNameFromSchedule(schedule)];
-    else 
+    if (useForCheckForm)
+      disabled = !getValues(getInputNameFromSchedule(schedule));
+    else
       disabled = !judgeIsParticipating(schedule, {myParticipant});
   }
 
@@ -71,15 +83,21 @@ function ScheduleItem({schedule, myUser, myParticipant, editFormHook, checkFormH
 
           <Fee
             feesByBelong={schedule["fees_by_belong"]} 
-            belong={!editFormHook && myUser["belong"]}
-            editFormHook={editFormHook}
+            belong={!useForEditForm && myUser["belong"]}
+            useForEditForm={useForEditForm}
             disabled={disabled}
           />
         </div>
         
-        {checkFormHook &&
+        {useForCheckForm &&
           <div className="mt-4">
-            <Checkbox {...checkFormHook.register(getInputNameFromSchedule(schedule))} />
+            <Checkbox 
+              name={getInputNameFromSchedule(schedule)}
+              label={myParticipant 
+                ? "参加しますか？（キャンセルならチェックを外す）" 
+                : "参加しますか？"
+              }
+            />
           </div>
         }
       </div>
@@ -91,12 +109,12 @@ export function Schedules({
   myUser,
   event,
   myParticipant,
-  editFormHook,
-  checkFormHook,
+  useForEditForm,
+  useForCheckForm,
 }) {
   return (
     <div>
-      {!checkFormHook && (
+      {!useForCheckForm && (
         // UI部品に置き換え可能
         <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">
           スケジュール
@@ -110,8 +128,8 @@ export function Schedules({
             schedule={schedule}
             myUser={myUser}
             myParticipant={myParticipant}
-            editFormHook={editFormHook}
-            checkFormHook={checkFormHook}
+            useForEditForm={useForEditForm}
+            useForCheckForm={useForCheckForm}
           />
         ))}
       </div>

@@ -1,4 +1,4 @@
-import TextInput from "@/helpers/components/layouts/templates/form/ui/inputs/Text";
+import TextInput from "@/helpers/components/layouts/templates/form/inputs/Text";
 import uiSizeEnum from "../base/config/sizeEnum";
 
 export function TextInfo({label, value, inputProps}) {

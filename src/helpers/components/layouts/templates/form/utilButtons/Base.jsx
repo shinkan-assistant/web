@@ -1,4 +1,4 @@
-export default function FormButton({title, onClick, disabled}) {
+export default function FormUtilButton({title, onClick, disabled}) {
   return (
     <button 
       onClick={onClick} 

@@ -3,7 +3,12 @@ import HeldDate from "./HeldDate";
 import ContactGroup from "../schedules/ContactGroup";
 import OnlineMeetingInfo from "../schedules/OnlineMeetingInfo";
 
-export default function Summary({event, myParticipant, isItemPage, editFormHook}) {
+export default function Summary({
+  event, 
+  myParticipant, 
+  isItemPage, 
+  useForEditForm,
+}) {
   return (
     <div className={isItemPage ? "bg-gray-50 p-6 rounded-lg shadow-md" : ""}>
       {isItemPage &&
@@ -19,7 +24,7 @@ export default function Summary({event, myParticipant, isItemPage, editFormHook}
         <RoughLocationName
           roughLocationName={event["rough_location_name"]}
         />
-        {(isItemPage && (myParticipant || editFormHook)) && 
+        {(isItemPage && (myParticipant || useForEditForm)) && 
           <>
             {event["contact_group"] && 
               <ContactGroup contactGroup={event["contact_group"]}
