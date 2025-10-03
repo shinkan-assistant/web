@@ -36,12 +36,8 @@ export class ItemPageInfo extends PageInfoBase {
   #subTitle;
   #subNavInfos;
 
-  constructor({isForManage, isAfterApplying, isForm, title, subTitle, subNavInfos}) {
+  constructor({title, subTitle, subNavInfos}) {
     super({contentType: ContentTypeEnum.item});
-    this.isForManage = isForManage;
-    [this.isBeforeApplying, this.isAfterApplying] = [!isAfterApplying, isAfterApplying];
-    this.isForm = isForm;
-
     this.#title = title;
     this.#subTitle = subTitle;
     this.#subNavInfos = subNavInfos;

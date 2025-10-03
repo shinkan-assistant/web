@@ -46,9 +46,6 @@ export default function EventApply() {
   }
   
   const pageInfo = new ItemPageInfo({
-    isForManage: false,
-    isAfterApplying: false,
-    isForm: true,
     title: event["title"],
     subTitle: "申し込みフォーム",
     subNavInfos: [

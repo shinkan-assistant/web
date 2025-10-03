@@ -47,9 +47,6 @@ export default function EventDetailEdit() {
   }
 
   const pageInfo = new ItemPageInfo({
-    isForManage: false,
-    isAfterApplying: true,
-    isForm: true,
     title: event["title"],
     subTitle: "スケジュール変更 / キャンセル",
     subNavInfos: [

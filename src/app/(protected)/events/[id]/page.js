@@ -48,9 +48,6 @@ export default function EventDetail() {
   }
 
   const pageInfo = new ItemPageInfo({
-    isForManage: false,
-    isAfterApplying: true,
-    isForm: false,
     title: event["title"],
     subNavInfos: [
       new SubNavInfo({

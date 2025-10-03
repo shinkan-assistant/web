@@ -47,8 +47,6 @@ export default function EventManage() {
   }
 
   const pageInfo = new ItemPageInfo({
-    isForManage: true,
-    isForm: true,
     title: event["title"],
     subTitle: "管理画面",
     subNavInfos: [
