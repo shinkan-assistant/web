@@ -1,4 +1,4 @@
-import { getRecord } from "@/helpers/db/get";
+import { getRecord } from "@/helpers/db";
 
 export default class UserDbGW {
   static async exists({email}) {

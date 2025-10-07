@@ -1,11 +1,12 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { db } from "@/lib/firebase/clientApp";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { toRecord } from "@/helpers/db/utils";
+
+import { db } from "@/lib/firebase/clientApp";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useMyParticipants } from "./myParticipants";
+import { toRecord } from "@/helpers/db";
 
 const ParticipantsContext = createContext(null);
 

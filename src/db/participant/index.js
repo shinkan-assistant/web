@@ -1,5 +1,4 @@
-import { createRecord } from "@/helpers/db/create";
-import { updateRecord } from "@/helpers/db/update";
+import { createRecord, updateRecord } from "@/helpers/db";
 import { CreateParticipantSchema, UpdateParticipantSchedulesSchema } from "./schema/proc";
 
 export default class ParticipantDbGW {

@@ -1,4 +1,5 @@
-import { updateRecord } from "@/helpers/db/update";
+updateRecord
+import { updateRecord } from "@/helpers/db";
 import { UpdateEventSchema } from "./schema/proc";
 
 export default class EventDbGW {
