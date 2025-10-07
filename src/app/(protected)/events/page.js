@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
-import { ListPageInfo } from "@/helpers/components/layouts/templates/base/config";
-import { ItemLinkInfo } from "@/helpers/components/layouts/templates/list/ItemLink";
 
 export default function Events() {
   const router = useRouter();
@@ -31,7 +29,7 @@ export default function Events() {
       return;
     }
     
-    if (filter === EventsPageFilterEnum.manage && !myUser["belong"]["is_member"]) {
+    if (filter === EventsPageFilterEnum.edit && !myUser["belong"]["is_member"]) {
       router.push(`/events?filter=${EventsPageFilterEnum.participating}`);
       return;
     }
@@ -43,7 +41,7 @@ export default function Events() {
       [EventsPageFilterEnum.apply]: (e) => {
         return myParticipants.every(mp => e["id"] !== mp["event_id"])
       },
-      [EventsPageFilterEnum.manage]: (e) => {
+      [EventsPageFilterEnum.edit]: (e) => {
         if (myUser["is_admin"]) 
           return true;
         return myParticipants.some(mp => e["id"] === mp["event_id"] && mp["is_organizer"]);
@@ -58,27 +56,9 @@ export default function Events() {
     return <div>読み込み中です</div>
   }
 
-  const pageInfo = new ListPageInfo({
-    titleFunc: ({record}) => record["title"], 
-    itemLink: {
-      [EventsPageFilterEnum.participating]: new ItemLinkInfo({
-        hrefFunc: ({id}) => `/events/${id}`,
-        text: "詳細を見る",
-      }),
-      [EventsPageFilterEnum.apply]: new ItemLinkInfo({
-        hrefFunc: ({id}) => `/events/${id}/apply`,
-        text: "申し込む",
-      }),
-      [EventsPageFilterEnum.manage]: new ItemLinkInfo({
-        hrefFunc: ({id}) => `/events/${id}/edit`,
-        text: "管理する",
-      }),
-    }[filter],
-  });
-
   return (
     <EventsTemplate
-      pageInfo={pageInfo}
+      filter={filter}
       events={targetEvents}
     />
   );

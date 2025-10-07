@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { useEvents } from "@/stores/contexts/events";
-import { ItemPageInfo } from "@/helpers/components/layouts/templates/base/config";
-import { SubNavInfo } from "@/helpers/components/layouts/templates/base/ui/header/NavMenu";
 import { toast } from "react-toastify";
 import { EventsPageFilterEnum } from "@/features/event/components/templates/List";
 
@@ -44,21 +42,9 @@ export default function EventApply() {
   if (!myUser || !event) {
     return <div>読み込み中です</div>
   }
-  
-  const pageInfo = new ItemPageInfo({
-    title: event["title"],
-    subTitle: "申し込みフォーム",
-    subNavInfos: [
-      new SubNavInfo({
-        href: `/events?filter=${EventsPageFilterEnum.apply}`, 
-        text: "一覧へ戻る",
-      })
-    ]
-  });
 
   return (
     <EventApplyTemplate 
-      pageInfo={pageInfo}
       event={event}
       myUser={myUser}
     />

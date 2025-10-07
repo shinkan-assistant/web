@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
-import { ItemPageInfo } from "@/helpers/components/layouts/templates/base/config";
-import { SubNavInfo } from "@/helpers/components/layouts/templates/base/ui/header/NavMenu";
 import { EventsPageFilterEnum } from "@/features/event/components/templates/List";
 
 export default function EventManage() {
@@ -37,7 +35,7 @@ export default function EventManage() {
 
     const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
     if (!myUser["is_admin"] && !myParticipantTmp?.["is_organizer"]) {
-      router.push(`/events?filter=${EventsPageFilterEnum.manage}`);
+      router.push(`/events?filter=${EventsPageFilterEnum.edit}`);
       return;
     }
   }, [router, id, myUser, events, myParticipants]);
@@ -46,24 +44,8 @@ export default function EventManage() {
     return <div>読み込み中です</div>
   }
 
-  const pageInfo = new ItemPageInfo({
-    title: event["title"],
-    subTitle: "管理画面",
-    subNavInfos: [
-      new SubNavInfo({
-        href: `/events?filter=${EventsPageFilterEnum.manage}`, 
-        text: "一覧へ戻る",
-      }),
-      new SubNavInfo({
-        href: `/events/${id}/participants`, 
-        text: "参加者一覧を見る",
-      }),
-    ]
-  });
-
   return (
     <EventManageTemplate 
-      pageInfo={pageInfo}
       event={event}
     />
   );

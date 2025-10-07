@@ -1,17 +1,17 @@
 import ContentTitleArea from './TitleArea';
 import SubNavMenu from './NavMenu';
 
-export default function ContentHeader({info}) {
+export default function ContentHeader({type, title, subTitle, subNavLinks}) {
   return (
     <div>
       <div className="flex flex-col space-y-6">
         <ContentTitleArea 
-          contentType={info.type}
-          title={info.title}
-          subTitle={info.subTitle}
+          type={type}
+          title={title}
+          subTitle={subTitle}
         />
-        {info.subNavInfos && 
-          <SubNavMenu infos={info.subNavInfos} />
+        {subNavLinks && 
+          <SubNavMenu links={subNavLinks} />
         }
       </div>
     </div>

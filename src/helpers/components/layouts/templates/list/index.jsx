@@ -1,21 +1,21 @@
 import ItemLink from "./ItemLink";
 import ContentHeader from "../base/ui/header";
+import ContentTypeEnum from "../base/const/typeEnum";
 
-export function ListItemTemplateLayout({ pageInfo, record, children }) {
+export function ListItemTemplateLayout({ title, itemLink, children }) {
   return (
     <div
       className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 p-6"
     >
       <div className="mb-4">
         <ContentHeader
-          info={pageInfo.getItemContent({record: record})}
+          type={ContentTypeEnum.list}
+          title={title}
         />
       </div>
       {children}
       <div className="mt-4">
-        <ItemLink
-          info={pageInfo.getItemContent({record: record})}
-        />
+        <ItemLink link={itemLink} />
       </div>
     </div>
   );

@@ -10,13 +10,21 @@ import { getInputNameFromSchedule } from "../contents/schedules/utils";
 import { ResetButton } from "@/helpers/components/layouts/templates/form/utilButtons/Reset";
 import { toast } from "react-toastify";
 import participantGateway from "@/features/participant/api";
+import { EventsPageFilterEnum } from "./List";
 
-export default function EventApplyTemplate({ pageInfo, event, myUser }) {
+export default function EventApplyTemplate({ event, myUser }) {
   const router = useRouter();
 
   return (
     <FormTemplateLayout 
-      pageInfo={pageInfo}
+      title={event["title"]}
+      subTitle="申し込みフォーム"
+      subNavLinks={[
+        {
+          href: `/events?filter=${EventsPageFilterEnum.apply}`, 
+          text: "一覧へ戻る",
+        }
+      ]}
       methods={useForm({
         defaultValues: event["schedules"].reduce((acc, schedule) => {
           return {

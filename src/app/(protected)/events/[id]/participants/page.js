@@ -40,7 +40,7 @@ export default function ParticipantListPage() {
 
     const myParticipantTmp = myParticipants.find(mp => id === mp["event_id"]);
     if (!myUser["is_admin"] && !myParticipantTmp?.["is_organizer"]) {
-      router.push(`/events?filter=${EventsPageFilterEnum.manage}`);
+      router.push(`/events?filter=${EventsPageFilterEnum.edit}`);
       return;
     }
 

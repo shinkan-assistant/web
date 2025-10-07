@@ -11,6 +11,7 @@ import FormUtilButton from "@/helpers/components/layouts/templates/form/utilButt
 import { getInputNameFromSchedule, judgeIsParticipating } from "../contents/schedules/utils";
 import { ResetButton } from "@/helpers/components/layouts/templates/form/utilButtons/Reset";
 import participantGateway from "@/features/participant/api";
+import { EventsPageFilterEnum } from "./List";
 
 function AllCancelButton({event}) {
   const { watch, getValues, reset } = useFormContext();
@@ -41,12 +42,23 @@ function AllCancelButton({event}) {
   );
 }
 
-export default function EventConfirmTemplate({ pageInfo, event, myUser, myParticipant }) {
+export default function EventConfirmTemplate({ event, myUser, myParticipant }) {
   const router = useRouter();
 
   return (
     <FormTemplateLayout 
-      pageInfo={pageInfo}
+      title={event["title"]}
+      subTitle="スケジュール変更 / キャンセル"
+      subNavLinks={[
+        {
+          href: `/events?filter=${EventsPageFilterEnum.participating}`, 
+          text: "一覧へ戻る",
+        },
+        {
+          href: `/events/${event.id}`, 
+          text: "編集キャンセル",
+        }
+      ]}
       methods={useForm({
         defaultValues: event["schedules"].reduce((acc, schedule) => {
           return {

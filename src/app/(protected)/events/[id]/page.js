@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
-import { ItemPageInfo } from "@/helpers/components/layouts/templates/base/config";
-import { SubNavInfo } from "@/helpers/components/layouts/templates/base/ui/header/NavMenu";
 import { toast } from "react-toastify";
 import { EventsPageFilterEnum } from "@/features/event/components/templates/List";
 
@@ -47,23 +45,8 @@ export default function EventDetail() {
     return <div>読み込み中です</div>
   }
 
-  const pageInfo = new ItemPageInfo({
-    title: event["title"],
-    subNavInfos: [
-      new SubNavInfo({
-        href: `/events?filter=${EventsPageFilterEnum.participating}`, 
-        text: "一覧へ戻る",
-      }),
-      new SubNavInfo({
-        href: `/events/${event.id}/confirm`, 
-        text: "スケジュール変更 / キャンセル",
-      })
-    ]
-  });
-
   return (
     <EventDetailTemplate 
-      pageInfo={pageInfo}
       event={event} 
       myUser={myUser} 
       myParticipant={myParticipant}

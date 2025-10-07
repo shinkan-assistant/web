@@ -1,14 +1,14 @@
-import ContentTypeEnum from "../../config/typeEnum";
+import ContentTypeEnum from "../../const/typeEnum";
 
-export default function ContentTitleArea({contentType, title, subTitle}) {
+export default function ContentTitleArea({type, title, subTitle}) {
   const containerAdditionalClassName = {
     [ContentTypeEnum.list]: "font-bold truncate",
     [ContentTypeEnum.item]: "font-extrabold",
-  }[contentType];
+  }[type];
   const titleTextSizeClassName = {
     [ContentTypeEnum.list]: "text-2xl",
     [ContentTypeEnum.item]: "text-3xl sm:text-4xl",
-  }[contentType];
+  }[type];
 
   return (
     <h1 className={`text-gray-900 flex flex-col gap-y-4 ${containerAdditionalClassName}`}>

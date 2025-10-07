@@ -79,16 +79,16 @@ function FormTemplateLayoutInner({
 }
 
 export default function FormTemplateLayout({
-  pageInfo,
-  methods,
-  Buttons, 
-  genFormData, 
-  judgeCanSubmit, 
-  onSubmit, 
+  title, subTitle, subNavLinks,
+  methods, Buttons, genFormData, judgeCanSubmit, onSubmit, 
   children
 }) {
   return (
-    <ItemTemplateLayout pageInfo={pageInfo} >
+    <ItemTemplateLayout
+      title={title}
+      subTitle={subTitle}
+      subNavLinks={subNavLinks}
+    >
       <FormProvider {...methods}>
         <FormTemplateLayoutInner
           Buttons={Buttons} 

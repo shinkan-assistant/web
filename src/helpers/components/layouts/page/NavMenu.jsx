@@ -62,7 +62,7 @@ export default function NavMenu() {
         isOnlyForAdmin: false, isOnlyForMember: false
       },
       {
-        href: `/events?filter=${EventsPageFilterEnum.manage}`, 
+        href: `/events?filter=${EventsPageFilterEnum.edit}`, 
         title: "イベント管理", 
         isOnlyForAdmin: false, isOnlyForMember: true
       },

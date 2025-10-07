@@ -1,16 +1,14 @@
 'use client';
 
 import { notFound, useParams, useRouter } from "next/navigation";
-import EventDetailEditTemplate from "@/features/event/components/templates/Confirm";
+import EventConfirmTemplate from "@/features/event/components/templates/Confirm";
 import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
-import { ItemPageInfo } from "@/helpers/components/layouts/templates/base/config";
-import { SubNavInfo } from "@/helpers/components/layouts/templates/base/ui/header/NavMenu";
 import { EventsPageFilterEnum } from "@/features/event/components/templates/List";
 
-export default function EventDetailEdit() {
+export default function EventConfirm() {
   const router = useRouter();
   const { id } = useParams();
 
@@ -45,25 +43,9 @@ export default function EventDetailEdit() {
   if (!myUser || !event || !myParticipant) {
     return <div>読み込み中です</div>
   }
-
-  const pageInfo = new ItemPageInfo({
-    title: event["title"],
-    subTitle: "スケジュール変更 / キャンセル",
-    subNavInfos: [
-      new SubNavInfo({
-        href: `/events?filter=${EventsPageFilterEnum.participating}`, 
-        text: "一覧へ戻る",
-      }),
-      new SubNavInfo({
-        href: `/events/${event.id}`, 
-        text: "編集キャンセル",
-      })
-    ]
-  });
   
   return (
-    <EventDetailEditTemplate
-      pageInfo={pageInfo}
+    <EventConfirmTemplate
       event={event} 
       myUser={myUser} 
       myParticipant={myParticipant} 
