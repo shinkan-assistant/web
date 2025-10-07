@@ -1,10 +1,9 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { db } from "@/lib/firebase/clientApp";
-import { collection, onSnapshot } from "firebase/firestore";
-import { useMyUser } from "@/stores/contexts/myUser";
-import { toRecord } from "@/helpers/db";
+import { useMyUser } from "./myUser";
+import { onSnapshotRecords } from "@/helpers/db";
+import EventService from "@/db/event";
 
 const EventsContext = createContext(null);
 
@@ -20,22 +19,8 @@ function EventsProvider({ children }) {
       return;
     }
     
-    let unsubscribe = () => {};
-
-    (async() => {
-      const collectionRef = collection(db, 'events');
-      
-      // onSnapshotのリスナーを起動
-      unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
-        setEvents(querySnapshot.docs.map(doc => toRecord(doc)));
-      }, (error) => {
-        // エラーハンドリング
-        console.error("onSnapshot error:", error);
-      });
-    })();
-
-    return () => unsubscribe();
-
+    // TODO myParticipantsに対応して、それぞれのeventの取得できる情報を変える
+    return EventService.onSnapshotAll({setEvents});
   }, [myUser]);
 
   return (

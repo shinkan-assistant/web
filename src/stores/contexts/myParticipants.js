@@ -1,10 +1,9 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { db } from "@/lib/firebase/clientApp";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { useMyUser } from "@/stores/contexts/myUser";
-import { toRecord } from "@/helpers/db";
+
+import { useMyUser } from "./myUser";
+import ParticipantService from "@/db/participant";
 
 const MyParticipantsContext = createContext(null);
 
@@ -18,23 +17,10 @@ function MyParticipantsProvider({ children }) {
       return;
     }
     
-    let unsubscribe = () => {};
-
-    (async() => {
-      const collectionRef = collection(db, "participants")
-      const q = query(collectionRef, where("user_email", "==", myUser.email));
-      
-      // onSnapshotのリスナーを起動
-      unsubscribe = onSnapshot(q, (querySnapshot) => {
-        setMyParticipants(querySnapshot.docs.map(doc => toRecord(doc)))
-      }, (error) => {
-        // エラーハンドリング
-        console.error("onSnapshot error:", error);
-      });
-    })();
-
-    return () => unsubscribe();
-
+    return ParticipantService.onSnapshotMe({
+      myUser,
+      setMyParticipants
+    });
   }, [myUser]);
 
   return (

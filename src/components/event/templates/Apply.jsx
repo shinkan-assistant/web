@@ -10,7 +10,7 @@ import { getInputNameFromSchedule } from "../contents/schedules/utils";
 import { ResetButton } from "@/helpers/components/layouts/templates/form/utilButtons/Reset";
 import { toast } from "react-toastify";
 import { EventsPageFilterEnum } from "./List";
-import ParticipantDbGW from "@/db/participant";
+import ParticipantService from "@/db/participant";
 
 export default function EventApplyTemplate({ event, myUser }) {
   const router = useRouter();
@@ -45,7 +45,7 @@ export default function EventApplyTemplate({ event, myUser }) {
         return formData["schedule_ids"].length > 0;
       }}
       onSubmit={async function (formData) {
-        await ParticipantDbGW.apply({
+        await ParticipantService.apply({
           userEmail: myUser["email"],
           eventId: event["id"],
           scheduleIds: formData["schedule_ids"],

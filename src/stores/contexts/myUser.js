@@ -1,10 +1,8 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { db } from "@/lib/firebase/clientApp";
-import { doc, onSnapshot } from "firebase/firestore";
 import { useAuthUser } from "../sessions/authUser";
-import { getRecord } from "@/helpers/db";
+import UserService from "@/db/user";
 
 const MyUserContext = createContext(null);
 
@@ -20,26 +18,13 @@ function MyUserProvider({ children }) {
     }
     
     let unsubscribe = () => {};
-
     (async() => {
-      const initialMyUser = await getRecord("users", {uniqueData: {"email": authUser.email}});
-      if (!initialMyUser) return;
-
-      const myUserDocRef = doc(db, 'users', initialMyUser.id);
-      
-      // onSnapshotのリスナーを起動
-      unsubscribe = onSnapshot(myUserDocRef, (doc) => {
-        if (doc.exists()) {
-          setMyUser(doc.data());
-        }
-      }, (error) => {
-        // エラーハンドリング
-        console.error("onSnapshot error:", error);
+      unsubscribe = await UserService.onSnapshotMe({
+        email: authUser.email,
+        setMyUser
       });
     })();
-
-    return () => unsubscribe();
-
+    return unsubscribe;
   }, [authUser]);
 
   return (

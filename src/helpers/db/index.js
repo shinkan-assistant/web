@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, getDocs, setDoc, query, updateDoc, where } 
+import { collection, deleteDoc, doc, getDocs, setDoc, query, updateDoc, where, onSnapshot } 
   from "firebase/firestore";
 
 import { db } from "@/lib/firebase/clientApp";
@@ -32,6 +32,33 @@ export async function getRecord(tableName, {uniqueData}) {
     .map(name => where(name, "==", uniqueData[name]));
   const records = await getRecords(tableName, {constraints});
   return records[0] ?? null;
+}
+
+export function onSnapshotRecords(tableName, {constraints, setContext}) {
+  let ref = collection(db, tableName)
+  if (constraints) 
+    ref = query(ref, ...constraints);
+  
+  // onSnapshotのリスナーを起動
+  return onSnapshot(ref, (querySnapshot) => {
+    setContext(querySnapshot.docs.map(doc => toRecord(doc)));
+  }, (error) => {
+    // エラーハンドリング
+    console.error("onSnapshot error:", error);
+  });
+}
+
+export function onSnapshotRecord(tableName, {id, setContext}) {
+  const docRef = doc(db, tableName, id);
+  // onSnapshotのリスナーを起動
+  return onSnapshot(docRef, (doc) => {
+    if (doc.exists()) {
+      setContext(doc.data());
+    }
+  }, (error) => {
+    // エラーハンドリング
+    console.error("onSnapshot error:", error);
+  });
 }
 
 export async function updateRecord(tableName, {Schema, initialData, formData}) {
