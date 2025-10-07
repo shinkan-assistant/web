@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuthUser } from "../sessions/authUser";
-import UserService from "@/db/user";
+import UserService from "@/services/user";
 
 const MyUserContext = createContext(null);
 

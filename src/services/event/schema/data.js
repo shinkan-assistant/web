@@ -1,7 +1,7 @@
 import { v4 as uuidV4 } from 'uuid';
 import z from "@/lib/zod"
 import { DateTimeSchema } from '@/helpers/db/schema/data';
-import { BelongSchema } from '@/db/user/schema/data';
+import { BelongSchema } from '@/services/user/schema/data';
 import EventTypeEnum from '../../../backend/data/enums/event/type';
 import FeeTypeEnum from '../../../backend/data/enums/event/feeType';
 import ContactGroupPlatformEnum from '../../../backend/data/enums/event/contactGroupPlatform';

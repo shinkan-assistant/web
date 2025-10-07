@@ -11,7 +11,7 @@ import FormUtilButton from "@/helpers/components/layouts/templates/form/utilButt
 import { getInputNameFromSchedule, judgeIsParticipating } from "../contents/schedules/utils";
 import { ResetButton } from "@/helpers/components/layouts/templates/form/utilButtons/Reset";
 import { EventsPageFilterEnum } from "./List";
-import ParticipantService from "@/db/participant";
+import ParticipantService from "@/services/participant";
 
 function AllCancelButton({event}) {
   const { watch, getValues, reset } = useFormContext();

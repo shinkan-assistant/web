@@ -2,8 +2,8 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useMyUser } from "./myUser";
-import { onSnapshotRecords } from "@/helpers/db";
-import EventService from "@/db/event";
+import { onSnapshotRecords } from "@/helpers/db/repository";
+import EventService from "@/services/event";
 
 const EventsContext = createContext(null);
 

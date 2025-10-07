@@ -1,4 +1,4 @@
-import { createRecord, onSnapshotRecords, updateRecord } from "@/helpers/db";
+import { createRecord, onSnapshotRecords, updateRecord } from "@/helpers/db/repository";
 import { CreateParticipantSchema, UpdateParticipantSchedulesSchema } from "./schema/proc";
 import { where } from "firebase/firestore";
 

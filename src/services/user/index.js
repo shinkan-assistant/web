@@ -1,4 +1,4 @@
-import { getRecord, onSnapshotRecord, onSnapshotRecords } from "@/helpers/db";
+import { getRecord, onSnapshotRecord, onSnapshotRecords } from "@/helpers/db/repository";
 import { where } from "firebase/firestore";
 
 export default class UserService {

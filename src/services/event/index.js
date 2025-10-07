@@ -1,4 +1,4 @@
-import { onSnapshotRecords, updateRecord } from "@/helpers/db";
+import { onSnapshotRecords, updateRecord } from "@/helpers/db/repository";
 import { UpdateEventSchema } from "./schema/proc";
 
 export default class EventService {

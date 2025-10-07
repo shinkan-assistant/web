@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { useMyUser } from "./myUser";
-import ParticipantService from "@/db/participant";
+import ParticipantService from "@/services/participant";
 
 const MyParticipantsContext = createContext(null);
 
