@@ -1,6 +1,6 @@
 'use client';
 
-import HomeTemplate from "@/features/other/components/templates/Home"
+import HomeTemplate from "@/components/other/templates/Home"
 
 export default function Home() {
   return (

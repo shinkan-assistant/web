@@ -1,13 +1,13 @@
 'use client';
 
-import EventDetailTemplate from "@/features/event/components/templates/Detail";
+import EventDetailTemplate from "@/components/event/templates/Detail";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { toast } from "react-toastify";
-import { EventsPageFilterEnum } from "@/features/event/components/templates/List";
+import { EventsPageFilterEnum } from "@/components/event/templates/List";
 
 export default function EventDetail() {
   const router = useRouter();

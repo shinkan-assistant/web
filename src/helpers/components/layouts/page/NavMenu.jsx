@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useMyUser } from '@/stores/contexts/myUser';
-import { EventsPageFilterEnum } from '@/features/event/components/templates/List';
+import { EventsPageFilterEnum } from '@/components/event/templates/List';
 
 function NavLink({ href, children }) {
   const pathname = usePathname();

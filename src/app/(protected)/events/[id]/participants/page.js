@@ -1,14 +1,14 @@
 'use client';
 
 import { useEvents } from "@/stores/contexts/events";
-import ParticipantListTemplate from "@/features/participant/components/templates/List";
+import ParticipantListTemplate from "@/components/participant/templates/List";
 import { useParticipants } from "@/stores/contexts/participants";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useUsers } from "@/stores/contexts/users";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { EventsPageFilterEnum } from "@/features/event/components/templates/List";
+import { EventsPageFilterEnum } from "@/components/event/templates/List";
 
 export default function ParticipantListPage() {
   const router = useRouter();
