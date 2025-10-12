@@ -2,10 +2,10 @@ import { v4 as uuidV4 } from 'uuid';
 import z from "@/lib/zod"
 import { DateTimeSchema } from '@/helpers/db/schema/data';
 import { BelongSchema } from '@/services/user/schema/data';
-import EventTypeEnum from '../../../backend/data/enums/event/type';
-import FeeTypeEnum from '../../../backend/data/enums/event/feeType';
-import ContactGroupPlatformEnum from '../../../backend/data/enums/event/contactGroupPlatform';
-import OnlineMeetingPlatformEnum from '../../../backend/data/enums/event/onlineMeetingPlatform';
+import EventTypeEnum from '../../../data/enums/event/type';
+import FeeTypeEnum from '../../../data/enums/event/feeType';
+import ContactGroupPlatformEnum from '../../../data/enums/event/contactGroupPlatform';
+import OnlineMeetingPlatformEnum from '../../../data/enums/event/onlineMeetingPlatform';
 
 const LocationSchema = z.object({
   name: z.string().min(1),

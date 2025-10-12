@@ -1,5 +1,5 @@
 import TextInfoArea, {TextInfo} from "@/helpers/components/ui/textInfoArea";
-import FeeTypeEnum from "../../../../backend/data/enums/event/feeType";
+import FeeTypeEnum from "../../../../data/enums/event/feeType";
 import uiSizeEnum from "@/helpers/components/ui/base/config/sizeEnum";
 import FeeIcon from "@/helpers/components/ui/icons/fee";
 

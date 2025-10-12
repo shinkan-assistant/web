@@ -1,6 +1,6 @@
 import z from "@/lib/zod";
-import GenderEnum from "../../../backend/data/enums/user/gender";
-import AcademicLevelEnum from "../../../backend/data/enums/user/academicLevel";
+import GenderEnum from "../../../data/enums/user/gender";
+import AcademicLevelEnum from "../../../data/enums/user/academicLevel";
 
 export const BelongSchema = z.object({
   "is_member": z.boolean().default(false),

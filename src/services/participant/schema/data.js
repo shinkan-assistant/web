@@ -1,5 +1,5 @@
 import z from "@/lib/zod";
-import PaymentMethodEnum from "../../../backend/data/enums/participant/paymentMethod";
+import PaymentMethodEnum from "../../../data/enums/participant/paymentMethod";
 import { DateTimeSchema } from "@/helpers/db/schema/data";
 
 const CancelSchema = z.object({
