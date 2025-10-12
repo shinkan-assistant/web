@@ -2,8 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useMyUser } from "./myUser";
-import { onSnapshotRecords } from "@/helpers/db/repository";
-import EventService from "@/services/event";
+import eventService from "@/services/event";
 
 const EventsContext = createContext(null);
 
@@ -20,7 +19,7 @@ function EventsProvider({ children }) {
     }
     
     // TODO myParticipantsに対応して、それぞれのeventの取得できる情報を変える
-    return EventService.onSnapshotAll({setEvents});
+    return eventService.onSnapshotAll({setEvents});
   }, [myUser]);
 
   return (

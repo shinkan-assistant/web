@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { useMyUser } from "./myUser";
-import ParticipantService from "@/services/participant";
+import participantService from "@/services/participant";
 
 const MyParticipantsContext = createContext(null);
 
@@ -17,7 +17,7 @@ function MyParticipantsProvider({ children }) {
       return;
     }
     
-    return ParticipantService.onSnapshotMe({
+    return participantService.onSnapshotMe({
       myUser,
       setMyParticipants
     });

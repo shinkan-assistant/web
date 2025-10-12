@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useParticipants } from "@/stores/contexts/participants";
 import { useMyUser } from "./myUser";
-import UserService from "@/services/user";
+import userService from "@/services/user";
 
 const UsersContext = createContext(null);
 
@@ -19,7 +19,7 @@ function UsersProvider({ children }) {
       return;
     }
     
-    return UserService.onSnapshotAllVisible({myUser, participants, setUsers});
+    return userService.onSnapshotAllVisible({myUser, participants, setUsers});
   }, [myUser, participants]);
 
   return (

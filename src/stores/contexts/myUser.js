@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuthUser } from "../sessions/authUser";
-import UserService from "@/services/user";
+import userService from "@/services/user";
 
 const MyUserContext = createContext(null);
 
@@ -19,7 +19,7 @@ function MyUserProvider({ children }) {
     
     let unsubscribe = () => {};
     (async() => {
-      unsubscribe = await UserService.onSnapshotMe({
+      unsubscribe = await userService.onSnapshotMe({
         email: authUser.email,
         setMyUser
       });

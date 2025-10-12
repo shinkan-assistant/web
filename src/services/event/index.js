@@ -1,20 +1,27 @@
-import { onSnapshotRecords, updateRecord } from "@/helpers/db/repository";
+import Service from "@/helpers/db/service";
 import { UpdateEventSchema } from "./schema/proc";
 
-export default class EventService {
-  static onSnapshotAll({setEvents}) {
-    return onSnapshotRecords("events", {
+class EventService extends Service {
+  constructor() {
+    super({tableName: "events"});
+  }
+
+  onSnapshotAll({setEvents}) {
+    return this.repo.onSnapshotRecords({
       constraints: [],
       setContext: setEvents
     });
   }
 
-  static async updateDetail({event, formData}) {
+  async updateDetail({event, formData}) {
     // TODO 権限確認
-    await updateRecord("participants", {
+    await this.repo.updateRecord({
       Schema: UpdateEventSchema,
       initialData: event,
       formData: formData,
     });
   }
 }
+
+const eventService = new EventService();
+export default eventService;

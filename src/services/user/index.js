@@ -1,29 +1,32 @@
-import { getRecord, onSnapshotRecord, onSnapshotRecords } from "@/helpers/db/repository";
+import Service from "@/helpers/db/service";
 import { where } from "firebase/firestore";
 
-export default class UserService {
-  static async exists({email}) {
+class UserService extends Service {
+  constructor() {
+    super({tableName: "users"});
+  }
+
+  async exists({email}) {
     // TODO 権限確認
-    const user = await getRecord(
-      "users", { 
-        uniqueData: {email} }
-      );
+    const user = await this.repo.getRecord({ 
+      uniqueData: {email}
+    });
     return Boolean(user);
   }
 
-  static async onSnapshotMe({email, setMyUser}) {
-    const initialMyUser = await getRecord("users", {
+  async onSnapshotMe({email, setMyUser}) {
+    const initialMyUser = await this.repo.getRecord({
       uniqueData: {"email": email}
     });
     if (!initialMyUser) return;
 
-    return onSnapshotRecord("users", {
+    return this.repo.onSnapshotRecord({
       id: initialMyUser.id,
       setContext: setMyUser
     });
   }
 
-  static onSnapshotAllVisible({myUser, participants, setUsers}) {
+  onSnapshotAllVisible({myUser, participants, setUsers}) {
     const constraints = [];
     if (!myUser["is_admin"]) {
       const emails = Set(participants.map(p => p["user_email"]))
@@ -32,9 +35,12 @@ export default class UserService {
       ]);
     }
 
-    return onSnapshotRecords("users", {
+    return this.repo.onSnapshotRecords({
       constraints: [],
       setContext: setUsers
     });
   }
 }
+
+const userService = new UserService();
+export default userService;

@@ -1,16 +1,20 @@
-import { createRecord, onSnapshotRecords, updateRecord } from "@/helpers/db/repository";
+import Service from "@/helpers/db/service";
 import { CreateParticipantSchema, UpdateParticipantSchedulesSchema } from "./schema/proc";
 import { where } from "firebase/firestore";
 
-export default class ParticipantService {
-  static onSnapshotMe({myUser, setMyParticipants}) {
-    return onSnapshotRecords("participants", {
+class ParticipantService extends Service {
+  constructor() {
+    super({tableName: "participants"});
+  }
+
+  onSnapshotMe({myUser, setMyParticipants}) {
+    return this.repo.onSnapshotRecords({
       constraints: [where("user_email", "==", myUser.email)],
       setContext: setMyParticipants
     });
   }
 
-  static onSnapshotAllVisible({myUser, myParticipants, setParticipants}) {
+  onSnapshotAllVisible({myUser, myParticipants, setParticipants}) {
     const constraints = [];
     if (!myUser["is_admin"]) {
       const myOrganizers = myParticipants.filter(mp => mp["is_organizer"]);
@@ -20,15 +24,15 @@ export default class ParticipantService {
       ]);
     }
 
-    return onSnapshotRecords("participants", {
+    return this.repo.onSnapshotRecords({
       constraints,
       setContext: setParticipants,
     });
   }
 
-  static async applyEvent({userEmail, eventId, scheduleIds}) {
+  async applyEvent({userEmail, eventId, scheduleIds}) {
     // TODO 権限管理
-    await createRecord("participants", {
+    await this.repo.createRecord({
       Schema: CreateParticipantSchema,
       uniqueData: {
         "user_email": userEmail,
@@ -41,12 +45,15 @@ export default class ParticipantService {
     });
   }
 
-  static async updateSchedules({myParticipant, formData}) {
+  async updateSchedules({myParticipant, formData}) {
     // TODO 権限管理
-    await updateRecord("participants", {
+    await this.repo.updateRecord({
       Schema: UpdateParticipantSchedulesSchema,
       initialData: myParticipant,
       formData: formData,
     });
   }
 }
+
+const participantService = new ParticipantService();
+export default participantService;

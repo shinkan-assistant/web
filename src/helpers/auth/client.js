@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import { firebaseApp } from "../../lib/firebase/clientApp";
 import { toast } from "react-toastify";
-import UserService from "@/services/user";
+import userService from "@/services/user";
 
 // TODO try-catch 作りたい（アカウント消された時は、ここで、Bad Request と出る）
 const auth = getAuth(firebaseApp);
@@ -44,7 +44,7 @@ export async function signInWithGoogle() {
   }
 
   // 次はユーザーデータがあるかを確認する
-  if (!await UserService.exists({email: signInResult.user.email})) {
+  if (!await userService.exists({email: signInResult.user.email})) {
     toast.warn("既存のユーザーでサインインしてください");
     await signOut();
   }

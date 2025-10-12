@@ -1,87 +1,92 @@
 import { collection, deleteDoc, doc, getDocs, setDoc, query, updateDoc, where, onSnapshot } 
   from "firebase/firestore";
-
 import { db } from "@/lib/firebase/clientApp";
 
-export function toRecord(docSnapshot) {
-  return {
-    id: docSnapshot.id,
-    ...docSnapshot.data()
-  }; 
-}
-
-export async function createRecord(tableName, {Schema, uniqueData, otherData}) {
-  const record = await getRecord(tableName, {uniqueData});
-  if (!!record) {
-    throw new Error("重複しています。");
+export default class Repository {
+  constructor({tableName}) {
+    this.db = db;
+    this.tableName = tableName;
   }
 
-  const {id, ...data} = Schema.parse({...uniqueData, ...otherData});
-  const docRef = doc(db, tableName, id);
-  await setDoc(docRef, data);
-}
+  static toRecord(docSnapshot) {
+    return {
+      id: docSnapshot.id,
+      ...docSnapshot.data()
+    }; 
+  }
 
-export async function getRecords(tableName, {constraints}) {
-  const collectionRef = collection(db, tableName);
-  const querySnapshot = await getDocs(query(collectionRef, ...constraints));
-  return querySnapshot.docs.map((docSnapshot) => toRecord(docSnapshot));
-}
+  async getRecords({constraints}) {
+    const collectionRef = collection(this.db, this.tableName);
+    const querySnapshot = await getDocs(query(collectionRef, ...constraints));
+    return querySnapshot.docs.map((docSnapshot) => Repository.toRecord(docSnapshot));
+  }
 
-export async function getRecord(tableName, {uniqueData}) {
-  const constraints = Object.keys(uniqueData)
-    .map(name => where(name, "==", uniqueData[name]));
-  const records = await getRecords(tableName, {constraints});
-  return records[0] ?? null;
-}
-
-export function onSnapshotRecords(tableName, {constraints, setContext}) {
-  let ref = collection(db, tableName)
-  if (constraints) 
-    ref = query(ref, ...constraints);
-  
-  // onSnapshotのリスナーを起動
-  return onSnapshot(ref, (querySnapshot) => {
-    setContext(querySnapshot.docs.map(doc => toRecord(doc)));
-  }, (error) => {
-    // エラーハンドリング
-    console.error("onSnapshot error:", error);
-  });
-}
-
-export function onSnapshotRecord(tableName, {id, setContext}) {
-  const docRef = doc(db, tableName, id);
-  // onSnapshotのリスナーを起動
-  return onSnapshot(docRef, (doc) => {
-    if (doc.exists()) {
-      setContext(doc.data());
+  async createRecord({Schema, uniqueData, otherData}) {
+    const record = await this.getRecord({uniqueData});
+    if (!!record) {
+      throw new Error("重複しています。");
     }
-  }, (error) => {
-    // エラーハンドリング
-    console.error("onSnapshot error:", error);
-  });
-}
-
-export async function updateRecord(tableName, {Schema, initialData, formData}) {
-  const id = initialData["id"];
-
-  if (!id) {
-    throw new Error('Item ID is required for update operation.');
+  
+    const {id, ...data} = Schema.parse({...uniqueData, ...otherData});
+    const docRef = doc(this.db, this.tableName, id);
+    await setDoc(docRef, data);
   }
 
-  const data = Schema.parse({ 
-    initialData: {...initialData}, 
-    formData
-  });
-
-  const docRef = doc(db, tableName, id);
-  await updateDoc(docRef, data);
-}
-
-export async function deleteRecord(tableName, {id}) {
-  if (!id) {
-    throw new Error('Item ID is required for delete operation.');
+  async getRecord({uniqueData}) {
+    const constraints = Object.keys(uniqueData)
+      .map(name => where(name, "==", uniqueData[name]));
+    const records = await this.getRecords({constraints});
+    return records[0] ?? null;
   }
 
-  const docRef = doc(db, tableName, id);
-  await deleteDoc(docRef);
+  onSnapshotRecords({constraints, setContext}) {
+    let ref = collection(this.db, this.tableName)
+    if (constraints) 
+      ref = query(ref, ...constraints);
+    
+    return onSnapshot(ref, (querySnapshot) => {
+      setContext(querySnapshot.docs.map(doc => Repository.toRecord(doc)));
+    }, (error) => {
+      // エラーハンドリング
+      console.error("onSnapshot error:", error);
+    });
+  }
+
+  onSnapshotRecord({id, setContext}) {
+    const docRef = doc(this.db, this.tableName, id);
+    // onSnapshotのリスナーを起動
+    return onSnapshot(docRef, (doc) => {
+      if (doc.exists()) {
+        setContext(doc.data());
+      }
+    }, (error) => {
+      // エラーハンドリング
+      console.error("onSnapshot error:", error);
+    });
+  }
+
+  async updateRecord({Schema, initialData, formData}) {
+    const id = initialData["id"];
+  
+    if (!id) {
+      throw new Error('Item ID is required for update operation.');
+    }
+  
+    const data = Schema.parse({ 
+      initialData: {...initialData}, 
+      formData
+    });
+  
+    const docRef = doc(this.db, this.tableName, id);
+    await updateDoc(docRef, data);
+  }
+  
+  async deleteRecord({id}) {
+    if (!id) {
+      throw new Error('Item ID is required for delete operation.');
+    }
+  
+    const docRef = doc(this.db, this.tableName, id);
+    await deleteDoc(docRef);
+  }
 }

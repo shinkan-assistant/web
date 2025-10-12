@@ -11,7 +11,7 @@ import FormUtilButton from "@/helpers/components/layouts/templates/form/utilButt
 import { getInputNameFromSchedule, judgeIsParticipating } from "../contents/schedules/utils";
 import { ResetButton } from "@/helpers/components/layouts/templates/form/utilButtons/Reset";
 import { EventsPageFilterEnum } from "./List";
-import ParticipantService from "@/services/participant";
+import participantService from "@/services/participant";
 
 function AllCancelButton({event}) {
   const { watch, getValues, reset } = useFormContext();
@@ -86,7 +86,7 @@ export default function EventConfirmTemplate({ event, myUser, myParticipant }) {
       onSubmit={async function (formData) {
         const isAllCancel = formData["schedule_ids"].length === 0;
   
-        await ParticipantService.updateSchedules({myParticipant, formData});
+        await participantService.updateSchedules({myParticipant, formData});
         
         toast.info(isAllCancel ? `${event["title"]}のキャンセルが完了しました` : `${event["title"]}のスケジュールの変更が完了しました`);
         router.push(`/events/${event["id"]}`);
