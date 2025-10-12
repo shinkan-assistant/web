@@ -13,12 +13,11 @@ class EventService extends Service {
     });
   }
 
-  async updateDetail({event, formData}) {
-    // TODO 権限確認
+  async updateDetail(initialData, roughLocationName) {
     await this.repo.updateRecord({
       Schema: UpdateEventSchema,
-      initialData: event,
-      formData: formData,
+      initialData,
+      formData: {roughLocationName},
     });
   }
 }

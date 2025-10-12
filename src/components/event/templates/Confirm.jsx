@@ -79,14 +79,17 @@ export default function EventConfirmTemplate({ event, myUser, myParticipant }) {
         console.log(initialFormData, formData);
         if (initialFormData["schedule_ids"].length !== formData["schedule_ids"].length) return true;
         for (let scheduleId of formData["schedule_ids"]) {
-          if (!initialFormData['schedule_ids'].includes(scheduleId)) return true;
+          if (!initialFormData["schedule_ids"].includes(scheduleId)) return true;
         }
         return false;
       }}
       onSubmit={async function (formData) {
         const isAllCancel = formData["schedule_ids"].length === 0;
   
-        await participantService.updateSchedules({myParticipant, formData});
+        await participantService.updateSchedules({
+          myParticipant, 
+          scheduleIds: formData["schedule_ids"],
+        });
         
         toast.info(isAllCancel ? `${event["title"]}のキャンセルが完了しました` : `${event["title"]}のスケジュールの変更が完了しました`);
         router.push(`/events/${event["id"]}`);

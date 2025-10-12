@@ -31,7 +31,6 @@ class ParticipantService extends Service {
   }
 
   async applyEvent({userEmail, eventId, scheduleIds}) {
-    // TODO 権限管理
     await this.repo.createRecord({
       Schema: CreateParticipantSchema,
       uniqueData: {
@@ -45,12 +44,11 @@ class ParticipantService extends Service {
     });
   }
 
-  async updateSchedules({myParticipant, formData}) {
-    // TODO 権限管理
+  async updateSchedules({myParticipant, scheduleIds}) {
     await this.repo.updateRecord({
       Schema: UpdateParticipantSchedulesSchema,
       initialData: myParticipant,
-      formData: formData,
+      formData: {"schedule_ids": scheduleIds},
     });
   }
 }

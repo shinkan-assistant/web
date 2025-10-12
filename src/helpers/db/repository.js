@@ -21,20 +21,20 @@ export default class Repository {
     return querySnapshot.docs.map((docSnapshot) => Repository.toRecord(docSnapshot));
   }
 
-  async createRecord({Schema, uniqueData, otherData}) {
+  async createRecord({Schema, uniqueData, formData}) {
     const record = await this.getRecord({uniqueData});
     if (!!record) {
       throw new Error("重複しています。");
     }
   
-    const {id, ...data} = Schema.parse({...uniqueData, ...otherData});
+    const {id, ...data} = Schema.parse({uniqueData, formData});
     const docRef = doc(this.db, this.tableName, id);
     await setDoc(docRef, data);
   }
 
   async getRecord({uniqueData}) {
     const constraints = Object.keys(uniqueData)
-      .map(name => where(name, "==", uniqueData[name]));
+      .map(key => where(key, "==", uniqueData[key]));
     const records = await this.getRecords({constraints});
     return records[0] ?? null;
   }
@@ -66,6 +66,7 @@ export default class Repository {
   }
 
   async updateRecord({Schema, initialData, formData}) {
+    console.log(initialData, formData)
     const id = initialData["id"];
   
     if (!id) {
