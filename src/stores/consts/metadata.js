@@ -6,8 +6,8 @@ const MetadataContext = createContext(null);
 
 function MetadataProvider({ children }) {
   const metadata = {
-    title: "Gatherlynx",
-    description: "Web Application for New Welcome",
+    title: "新歓アシスタント",
+    description: "「無給」の新歓運営から解放されよう！",
   }
 
   return (
