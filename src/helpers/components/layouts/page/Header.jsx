@@ -75,7 +75,7 @@ function AuthorizedHeader() {
             className="block rounded-full"
           />
           <span className="text-sm font-medium text-slate-700 hidden pr-2 sm:block">
-            {`${myUser["first_name"]} ${myUser["last_name"]}`}
+            {`${myUser["family_name"]} ${myUser["given_name"]}`}
           </span>
         </button>
 

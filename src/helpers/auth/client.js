@@ -38,12 +38,14 @@ export async function signInWithGoogle() {
     }
   }
 
+  console.log(signInResult?.user)
   // Google認証に通ってない場合は
   if (!signInResult?.user) {
     toast.warn("Googleの認証に失敗しました");
   }
 
   // 次はユーザーデータがあるかを確認する
+  console.log(await userService.exists({email: signInResult.user.email}))
   if (!await userService.exists({email: signInResult.user.email})) {
     toast.warn("既存のユーザーでサインインしてください");
     await signOut();

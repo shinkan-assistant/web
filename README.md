@@ -9,7 +9,7 @@
 ## ローカル環境での実行方法
 
 1. 本リポジトリをクローンする
-2. `.envs/production`(本番用のFirebaseなどの環境設定) と `.envs/staging`(ステージング用のFirebaseなどの環境設定) ファイルを取得（本リポジトリの管理者に連絡）
+2. `.secrets`フォルダを取得（本リポジトリの管理者に連絡）
 3. `npm install` を実行
 4. `npm run dev` を実行
 

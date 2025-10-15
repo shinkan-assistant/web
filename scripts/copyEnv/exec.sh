@@ -3,7 +3,7 @@
 # 対応表ファイルのパス
 MAP_FILE="./branch-env-map.txt"
 # 環境変数ファイルが置かれているディレクトリのパス
-ENVS_DIR="./.secrets/.env"
+ENVS_DIR="./.secrets/env"
 # コピー先の環境変数ファイル名
 DEST_ENV_FILE=".env"
 

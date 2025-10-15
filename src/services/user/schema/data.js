@@ -8,8 +8,8 @@ export const BelongSchema = z.object({
 
 const UserSchema = z.object({
   "email": z.string().email(),
-  "first_name": z.string().min(1),
-  "last_name": z.string().min(1),
+  "family_name": z.string().min(1),
+  "given_name": z.string().min(1),
   "gender": z.enum(Object.values(GenderEnum)),
   "university": z.string().min(1),
   "academic_level": z.enum(Object.values(AcademicLevelEnum)),
