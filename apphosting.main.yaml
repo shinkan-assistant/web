@@ -19,4 +19,4 @@ env:
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
     secret: projects/gatherlynx-57286/secrets/FIREBASE_APP_ID/versions/latest
   - variable: NODE_ENV
-    value: production
+    value: main

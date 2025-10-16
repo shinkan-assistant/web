@@ -5,12 +5,12 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint . --fix",
-    "serve:production": "npm run build && firebase emulators:start --only functions --project gatherlynx-57286",
-    "serve:staging": "npm run build && firebase emulators:start --only functions --project gatherlynxstaging",
+    "serve:main": "npm run build && firebase emulators:start --only functions --project gatherlynx-57286",
+    "serve:dev": "npm run build && firebase emulators:start --only functions --project gatherlynxstaging",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy:production": "firebase deploy --only functions --project gatherlynx-57286",
-    "deploy:staging": "firebase deploy --only functions --project gatherlynxstaging",
+    "deploy:main": "firebase deploy --only functions --project gatherlynx-57286",
+    "deploy:dev": "firebase deploy --only functions --project gatherlynxstaging",
     "logs": "firebase functions:log"
   },
   "engines": {
