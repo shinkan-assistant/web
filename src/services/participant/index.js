@@ -30,7 +30,7 @@ class ParticipantService extends Service {
     });
   }
 
-  async applyEvent({userEmail, eventId, scheduleIds}) {
+  async apply({userEmail, eventId, scheduleIds}) {
     await this.repo.createRecord({
       Schema: CreateParticipantSchema,
       uniqueData: {

@@ -21,13 +21,14 @@ export default class Repository {
     return querySnapshot.docs.map((docSnapshot) => Repository.toRecord(docSnapshot));
   }
 
-  async createRecord({Schema, uniqueData, formData}) {
+  async createRecord({Schema, uniqueData, otherData}) {
+    console.log(uniqueData, otherData);
     const record = await this.getRecord({uniqueData});
-    if (!!record) {
+    if (record) {
       throw new Error("重複しています。");
     }
   
-    const {id, ...data} = Schema.parse({uniqueData, formData});
+    const {id, ...data} = Schema.parse({...uniqueData, ...otherData});
     const docRef = doc(this.db, this.tableName, id);
     await setDoc(docRef, data);
   }
