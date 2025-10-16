@@ -7,14 +7,14 @@ scripts:
   runCommand: next start
 env:
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    secret: projects/615781396074/secrets/FIREBASE_API_KEY/versions/latest
+    secret: projects/582391838563/secrets/FIREBASE_API_KEY/versions/latest
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-    secret: projects/615781396074/secrets/FIREBASE_AUTH_DOMAIN/versions/latest
+    secret: projects/582391838563/secrets/FIREBASE_AUTH_DOMAIN/versions/latest
   - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
-    secret: projects/615781396074/secrets/FIREBASE_PROJECT_ID/versions/latest
+    secret: projects/582391838563/secrets/FIREBASE_PROJECT_ID/versions/latest
   - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-    secret: projects/615781396074/secrets/FIREBASE_STORAGE_BUCKET/versions/latest
+    secret: projects/582391838563/secrets/FIREBASE_STORAGE_BUCKET/versions/latest
   - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-    secret: projects/615781396074/secrets/FIREBASE_MESSAGING_SENDER_ID/versions/latest
+    secret: projects/582391838563/secrets/FIREBASE_MESSAGING_SENDER_ID/versions/latest
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
-    secret: projects/615781396074/secrets/FIREBASE_APP_ID/versions/latest
+    secret: projects/582391838563/secrets/FIREBASE_APP_ID/versions/latest
