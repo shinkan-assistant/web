@@ -7,7 +7,7 @@ import { MyUserProvider } from "@/stores/contexts/myUser";
 import { Suspense } from "react";
 
 export default async function RootLayout({ children }) {
-  const authUser = getAuthUser();
+  const authUser = await getAuthUser();
 
   return (
     <html lang="ja">

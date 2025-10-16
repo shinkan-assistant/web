@@ -1,6 +1,6 @@
 'use client';
 
-import UsersTemplate from "@/components/member/templates/List";
+import UsersTemplate from "@/components/user/templates/List";
 
 export default function Users() {
   return(

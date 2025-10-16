@@ -8,6 +8,7 @@ import {
 import { firebaseApp } from "../../lib/firebase/clientApp";
 import { toast } from "react-toastify";
 import userService from "@/services/user";
+import { redirect } from "next/navigation";
 
 // TODO try-catch 作りたい（アカウント消された時は、ここで、Bad Request と出る）
 const auth = getAuth(firebaseApp);
@@ -20,7 +21,7 @@ export function onIdTokenChanged(cb) {
   return _onIdTokenChanged(auth, cb);
 }
 
-export async function signInWithGoogle() {
+async function signInToGoogle() {
   // Googleによる認証
   let signInResult = null;
   try {
@@ -28,12 +29,12 @@ export async function signInWithGoogle() {
     signInResult = await signInWithPopup(auth, provider);
   } catch (error) {
     // ユーザーがポップアップを閉じた、またはキャンセルされた場合はエラーを無視する
-    console.error("Googleの認証に失敗しました。", error)
     switch (error.code) {
       case "auth/popup-closed-by-user":
       case "auth/cancelled-popup-request":
         break;
       default:
+        console.error("Googleの認証に失敗しました", error);
         toast.warn("Googleの認証に失敗しました");
     }
   }
@@ -43,10 +44,31 @@ export async function signInWithGoogle() {
     toast.warn("Googleの認証に失敗しました");
   }
 
+  return signInResult;
+}
+
+export async function signInWithGoogle() {
+  // Googleによる認証
+  const signInResult = await signInToGoogle();
+  if (!signInResult?.user) return;
+  
   // 次はユーザーデータがあるかを確認する
   if (!await userService.exists({email: signInResult.user.email})) {
     toast.warn("既存のユーザーでサインインしてください");
     await signOut();
+  }
+}
+
+export async function signInWithGoogleForRegister() {
+  // Googleによる認証
+  const signInResult = await signInToGoogle();
+  if (!signInResult?.user) return;
+
+  // 次はユーザーデータがあるかを確認する
+  if (await userService.exists({email: signInResult.user.email})) {
+    toast.warn("すでに存在するユーザーです");
+    await signOut();
+    redirect("/user/register");
   }
 }
 

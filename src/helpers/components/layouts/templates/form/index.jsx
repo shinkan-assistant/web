@@ -34,7 +34,7 @@ function FormTemplateLayoutInner({
   // *これやらないと、postDataの更新とともに値が変化してしまう
   const { watch, getValues, setError } = useFormContext();
   
-  const [initialFormData] = useState(genFormData(getValues));
+  const [initialFormData] = useState(genFormData(getValues()));
   const [formData, setFormData] = useState(initialFormData);
   const [canSubmit, setCanSubmit] = useState(false);
 

@@ -22,7 +22,6 @@ export default class Repository {
   }
 
   async createRecord({Schema, uniqueData, otherData}) {
-    console.log(uniqueData, otherData);
     const record = await this.getRecord({uniqueData});
     if (record) {
       throw new Error("重複しています。");
@@ -67,7 +66,6 @@ export default class Repository {
   }
 
   async updateRecord({Schema, initialData, formData}) {
-    console.log(initialData, formData)
     const id = initialData["id"];
   
     if (!id) {

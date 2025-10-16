@@ -1,5 +1,6 @@
 import Service from "@/helpers/db/service";
 import { where } from "firebase/firestore";
+import { CreateUserSchema } from "./schema/proc";
 
 class UserService extends Service {
   constructor() {
@@ -7,7 +8,6 @@ class UserService extends Service {
   }
 
   async exists({email}) {
-    // TODO 権限確認
     const user = await this.repo.getRecord({ 
       uniqueData: {email}
     });
@@ -38,6 +38,30 @@ class UserService extends Service {
     return this.repo.onSnapshotRecords({
       constraints: [],
       setContext: setUsers
+    });
+  }
+
+  async create({
+    email, family_name, given_name, university, gender, 
+    academic_level, grade, keyword_for_member, 
+  }) {
+    // TODO サーバー側に移す
+    const belong = {
+      "is_member": keyword_for_member === "everyday-fun"
+    };
+    
+    await this.repo.createRecord({ 
+      Schema: CreateUserSchema,
+      uniqueData: {email},
+      otherData: {
+        family_name,
+        given_name,
+        university,
+        gender,
+        academic_level,
+        grade,
+        belong,
+      }
     });
   }
 }

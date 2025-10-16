@@ -47,10 +47,6 @@ function AuthorizedHeader() {
     };
   }, []);
 
-  const handleSignOut = () => {
-    signOut();
-  };
-
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -87,7 +83,7 @@ function AuthorizedHeader() {
         >
           <div className="p-1">
             <button
-              onClick={handleSignOut}
+              onClick={signOut}
               className="flex items-center w-full text-left p-2 text-sm rounded-md text-red-600 hover:bg-red-50 hover:text-red-700"
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -102,25 +98,25 @@ function AuthorizedHeader() {
 
 // --- UnAuthorizedHeader: 変更なし ---
 function UnAuthorizedHeader() {
-  const handleSignIn = async () => {
-    await signInWithGoogle();
-  };
+  const authUser = useAuthUser();
 
   return (
     <HeaderContainer>
-      <button
-        onClick={handleSignIn}
-        className="flex items-center justify-center rounded-lg font-semibold px-4 py-2 bg-sky-600 text-white hover:bg-sky-700 transition-colors duration-300"
-      >
-        <Image
-          src="/icons/google.svg"
-          alt="Google logo"
-          width={20}
-          height={20}
-          className="block"
-        />
-        <span className="ml-2 text-sm">ログイン</span>
-      </button>
+      {!authUser && 
+        <button
+          onClick={signInWithGoogle}
+          className="flex items-center justify-center rounded-lg font-semibold px-4 py-2 bg-sky-600 text-white hover:bg-sky-700 transition-colors duration-300"
+        >
+          <Image
+            src="/icons/google.svg"
+            alt="Google logo"
+            width={20}
+            height={20}
+            className="block"
+          />
+          <span className="ml-2 text-sm">ログイン</span>
+        </button>
+      }
     </HeaderContainer>
   );
 }

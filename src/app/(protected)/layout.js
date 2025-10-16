@@ -18,10 +18,12 @@ export default function ProtectedLayout({ children }) {
   const authUser = useAuthUser();
 
   useEffect(() => {
-    if ((!authUser || !myUser) && window.location.pathname !== '/') {
-      router.push('/');
+    if (!authUser || !myUser) {
+      if (window.location.pathname !== '/') {
+        router.push('/');
+      }
     }
-  }, [authUser, router]); 
+  }, [authUser, myUser, router]); 
 
   return (
     <EventsProvider>
