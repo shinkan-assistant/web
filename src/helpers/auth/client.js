@@ -91,7 +91,7 @@ export async function deleteUser() {
     return;
   }
 
-  const confirmToDelete = window.confirm("本当にアカウントを削除しますか？この操作は元に戻せません。");
+  const confirmToDelete = window.confirm("本当に退会しますか？この操作は元に戻せません。");
   if (!confirmToDelete) {
     return;
   }
@@ -106,7 +106,7 @@ export async function deleteUser() {
     // Authenticationのユーザーを削除
     await _deleteUser(user);
     
-    toast.info("アカウントが正常に削除されました。");
+    toast.info("正常に退会しました。");
     // 削除後のリダイレクトやUI更新などの処理を追加
     window.location.href = "/"; // トップページなどにリダイレクト
   } catch (error) {
@@ -114,9 +114,9 @@ export async function deleteUser() {
     // エラーハンドリング
     if (error.code === 'auth/requires-recent-login') {
       // 最近のログインが必要な場合、再認証を促すメッセージを表示
-      alert("セキュリティ上の理由により、アカウントを削除するには再認証が必要です。再認証を完了してから再度お試しください。");
+      alert("セキュリティ上の理由により、退会するには再認証が必要です。再認証を完了してから再度お試しください。");
     } else {
-      alert("アカウントの削除中にエラーが発生しました。\n" + error.message);
+      alert("退会中にエラーが発生しました。\n" + error.message);
     }
   }
 }

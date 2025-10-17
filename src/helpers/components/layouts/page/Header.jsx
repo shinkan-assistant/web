@@ -108,7 +108,7 @@ function AuthorizedHeader() {
       onClick: handleSignOut,
     },
     {
-      label: "ユーザー削除",
+      label: "退会",
       Icon: (
         <svg 
           className="w-4 h-4 mr-2" 
