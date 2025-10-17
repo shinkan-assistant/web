@@ -121,8 +121,8 @@ async function initializeData() {
 
   await Promise.all([
     () => insertDocs(db, 'users', getSeedUsers(envName)),
-    envName === "dev" ? () => insertDocs(db, 'events', mockEvents) : () => {},
-    envName === "dev" ? () => insertDocs(db, 'participants', mockParticipants) : () => {},
+    () => insertDocs(db, 'events', mockEvents),
+    () => insertDocs(db, 'participants', envName === 'dev' ? mockParticipants : []),
   ].map(fn => fn()));
 }
 
