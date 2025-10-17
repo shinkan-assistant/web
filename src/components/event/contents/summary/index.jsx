@@ -4,6 +4,7 @@ import ContactGroup from "../schedules/ContactGroup";
 import OnlineMeetingInfo from "../schedules/OnlineMeetingInfo";
 import { EventsPageFilterEnum } from "../../templates/List";
 import StatusBadgeArea from "@/helpers/components/ui/statusBadgeArea";
+import judgeMyParticipantStatus from "../../utils/myParticipantStatus";
 
 export default function Summary({
   event, 
@@ -20,9 +21,7 @@ export default function Summary({
       {fieldName: "attendance", title: "出席済み"},
       {fieldName: "payment", title: "支払い済み"},
     ].filter(
-      status => {
-        return myParticipant?.schedules.every(s => s.hasOwnProperty(status.fieldName))
-      }
+      status => judgeMyParticipantStatus(myParticipant, status.fieldName)
     );
   }
 
