@@ -1,19 +1,16 @@
 import { MetadataProvider } from "@/stores/consts/metadata";
 import "./globals.css";
 import { AuthUserProvider } from "@/stores/sessions/authUser";
-import { getAuthUser } from "@/helpers/auth/server";
 import { ToastContainer } from "react-toastify";
 import { MyUserProvider } from "@/stores/contexts/myUser";
 import { Suspense } from "react";
 
 export default async function RootLayout({ children }) {
-  const authUser = getAuthUser();
-
   return (
     <html lang="ja">
       <body>
         <MetadataProvider>
-          <AuthUserProvider initialAuthUser={authUser}>
+          <AuthUserProvider>
             <MyUserProvider>
               <ToastContainer />
                 <Suspense fallback={<div>読み込み中です</div>}>

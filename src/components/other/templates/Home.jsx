@@ -2,12 +2,11 @@
 
 import { signInWithGoogle } from "@/helpers/auth/client";
 import { useMetadata } from "@/stores/consts/metadata";
+import { useRouter } from "next/navigation";
 
 export default function HomeTemplate() {
+  const router = useRouter();
   const metadata = useMetadata();
-  const handleSignIn = async () => {
-    await signInWithGoogle();
-  };
 
   return (
     // ページ全体のコンテナを白背景に設定
@@ -106,17 +105,18 @@ export default function HomeTemplate() {
 
         {/* 下部コンテンツ：アクションボタン */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-          <button className="w-64 py-3 rounded-full bg-sky-600 text-white text-lg font-semibold shadow-lg hover:bg-sky-700 transition duration-300 transform hover:scale-105">
+          <button 
+            onClick={() => router.push('/user/register')}
+            className="w-64 py-3 rounded-full bg-sky-600 text-white text-lg font-semibold shadow-lg hover:bg-sky-700 transition duration-300 transform hover:scale-105">
             新規登録して始める
           </button>
           <button 
-            onClick={handleSignIn}
+            onClick={signInWithGoogle}
             className="w-64 py-3 rounded-full text-sky-600 text-lg font-semibold border-2 border-sky-600 hover:bg-sky-50 transition duration-300 transform hover:scale-105"
           >
             ログイン
           </button>
         </div>
-        
       </div>
     </div>
   );

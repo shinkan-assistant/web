@@ -6,7 +6,17 @@ class EventService extends Service {
     super({tableName: "events"});
   }
 
-  onSnapshotAll({setEvents}) {
+  async getById({id}) {
+    return await this.repo.getRecordById({id})
+  }
+
+  async onSnapshotAll({myUser, setEvents}) {
+    // 認証ユーザーが存在しない場合は何もしない
+    if (!myUser) {
+      setEvents(null);
+      return;
+    }
+
     return this.repo.onSnapshotRecords({
       constraints: [],
       setContext: setEvents

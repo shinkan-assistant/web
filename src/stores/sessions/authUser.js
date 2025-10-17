@@ -1,42 +1,40 @@
 'use client';
 
 import { onIdTokenChanged } from '@/helpers/auth/client';
-import { createContext, useEffect, useContext, useState } from 'react';
+import { createContext, useEffect, useContext } from 'react';
 import { setCookie, deleteCookie } from "cookies-next";
 import { convertUserImpl2AuthUser } from '../../helpers/auth/utils';
+import useLoadedState from '@/helpers/hooks/loadedState';
 
-const AuthUserContext = createContext(null);
+const LoadedAuthUserContext = createContext(null);
 
-
-function AuthUserProvider({ initialAuthUser, children }) {
-  const [authUser, setAuthUser] = useState(initialAuthUser);
+function AuthUserProvider({ children }) {
+  const [loadedAuthUser, setLoadedAuthUser] = useLoadedState();
 
   useEffect(() => {
     const unsubscribeAuth = onIdTokenChanged(async (latestUserImpl) => {
       const latestAuthUser = convertUserImpl2AuthUser(latestUserImpl);
       if (latestAuthUser) {
         const idToken = await latestUserImpl.getIdToken();
-        await setCookie("__session", idToken);
+        setCookie("__session", idToken);
       } else {
-        await deleteCookie("__session");
+        deleteCookie("__session");
       }
-      setAuthUser(latestAuthUser);
+      setLoadedAuthUser(latestAuthUser);
     });
 
-    return () => {
-      unsubscribeAuth(null);
-    }
+    return unsubscribeAuth;
   }, []);
 
   return (
-    <AuthUserContext.Provider value={authUser}>
+    <LoadedAuthUserContext.Provider value={loadedAuthUser}>
       {children}
-    </AuthUserContext.Provider>
+    </LoadedAuthUserContext.Provider>
   );
 }
 
-function useAuthUser() {
-  return useContext(AuthUserContext);
+function useLoadedAuthUser() {
+  return useContext(LoadedAuthUserContext);
 }
 
-export { AuthUserProvider, useAuthUser };
+export { AuthUserProvider, useLoadedAuthUser };

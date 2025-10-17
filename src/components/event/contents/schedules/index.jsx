@@ -6,6 +6,7 @@ import TimeRange from "./TimeRange";
 import Fee from "./Fee";
 import Checkbox from "@/helpers/components/layouts/templates/form/inputs/Checkbox";
 import Location from "./Location";
+import { useEffect, useState } from "react";
 
 function ScheduleItem({
   schedule, 
@@ -14,9 +15,28 @@ function ScheduleItem({
   useForCheckForm, 
   useForEditForm,  
 }) {
-  let getValues;
-  if (useForCheckForm || useForEditForm)
+  // 暗めに表示するかどうか（checkFormは入力に合わせて変化させる）
+  let defaultDisabled = false;
+  let [getValues, watch] = [() => {}, () => {}];
+  if (useForCheckForm || useForEditForm) {
     getValues = useFormContext().getValues;
+    watch = useFormContext().watch;
+    if (useForCheckForm) {
+      defaultDisabled = !getValues(getInputNameFromSchedule(schedule));
+    }
+  } else {
+    defaultDisabled = !judgeIsParticipating(schedule, {myParticipant})
+  }
+  const [disabled, setDisabled] = useState(defaultDisabled);
+
+  useEffect(() => {
+    if (useForCheckForm) {
+      const subscription = watch(() => {
+        setDisabled(!getValues(getInputNameFromSchedule(schedule)));
+      });
+      return () => subscription.unsubscribe();
+    }
+  }, [watch]);
 
   // 参加状態のステータスバッジ
   let statuses;
@@ -30,17 +50,6 @@ function ScheduleItem({
     ].filter(
       status => scheduleForParticipant?.hasOwnProperty(status.fieldName)
     );
-  }
-  
-  // 暗めに表示するかどうか（checkFormは入力に合わせて変化させる）
-  let disabled;
-  if (useForEditForm) 
-    disabled = false;
-  else {
-    if (useForCheckForm)
-      disabled = !getValues(getInputNameFromSchedule(schedule));
-    else
-      disabled = !judgeIsParticipating(schedule, {myParticipant});
   }
 
   return (
@@ -83,7 +92,7 @@ function ScheduleItem({
 
           <Fee
             feesByBelong={schedule["fees_by_belong"]} 
-            belong={!useForEditForm && myUser["belong"]}
+            belong={!useForEditForm && myUser?.["belong"]}
             useForEditForm={useForEditForm}
             disabled={disabled}
           />

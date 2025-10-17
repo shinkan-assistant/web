@@ -15,16 +15,12 @@ function ParticipantsProvider({ children }) {
   const [participants, setParticipants] = useState(null);
 
   useEffect(() => {
-    if (!myUser || !myParticipants) {
-      setParticipants(null)
-      return;
-    }
-    if (!myUser["belong"]["is_member"]) {
-      setParticipants(null)
-      return;
-    }
-    
-    return participantService.onSnapshotAllVisible({myUser, myParticipants, setParticipants});
+    (async () => {
+      const unsubscribe = await participantService.onSnapshotAllVisible({
+        myUser, myParticipants, setParticipants
+      });
+      if (unsubscribe) return unsubscribe;
+    })();
   }, [myUser, myParticipants]);
 
   return (

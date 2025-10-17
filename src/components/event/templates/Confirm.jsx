@@ -76,7 +76,6 @@ export default function EventConfirmTemplate({ event, myUser, myParticipant }) {
         return formData;
       }}
       judgeCanSubmit={(initialFormData, formData) => {
-        console.log(initialFormData, formData);
         if (initialFormData["schedule_ids"].length !== formData["schedule_ids"].length) return true;
         for (let scheduleId of formData["schedule_ids"]) {
           if (!initialFormData["schedule_ids"].includes(scheduleId)) return true;

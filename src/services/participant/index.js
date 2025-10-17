@@ -7,7 +7,12 @@ class ParticipantService extends Service {
     super({tableName: "participants"});
   }
 
-  onSnapshotMe({myUser, setMyParticipants}) {
+  async onSnapshotMe({myUser, setMyParticipants}) {
+    if (!myUser) {
+      setMyParticipants(null);
+      return;
+    }
+
     return this.repo.onSnapshotRecords({
       constraints: [where("user_email", "==", myUser.email)],
       setContext: setMyParticipants
@@ -15,6 +20,15 @@ class ParticipantService extends Service {
   }
 
   onSnapshotAllVisible({myUser, myParticipants, setParticipants}) {
+    if (!myUser || !myParticipants) {
+      setParticipants(null);
+      return;
+    }
+    if (!myUser["belong"]["is_member"]) {
+      setParticipants(null);
+      return;
+    }
+
     const constraints = [];
     if (!myUser["is_admin"]) {
       const myOrganizers = myParticipants.filter(mp => mp["is_organizer"]);

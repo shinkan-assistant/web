@@ -4,6 +4,8 @@ import uiSizeEnum from "@/helpers/components/ui/base/config/sizeEnum";
 import FeeIcon from "@/helpers/components/ui/icons/fee";
 
 export default function Fee({feesByBelong, belong, useForEditForm, disabled}) {
+  if (!belong) belong = {"is_member": false};
+  
   let fee;
   if (feesByBelong === undefined || feesByBelong.length === 0) {
     fee = {type: FeeTypeEnum.free};

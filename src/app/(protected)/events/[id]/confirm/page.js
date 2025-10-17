@@ -7,6 +7,8 @@ import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { EventsPageFilterEnum } from "@/components/event/templates/List";
+import judgeMyParticipantStatus from "@/components/event/utils/myParticipantStatus";
+import { toast } from "react-toastify";
 
 export default function EventConfirm() {
   const router = useRouter();
@@ -33,6 +35,12 @@ export default function EventConfirm() {
     if (!myParticipantTmp) {
       toast.warn(`まだ${eventTmp["title"]}に申し込んでいません`);
       router.push(`/events?filter=${EventsPageFilterEnum.participating}`);
+      return;
+    }
+
+    if (judgeMyParticipantStatus(myParticipantTmp, "cancel")) {
+      toast.warn(`${eventTmp["title"]}はキャンセル済みです`);
+      router.push(`/events/${id}`);
       return;
     }
 

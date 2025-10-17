@@ -66,11 +66,11 @@ export default function NavMenu() {
         title: "イベント管理", 
         isOnlyForAdmin: false, isOnlyForMember: true
       },
-      {
-        href: "/circle/members", 
-        title: "ユーザー管理", 
-        isOnlyForAdmin: true
-      },
+      // {
+      //   href: "/circle/members", 
+      //   title: "ユーザー管理", 
+      //   isOnlyForAdmin: true
+      // },
     ];
     setNavLinkInfos(
       allNavLinkInfos.filter(info => {
