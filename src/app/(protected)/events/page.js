@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useEvents } from "@/stores/contexts/events";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
+import judgeNullish from "@/helpers/utils/nullish";
 
 export default function Events() {
   const router = useRouter();
@@ -23,8 +24,6 @@ export default function Events() {
       router.push(`/events?filter=${EventsPageFilterEnum.participating}`);
       return;
     }
-
-    console.log(myUser, events, myParticipants);
 
     if (!myUser || !events || !myParticipants) {
       setTargetEvents(null);
@@ -53,8 +52,7 @@ export default function Events() {
     setTargetEvents(events.filter(targetEventsFilterFunc));
   }, [router, filter, myUser, events, myParticipants]);
 
-  console.log(targetEvents, filter);
-  if (!targetEvents || !filter) {
+  if (judgeNullish(targetEvents) || judgeNullish(filter) || judgeNullish(myParticipants)) {
     return <div>読み込み中です</div>
   }
 
@@ -62,6 +60,7 @@ export default function Events() {
     <EventsTemplate
       filter={filter}
       events={targetEvents}
+      myParticipants={myParticipants}
     />
   );
 }

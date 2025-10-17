@@ -2,13 +2,30 @@ import RoughLocationName from "./RoughLocationName";
 import HeldDate from "./HeldDate";
 import ContactGroup from "../schedules/ContactGroup";
 import OnlineMeetingInfo from "../schedules/OnlineMeetingInfo";
+import { EventsPageFilterEnum } from "../../templates/List";
+import StatusBadgeArea from "@/helpers/components/ui/statusBadgeArea";
 
 export default function Summary({
   event, 
-  myParticipant, 
   isItemPage, 
-  useForEditForm,
+  myParticipant, 
+  useForEditForm, // Item Page
+  filter, // List Page
 }) {
+  // 参加状態のステータスバッジ
+  let statuses;
+  if (!isItemPage && filter === EventsPageFilterEnum.participating) {
+    statuses = [
+      {fieldName: "cancel", title: "キャンセル済み"},
+      {fieldName: "attendance", title: "出席済み"},
+      {fieldName: "payment", title: "支払い済み"},
+    ].filter(
+      status => {
+        return myParticipant?.schedules.every(s => s.hasOwnProperty(status.fieldName))
+      }
+    );
+  }
+
   return (
     <div className={isItemPage ? "bg-gray-50 p-6 rounded-lg shadow-md" : ""}>
       {isItemPage &&
@@ -18,6 +35,12 @@ export default function Summary({
       }
 
       <div className={isItemPage ? "space-y-4" : "space-y-2"}> {/* 各情報ブロック間のスペースを統一 */}
+
+        {(statuses && statuses.length > 0) && 
+          <StatusBadgeArea 
+            statuses={statuses}
+          />
+        }
         <HeldDate
           event={event}
         />

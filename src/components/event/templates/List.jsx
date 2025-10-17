@@ -27,7 +27,7 @@ function genItemLink(filter, id) {
   }
 }
 
-export default function EventsTemplate({ filter, events }) {
+export default function EventsTemplate({ filter, events, myParticipants }) {
   return (
     <ListTemplateLayout>
       {events.map((event) => (
@@ -39,6 +39,8 @@ export default function EventsTemplate({ filter, events }) {
           <Summary 
             event={event}
             isItemPage={false}
+            filter={filter}
+            myParticipant={myParticipants.find(p => p["event_id"] === event["id"])}
           />
         </ListItemTemplateLayout>
       ))}

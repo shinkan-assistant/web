@@ -14,7 +14,6 @@ export default function UnionLayout({ children }) {
   const authUser = useAuthUser();
   const myUser = useMyUser();
 
-  console.log(authUser, myUser)
   return (
     <>
       {(authUser && myUser) ? (
