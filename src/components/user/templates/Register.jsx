@@ -223,7 +223,6 @@ export default function UserRegisterTemplate() {
   });
 
   useEmailEffect({authUser, methods});
-  const isTmpSignIn = judgeTmpSignIn(authUser);
 
   return (
     <FormTemplateLayout 

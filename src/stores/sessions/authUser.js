@@ -23,9 +23,7 @@ function AuthUserProvider({ initialAuthUser, children }) {
       setAuthUser(latestAuthUser);
     });
 
-    return () => {
-      unsubscribeAuth(null);
-    }
+    return unsubscribeAuth;
   }, []);
 
   return (

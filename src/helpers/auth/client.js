@@ -8,7 +8,6 @@ import {
 import { firebaseApp } from "../../lib/firebase/clientApp";
 import { toast } from "react-toastify";
 import userService from "@/services/user";
-import { redirect } from "next/navigation";
 
 // TODO try-catch 作りたい（アカウント消された時は、ここで、Bad Request と出る）
 const auth = getAuth(firebaseApp);
@@ -47,6 +46,14 @@ async function signInToGoogle() {
   return signInResult;
 }
 
+export async function signOut() {
+  try {
+    return auth.signOut();
+  } catch (error) {
+    console.error("サインアウトに失敗しました。", error);
+  }
+}
+
 export async function signInWithGoogle() {
   // Googleによる認証
   const signInResult = await signInToGoogle();
@@ -68,14 +75,6 @@ export async function signInWithGoogleForRegister() {
   if (await userService.exists({email: signInResult.user.email})) {
     toast.warn("すでに存在するユーザーです");
     await signOut();
-    redirect("/user/register");
-  }
-}
-
-export async function signOut() {
-  try {
-    return auth.signOut();
-  } catch (error) {
-    console.error("サインアウトに失敗しました。", error);
+    // redirect("/user/register");
   }
 }
