@@ -9,15 +9,18 @@ import { useEffect, useRef, useState } from "react";
 import { useAuthUser } from "@/stores/sessions/authUser";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useMetadata } from "@/stores/consts/metadata";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import userService from "@/services/user";
 
 // --- HeaderContainer: 変更なし ---
-function HeaderContainer({children}) {
+export function HeaderContainer({children}) {
   const { title } = useMetadata();
 
   return (
     <header className="bg-white px-4 py-3 flex items-center shadow-sm border-b border-slate-200">
       <div className="container mx-auto flex items-center">
-        <div className="flex-initial text-2xl text-slate-800 font-bold">{title}</div>
+        <Link href="/" className="flex-initial text-2xl text-slate-800 font-bold">{title}</Link>
         <div className="flex-1"></div>
         <div className="flex-initial">
           {children}
@@ -29,11 +32,14 @@ function HeaderContainer({children}) {
 
 // --- AuthorizedHeader: より洗練されたデザインに更新 ---
 function AuthorizedHeader() {
+  const router = useRouter();
   const authUser = useAuthUser();
-  const myUser = useMyUser();
+  const initialMyUser = useMyUser();
 
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
+
+  const [myUser, setMyUser] = useState(initialMyUser);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -47,9 +53,23 @@ function AuthorizedHeader() {
     };
   }, []);
 
+
+  useEffect(() => {
+    (async () => {
+      if (authUser) {
+        setMyUser(await userService.get({email: authUser.email}));
+      }
+    })();
+  }, [authUser]);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/');
+  }
 
   if (!authUser || !myUser) {
     return <HeaderContainer><div className="w-48 h-9 bg-slate-200 rounded-full animate-pulse"></div></HeaderContainer>;
@@ -65,7 +85,7 @@ function AuthorizedHeader() {
         >
           <Image
             src={authUser.photoURL}
-            alt={myUser.email}
+            alt={authUser.email}
             width={32}
             height={32}
             className="block rounded-full"
@@ -83,7 +103,7 @@ function AuthorizedHeader() {
         >
           <div className="p-1">
             <button
-              onClick={signOut}
+              onClick={handleSignOut}
               className="flex items-center w-full text-left p-2 text-sm rounded-md text-red-600 hover:bg-red-50 hover:text-red-700"
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>

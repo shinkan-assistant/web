@@ -12,19 +12,12 @@ function MyUserProvider({ children }) {
   const [myUser, setMyUser] = useState(null);
 
   useEffect(() => {
-    if (!authUser?.email) {
-      setMyUser(null);
-      return;
-    }
-    
-    let unsubscribe = () => {};
     (async() => {
-      unsubscribe = await userService.onSnapshotMe({
-        email: authUser.email,
-        setMyUser
+      const unsubscribe = await userService.onSnapshotMe({
+        authUser, setMyUser
       });
+      if (unsubscribe) return;
     })();
-    return unsubscribe;
   }, [authUser]);
 
   return (

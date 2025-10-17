@@ -24,6 +24,8 @@ export default function Events() {
       return;
     }
 
+    console.log(myUser, events, myParticipants);
+
     if (!myUser || !events || !myParticipants) {
       setTargetEvents(null);
       return;
@@ -49,9 +51,9 @@ export default function Events() {
     }[filter];
 
     setTargetEvents(events.filter(targetEventsFilterFunc));
-    
   }, [router, filter, myUser, events, myParticipants]);
 
+  console.log(targetEvents, filter);
   if (!targetEvents || !filter) {
     return <div>読み込み中です</div>
   }

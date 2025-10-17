@@ -11,6 +11,7 @@ import { UsersProvider } from "@/stores/contexts/users";
 import SubRootLayout from "@/helpers/components/layouts/page";
 import { AuthorizedHeader } from "@/helpers/components/layouts/page/Header";
 import { useMyUser } from "@/stores/contexts/myUser";
+import userService from "@/services/user";
 
 export default function ProtectedLayout({ children }) {
   const router = useRouter();
@@ -18,11 +19,17 @@ export default function ProtectedLayout({ children }) {
   const authUser = useAuthUser();
 
   useEffect(() => {
-    if (!authUser || !myUser) {
-      if (window.location.pathname !== '/') {
+    (async() => {
+      if (!authUser) {
         router.push('/');
+      } else {
+        if (!(myUser || await userService.exists({email: authUser.email}))) {
+          if (window.location.pathname !== '/') {
+            router.push('/');
+          }
+        }
       }
-    }
+    })();
   }, [authUser, myUser, router]); 
 
   return (

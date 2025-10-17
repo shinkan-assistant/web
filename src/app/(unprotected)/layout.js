@@ -15,16 +15,16 @@ export default function UnprotectedLayout({ children }) {
   useEffect(() => {
     (async() => {
       if (authUser) {
-        // ログインしている場合はイベント一覧ページに遷移する
-        if (await userService.exists({email: authUser.email})) {
-          if (window.location.pathname !== `/events?filter=${EventsPageFilterEnum.participating}`) {
-            redirect(`/events?filter=${EventsPageFilterEnum.participating}`);
+        if (window.location.pathname !== "/user/register") {
+          // ログインしている場合はイベント一覧ページに遷移する
+          if (await userService.exists({email: authUser.email})) {
+            if (window.location.pathname !== `/events?filter=${EventsPageFilterEnum.participating}`) {
+              redirect(`/events?filter=${EventsPageFilterEnum.participating}`);
+            }
           }
-        }
-        // 仮ログインしている場合
-        else {
-          // ユーザー登録画面でない場合は、仮ログインを無効化する
-          if (window.location.pathname !== "/user/register") {
+          // 仮ログインしている場合
+          else {
+            // ユーザー登録画面でない場合は、仮ログインを無効化する
             await signOut();
           }
         }

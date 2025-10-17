@@ -12,14 +12,11 @@ function EventsProvider({ children }) {
   const [events, setEvents] = useState(null);
 
   useEffect(() => {
-    // 認証ユーザーが存在しない場合は何もしない
-    if (!myUser) {
-      setEvents(null);
-      return;
-    }
-    
-    // TODO myParticipantsに対応して、それぞれのeventの取得できる情報を変える
-    return eventService.onSnapshotAll({setEvents});
+    (async() => {
+      // TODO myParticipantsに対応して、それぞれのeventの取得できる情報を変える
+      const unsubscribe = await eventService.onSnapshotAll({myUser, setEvents});
+      if (unsubscribe) return unsubscribe;
+    })();
   }, [myUser]);
 
   return (

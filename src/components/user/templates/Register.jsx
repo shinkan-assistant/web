@@ -11,61 +11,72 @@ import Image from "next/image";
 import { signInWithGoogleForRegister, signOut } from "@/helpers/auth/client";
 import { useEffect } from "react";
 import { EventsPageFilterEnum } from "@/components/event/templates/List";
-import SelectInput from "@/helpers/components/layouts/templates/form/inputs/Select";
+import SelectInput, { wrapChoices, wrapDefaultValuesForSelect } from "@/helpers/components/layouts/templates/form/inputs/Select";
 import GenderEnum from "@/data/enums/user/gender";
 import AcademicLevelEnum from "@/data/enums/user/academicLevel";
 import userService from "@/services/user";
+import { useMyUser } from "@/stores/contexts/myUser";
+
+export const judgeTmpSignIn = (authUser) => {
+  return Boolean(authUser);
+}
+export const judgeRealSignIn = (authUser, myUser) => {
+  return judgeTmpSignIn(authUser) && Boolean(myUser);
+}
 
 export class UserRegisterFormInfo {
   inputInfos = {
     "family_name": {
       type: "text",
-      defaultValue: "",
       Component: TextInput,
       label: "姓",
     },
     "given_name": {
       type: "text",
-      defaultValue: "",
       Component: TextInput,
       label: "名",
     },
     "gender": {
       type: "text",
-      defaultValue: "",
       Component: SelectInput,
       label: "性別",
-      choices: Object.values(GenderEnum),
+      choices: wrapChoices(Object.values(GenderEnum)),
     },
     "university": {
       type: "text",
-      defaultValue: "",
       Component: TextInput,
       label: "大学名",
     },
     "academic_level": {
       type: "text",
-      defaultValue: "",
       Component: SelectInput,
       label: "学位",
-      choices: Object.values(AcademicLevelEnum),
+      choices: wrapChoices(Object.values(AcademicLevelEnum)),
     },
     "grade": {
       type: "number",
-      defaultValue: "",
       options: {min: 1, max: 6},
       Component: TextInput,
       label: "学年",
     },
+  };
+
+  constructor({defaultValues, disabled} = {}) {
+    for (let name of Object.keys(this.inputInfos)) {
+      this.inputInfos[name].disabled = Boolean(disabled);
+      this.inputInfos[name].defaultValue = {
+        [TextInput]: defaultValues?.[name] ? String(defaultValues?.[name]) : "",
+        [SelectInput]: wrapDefaultValuesForSelect(defaultValues?.[name]),
+      }[this.inputInfos[name].Component];
+    }
   }
 
   get defaultValues() {
-    return Object.keys(this.inputInfos).reduce((acc, name) => {
-      return {
-        ...acc,
-        [name]: this.inputInfos[name].defaultValue
-      }
-    }); 
+    const result = {};
+    for (let name of Object.keys(this.inputInfos)) {
+      result[name] = this.inputInfos[name].defaultValue;
+    }
+    return result;
   }
 
   genFormData = (currentValues) => {
@@ -93,7 +104,8 @@ export class UserRegisterFormInfo {
   }
 }
 
-export function UserInfoInputs({formInfo, isTmpSignIn}) {
+export function UserInfoInputs({formInfo, authUser}) {
+  const isTmpSignIn = judgeTmpSignIn(authUser);
   return (
     <>
       {Object.keys(formInfo.inputInfos).map((name, index) => {
@@ -105,7 +117,7 @@ export function UserInfoInputs({formInfo, isTmpSignIn}) {
                 name={name}
                 type={info.type}
                 label={info.label}
-                disabled={!isTmpSignIn}
+                disabled={info.disabled || !isTmpSignIn}
               />
             }
             {info.Component === SelectInput &&
@@ -113,7 +125,7 @@ export function UserInfoInputs({formInfo, isTmpSignIn}) {
                 name={name}
                 label={info.label}
                 choices={info.choices}
-                disabled={!isTmpSignIn}
+                disabled={info.disabled || !isTmpSignIn}
               />
             }
           </div>
@@ -123,8 +135,9 @@ export function UserInfoInputs({formInfo, isTmpSignIn}) {
   );
 }
 
-export function GoogleSignInButtonForRegister({authUser, isTmpSignIn}) {
-  if (isTmpSignIn) {
+export function GoogleSignInButtonForRegister({authUser, myUser}) {
+  const [isTmpSignIn, isRealSignIn] = [judgeTmpSignIn(authUser), judgeRealSignIn(authUser, myUser)];
+  if (isTmpSignIn || isRealSignIn) {
     return (
       <div className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg shadow-sm">
         {authUser.photoURL && (
@@ -142,15 +155,17 @@ export function GoogleSignInButtonForRegister({authUser, isTmpSignIn}) {
           </p>
           <p className="text-xs text-gray-500 truncate">{authUser.email}</p>
         </div>
-        <button
-          onClick={async () => {
-            await signOut();
-            signInWithGoogleForRegister();
-          }}
-          className="ml-auto px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors whitespace-nowrap"
-        >
-          アカウントを切り替える
-        </button>
+        {!isRealSignIn &&
+          <button
+            onClick={async () => {
+              await signOut();
+              signInWithGoogleForRegister();
+            }}
+            className="ml-auto px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors whitespace-nowrap"
+          >
+            アカウントを切り替える
+          </button>
+        }
       </div>
     );
   }
@@ -179,23 +194,7 @@ export function GoogleSignInButtonForRegister({authUser, isTmpSignIn}) {
   }
 }
 
-export const judgeTmpSignIn = (authUser) => {
-  return Boolean(authUser);
-}
-
-export default function UserRegisterTemplate() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const keywordForMember = searchParams.get("keyword");
-
-  const formInfo = new UserRegisterFormInfo();
-
-  const authUser = useAuthUser();
-  const methods = useForm({
-    defaultValues: formInfo.defaultValues,
-    mode: "onChange"
-  });
-
+export function useEmailEffect({authUser, methods}) {
   const { setValue } = methods;
   useEffect(() => {
     (async() => {
@@ -207,7 +206,23 @@ export default function UserRegisterTemplate() {
         setValue("email", "");
     })();
   }, [authUser, setValue]);
+}
 
+export default function UserRegisterTemplate() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const keywordForMember = searchParams.get("keyword");
+
+  const formInfo = new UserRegisterFormInfo();
+
+  const authUser = useAuthUser();
+  const myUser = useMyUser();
+  const methods = useForm({
+    defaultValues: formInfo.defaultValues,
+    mode: "onChange"
+  });
+
+  useEmailEffect({authUser, methods});
   const isTmpSignIn = judgeTmpSignIn(authUser);
 
   return (
@@ -233,8 +248,8 @@ export default function UserRegisterTemplate() {
         router.push(`/events?filter=${EventsPageFilterEnum.participating}`);
       }}
     >
-      <GoogleSignInButtonForRegister authUser={authUser} isTmpSignIn={isTmpSignIn} />
-      <UserInfoInputs formInfo={formInfo} isTmpSignIn={isTmpSignIn} />
+      <GoogleSignInButtonForRegister authUser={authUser} myUser={myUser} />
+      <UserInfoInputs formInfo={formInfo} authUser={authUser} />
     </FormTemplateLayout>
   );
 };

@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, getDocs, setDoc, query, updateDoc, where, onSnapshot } 
+import { collection, deleteDoc, doc, getDocs, setDoc, query, updateDoc, where, onSnapshot, getDoc } 
   from "firebase/firestore";
 import { db } from "@/lib/firebase/clientApp";
 
@@ -13,6 +13,12 @@ export default class Repository {
       id: docSnapshot.id,
       ...docSnapshot.data()
     }; 
+  }
+
+  async getRecordById({id}) {
+    const docRef = doc(this.db, this.tableName, id);
+    const docSnapshot = await getDoc(docRef);
+    return (docSnapshot.exists()) ? Repository.toRecord(docSnapshot) : null;
   }
 
   async getRecords({constraints}) {
@@ -39,10 +45,13 @@ export default class Repository {
     return records[0] ?? null;
   }
 
-  onSnapshotRecords({constraints, setContext}) {
-    let ref = collection(this.db, this.tableName)
-    if (constraints) 
+  async onSnapshotRecords({constraints, setContext}) {
+    let ref = collection(this.db, this.tableName);
+    if (constraints) {
       ref = query(ref, ...constraints);
+    }
+    const records = await this.getRecords({constraints});
+    setContext(records);
     
     return onSnapshot(ref, (querySnapshot) => {
       setContext(querySnapshot.docs.map(doc => Repository.toRecord(doc)));
@@ -52,17 +61,13 @@ export default class Repository {
     });
   }
 
-  onSnapshotRecord({id, setContext}) {
-    const docRef = doc(this.db, this.tableName, id);
-    // onSnapshotのリスナーを起動
-    return onSnapshot(docRef, (doc) => {
-      if (doc.exists()) {
-        setContext(doc.data());
-      }
-    }, (error) => {
-      // エラーハンドリング
-      console.error("onSnapshot error:", error);
-    });
+  async onSnapshotRecord({uniqueData, setContext}) {
+    const constraints = Object.keys(uniqueData)
+      .map(key => where(key, "==", uniqueData[key]));
+    const handleSetContext = (records) => {
+      setContext(records.length > 0 ? records[0] : null);
+    }
+    return this.onSnapshotRecords({constraints, setContext: handleSetContext})
   }
 
   async updateRecord({Schema, initialData, formData}) {

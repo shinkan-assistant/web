@@ -12,15 +12,12 @@ function MyParticipantsProvider({ children }) {
   const [myParticipants, setMyParticipants] = useState(null);
 
   useEffect(() => {
-    if (!myUser) {
-      setMyParticipants(null)
-      return;
-    }
-    
-    return participantService.onSnapshotMe({
-      myUser,
-      setMyParticipants
-    });
+    (async () => {
+      const unsubscribe = await participantService.onSnapshotMe({
+        myUser, setMyParticipants
+      });
+      if (unsubscribe) return unsubscribe;
+    })();
   }, [myUser]);
 
   return (
