@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ResetButton } from "@/helpers/components/layouts/templates/form/utilButtons/Reset";
 import { toast } from "react-toastify";
 import TextInput from "@/helpers/components/layouts/templates/form/inputs/Text";
-import { useAuthUser } from "@/stores/sessions/authUser";
+import { useLoadedAuthUser } from "@/stores/sessions/authUser";
 import Image from "next/image";
 import { signInWithGoogleForRegister, signOut } from "@/helpers/auth/client";
 import { useEffect } from "react";
@@ -215,7 +215,10 @@ export default function UserRegisterTemplate() {
 
   const formInfo = new UserRegisterFormInfo();
 
-  const authUser = useAuthUser();
+  const loadedAuthUser = useLoadedAuthUser();
+  if (!loadedAuthUser) return;
+  const authUser = loadedAuthUser;
+
   const myUser = useMyUser();
   const methods = useForm({
     defaultValues: formInfo.defaultValues,

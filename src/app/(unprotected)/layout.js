@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
-import { useAuthUser } from "@/stores/sessions/authUser";
+import { useLoadedAuthUser } from "@/stores/sessions/authUser";
 import SubRootLayout from "@/helpers/components/layouts/page";
 import { UnAuthorizedHeader } from "@/helpers/components/layouts/page/Header";
 import { EventsPageFilterEnum } from "@/components/event/templates/List";
@@ -10,10 +10,13 @@ import { signOut } from "@/helpers/auth/client";
 import userService from "@/services/user";
 
 export default function UnprotectedLayout({ children }) {
-  const authUser = useAuthUser();
+  const loadedAuthUser = useLoadedAuthUser();
 
   useEffect(() => {
     (async() => {
+      if (!loadedAuthUser) return;
+      const authUser = loadedAuthUser.get();
+      
       if (authUser) {
         if (window.location.pathname !== "/user/register") {
           // ログインしている場合はイベント一覧ページに遷移する
@@ -30,7 +33,7 @@ export default function UnprotectedLayout({ children }) {
         }
       }
     })();
-  }, [authUser]);
+  }, [loadedAuthUser]);
 
   return (
     <SubRootLayout

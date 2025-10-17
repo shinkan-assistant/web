@@ -6,7 +6,7 @@ import {
   signOut,
 } from "@/helpers/auth/client";
 import { useEffect, useRef, useState } from "react";
-import { useAuthUser } from "@/stores/sessions/authUser";
+import { useLoadedAuthUser } from "@/stores/sessions/authUser";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useMetadata } from "@/stores/consts/metadata";
 import { useRouter } from "next/navigation";
@@ -33,7 +33,9 @@ export function HeaderContainer({children}) {
 // --- AuthorizedHeader: より洗練されたデザインに更新 ---
 function AuthorizedHeader() {
   const router = useRouter();
-  const authUser = useAuthUser();
+
+  const loadedAuthUser = useLoadedAuthUser();
+
   const initialMyUser = useMyUser();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -56,11 +58,14 @@ function AuthorizedHeader() {
 
   useEffect(() => {
     (async () => {
+      if (!loadedAuthUser) return;
+      const authUser = loadedAuthUser.get();
+
       if (authUser) {
         setMyUser(await userService.get({email: authUser.email}));
       }
     })();
-  }, [authUser]);
+  }, [loadedAuthUser]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -71,9 +76,12 @@ function AuthorizedHeader() {
     router.push('/');
   }
 
-  if (!authUser || !myUser) {
+
+  if (!loadedAuthUser || !myUser) {
     return <HeaderContainer><div className="w-48 h-9 bg-slate-200 rounded-full animate-pulse"></div></HeaderContainer>;
   }
+
+  const authUser = loadedAuthUser.get();
 
   return (
     <HeaderContainer>
@@ -118,7 +126,9 @@ function AuthorizedHeader() {
 
 // --- UnAuthorizedHeader: 変更なし ---
 function UnAuthorizedHeader() {
-  const authUser = useAuthUser();
+  const loadedAuthUser = useLoadedAuthUser();
+  if (!loadedAuthUser) return;
+  const authUser = loadedAuthUser.get();
 
   return (
     <HeaderContainer>

@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 import { useMyUser } from "@/stores/contexts/myUser";
 import { useMyParticipants } from "@/stores/contexts/myParticipants";
 import { toast } from "react-toastify";
-import { EventsPageFilterEnum } from "@/components/event/templates/List";
-import { useAuthUser } from "@/stores/sessions/authUser";
+import { useLoadedAuthUser } from "@/stores/sessions/authUser";
 import eventService from "@/services/event";
 
 export default function EventApply() {
@@ -17,7 +16,7 @@ export default function EventApply() {
   const searchParams = useSearchParams();
   const keywordForMember = searchParams.get("keyword");
 
-  const authUser = useAuthUser();
+  const loadedAuthUser = useLoadedAuthUser();
   const myUser = useMyUser();
   const myParticipants = useMyParticipants();
   
@@ -44,14 +43,14 @@ export default function EventApply() {
     })();
   }, [router, id, myParticipants]);
 
-  if (!event) {
+  if (!event || !loadedAuthUser) {
     return <div>読み込み中です</div>
   }
 
   return (
     <EventApplyTemplate 
       event={event}
-      authUser={authUser}
+      authUser={loadedAuthUser.get()}
       myUser={myUser}
       keywordForMember={keywordForMember}
     />
