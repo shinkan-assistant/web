@@ -84,9 +84,9 @@ export async function signInWithGoogleForRegister() {
 // 現在ログインしているユーザーを削除
 export async function deleteUser() {
   const auth = getAuth();
-  const user = auth.currentUser;
+  const authUser = auth.currentUser;
 
-  if (!user) {
+  if (!authUser) {
     alert("ログインしているユーザーがいません。");
     return;
   }
@@ -99,12 +99,12 @@ export async function deleteUser() {
   try {
     // Google認証プロバイダを使って再認証
     const provider = new GoogleAuthProvider();
-    await reauthenticateWithPopup(user, provider);
+    await reauthenticateWithPopup(authUser, provider);
     
     // 再認証が成功したら、データベースからユーザーデータを削除
-    await userService.delete({email: user.email});
+    await userService.delete({email: authUser.email});
     // Authenticationのユーザーを削除
-    await _deleteUser(user);
+    await _deleteUser(authUser);
     
     toast.info("正常に退会しました。");
     // 削除後のリダイレクトやUI更新などの処理を追加
