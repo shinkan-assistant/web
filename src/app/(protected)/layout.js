@@ -24,12 +24,10 @@ export default function ProtectedLayout({ children }) {
 
       const authUser = loadedAuthUser.get();
       if (!authUser) {
-        console.log(loadedAuthUser, 22)
         router.push('/');
       } else {
         if (!(myUser || await userService.exists({email: authUser.email}))) {
           if (window.location.pathname !== '/') {
-            console.log(33)
             router.push('/');
           }
         }

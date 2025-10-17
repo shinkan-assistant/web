@@ -77,10 +77,9 @@ function AuthorizedHeader() {
   }
 
 
-  if (!loadedAuthUser || !myUser) {
+  if (!loadedAuthUser?.get() || !myUser) {
     return <HeaderContainer><div className="w-48 h-9 bg-slate-200 rounded-full animate-pulse"></div></HeaderContainer>;
   }
-
   const authUser = loadedAuthUser.get();
 
   return (
