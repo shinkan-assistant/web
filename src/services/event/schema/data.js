@@ -4,7 +4,6 @@ import { DateTimeSchema } from '@/helpers/db/schema/data';
 import { BelongSchema } from '@/services/user/schema/data';
 import EventTypeEnum from '../../../data/enums/event/type';
 import FeeTypeEnum from '../../../data/enums/event/feeType';
-import ContactGroupPlatformEnum from '../../../data/enums/event/contactGroupPlatform';
 import OnlineMeetingPlatformEnum from '../../../data/enums/event/onlineMeetingPlatform';
 
 const LocationSchema = z.object({
@@ -70,11 +69,6 @@ const InPersonScheduleSchema = ScheduleSchemaBase.extend({
 
 const OnlineScheduleSchema = ScheduleSchemaBase.transform(transformForSchedule);
 
-const ContactGroupSchema = z.object({
-  platform: z.enum(Object.values(ContactGroupPlatformEnum)),
-  url: z.string().url(),
-});
-
 const OnlineMeetingInfoSchema = z.object({
   platform: z.enum(Object.values(OnlineMeetingPlatformEnum)),
   meeting_url: z.string().min(1).url(),
@@ -115,7 +109,6 @@ const InPersonEventSchema = BaseEventSchema.extend({
   is_public_detail_location: z.boolean(),
   rough_location_name: z.string(),
   schedules: z.array(InPersonScheduleSchema).min(1),
-  contact_group: ContactGroupSchema,
 });
 
 const OnlineEventSchema = BaseEventSchema.extend({

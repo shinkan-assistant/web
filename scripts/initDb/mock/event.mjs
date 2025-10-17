@@ -5,10 +5,6 @@ const mockEvents = [
     "type": "対面",
     "rough_location_name": "池袋駅",
     "is_public_detail_location": false,
-    "contact_group": {
-      "platform": "Lineオープンチャット",
-      "url": "https://line.me/ti/g2/AbCdEfGhIjK_lMnOpQrStUvWxYz"
-    },
     "schedules": [
       {
         "id": "b3484f0e-36c1-4039-9d7a-1f81d113426e",

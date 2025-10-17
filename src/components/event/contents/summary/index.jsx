@@ -1,6 +1,5 @@
 import RoughLocationName from "./RoughLocationName";
 import HeldDate from "./HeldDate";
-import ContactGroup from "../schedules/ContactGroup";
 import OnlineMeetingInfo from "../schedules/OnlineMeetingInfo";
 import { EventsPageFilterEnum } from "../../templates/List";
 import StatusBadgeArea from "@/helpers/components/ui/statusBadgeArea";
@@ -48,9 +47,6 @@ export default function Summary({
         />
         {(isItemPage && (myParticipant || useForEditForm)) && 
           <>
-            {event["contact_group"] && 
-              <ContactGroup contactGroup={event["contact_group"]}
-            />}
             {event["online_meeting_info"] && 
               <OnlineMeetingInfo onlineMeetingInfo={event["online_meeting_info"]}
             />}
