@@ -4,6 +4,8 @@ import {
   signInWithPopup,
   onAuthStateChanged as _onAuthStateChanged,
   onIdTokenChanged as _onIdTokenChanged,
+  deleteUser as _deleteUser,
+  reauthenticateWithPopup,
 } from "firebase/auth";
 import { firebaseApp } from "../../lib/firebase/clientApp";
 import { toast } from "react-toastify";
@@ -76,5 +78,45 @@ export async function signInWithGoogleForRegister() {
     toast.warn("すでに存在するユーザーです");
     await signOut();
     // redirect("/user/register");
+  }
+}
+
+// 現在ログインしているユーザーを削除
+export async function deleteUser() {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("ログインしているユーザーがいません。");
+    return;
+  }
+
+  const confirmToDelete = window.confirm("本当にアカウントを削除しますか？この操作は元に戻せません。");
+  if (!confirmToDelete) {
+    return;
+  }
+
+  try {
+    // Google認証プロバイダを使って再認証
+    const provider = new GoogleAuthProvider();
+    await reauthenticateWithPopup(user, provider);
+    
+    // 再認証が成功したら、データベースからユーザーデータを削除
+    await userService.delete({email: user.email});
+    // Authenticationのユーザーを削除
+    await _deleteUser(user);
+    
+    toast.info("アカウントが正常に削除されました。");
+    // 削除後のリダイレクトやUI更新などの処理を追加
+    window.location.href = "/"; // トップページなどにリダイレクト
+  } catch (error) {
+    console.error("アカウント削除エラー: ", error);
+    // エラーハンドリング
+    if (error.code === 'auth/requires-recent-login') {
+      // 最近のログインが必要な場合、再認証を促すメッセージを表示
+      alert("セキュリティ上の理由により、アカウントを削除するには再認証が必要です。再認証を完了してから再度お試しください。");
+    } else {
+      alert("アカウントの削除中にエラーが発生しました。\n" + error.message);
+    }
   }
 }

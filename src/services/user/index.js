@@ -71,6 +71,14 @@ class UserService extends Service {
         belong,
       }
     });
+
+    return true;
+  }
+
+  async delete({email}) {
+    return await this.repo.deleteRecord({ 
+      uniqueData: {email}
+    });
   }
 }
 

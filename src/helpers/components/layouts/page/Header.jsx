@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import {
+  deleteUser,
   signInWithGoogle,
   signOut,
 } from "@/helpers/auth/client";
@@ -67,6 +68,11 @@ function AuthorizedHeader() {
     })();
   }, [loadedAuthUser]);
 
+  if (!loadedAuthUser?.get() || !myUser) {
+    return <HeaderContainer><div className="w-48 h-9 bg-slate-200 rounded-full animate-pulse"></div></HeaderContainer>;
+  }
+  const authUser = loadedAuthUser.get();
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -76,11 +82,51 @@ function AuthorizedHeader() {
     router.push('/');
   }
 
-
-  if (!loadedAuthUser?.get() || !myUser) {
-    return <HeaderContainer><div className="w-48 h-9 bg-slate-200 rounded-full animate-pulse"></div></HeaderContainer>;
+  const handleDeleteUser = async () => {
+    await deleteUser();
+    router.push('/');
   }
-  const authUser = loadedAuthUser.get();
+
+  const menuInfos = [
+    {
+      label: "ログアウト",
+      Icon: (
+        <svg 
+          className="w-4 h-4 mr-2" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth="1.5" 
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          ></path>
+        </svg>
+      ),
+      onClick: handleSignOut,
+    },
+    {
+      label: "ユーザー削除",
+      Icon: (
+        <svg 
+          className="w-4 h-4 mr-2" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          strokeWidth="1.5" 
+        >
+          <circle cx="12" cy="7" r="3"></circle>
+          <path d="M17 19c0-2.209-2.686-4-6-4S5 16.791 5 19"></path>
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+        </svg>
+      ),
+      onClick: handleDeleteUser,
+    },
+  ];
 
   return (
     <HeaderContainer>
@@ -108,15 +154,17 @@ function AuthorizedHeader() {
             ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`
           }
         >
-          <div className="p-1">
-            <button
-              onClick={handleSignOut}
-              className="flex items-center w-full text-left p-2 text-sm rounded-md text-red-600 hover:bg-red-50 hover:text-red-700"
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-              ログアウト
-            </button>
-          </div>
+          {menuInfos.map((info, index) => (
+            <div key={index} className="p-1">
+              <button
+                onClick={info.onClick}
+                className="flex items-center w-full text-left p-2 text-sm rounded-md text-red-600 hover:bg-red-50 hover:text-red-700"
+              >
+                {info.Icon}
+                {info.label}
+              </button>
+            </div>
+          ))}
         </div>
       </div>
     </HeaderContainer>

@@ -86,12 +86,11 @@ export default class Repository {
     await updateDoc(docRef, data);
   }
   
-  async deleteRecord({id}) {
-    if (!id) {
-      throw new Error('Item ID is required for delete operation.');
-    }
+  async deleteRecord({uniqueData}) {
+    const record = await this.getRecord({uniqueData});
+    if (!record) return false;
   
-    const docRef = doc(this.db, this.tableName, id);
+    const docRef = doc(this.db, this.tableName, record.id);
     await deleteDoc(docRef);
   }
 }
