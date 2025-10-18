@@ -7,7 +7,7 @@ export default function SubRootLayout({ Header, NavMenu, children }) {
         <Header />
       </div>
 
-      <div className="mt-[74px]">
+      <div className="mt-[64px]">
         {NavMenu && 
           <div className="fixed left-0 right-0">
             <NavMenu />
