@@ -17,12 +17,12 @@ function genItemLink(filter, id) {
     case EventsPageFilterEnum.apply:
       return {
         href: `/events/${id}/apply`,
-        text: "詳細を見る",
+        text: "申し込む",
       };
     case EventsPageFilterEnum.edit:
       return {
         href: `/events/${id}/edit`,
-        text: "詳細を見る",
+        text: "編集する",
       };
   }
 }
