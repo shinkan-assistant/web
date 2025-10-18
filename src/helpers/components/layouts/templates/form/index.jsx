@@ -9,7 +9,7 @@ function FormSubmitButton({canSubmit, isProcessing}) {
     <button
       type="submit"
       disabled={!canSubmit || isProcessing}
-      className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-semibold text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full flex justify-center py-4 px-6 border border-transparent rounded-xl shadow-lg text-lg font-semibold text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {isProcessing ? (
         <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -67,7 +67,7 @@ function FormTemplateLayoutInner({
   };
 
   return (
-    <form onSubmit={(e) => handleSubmit(e)} className="space-y-6">
+    <form onSubmit={(e) => handleSubmit(e)} className="space-y-8">
       {children}
       <FormUtilButtonArea Buttons={Buttons}  />
       <FormSubmitButton 

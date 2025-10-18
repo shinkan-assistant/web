@@ -139,21 +139,21 @@ export function GoogleSignInButtonForRegister({authUser, myUser}) {
   const [isTmpSignIn, isRealSignIn] = [judgeTmpSignIn(authUser), judgeRealSignIn(authUser, myUser)];
   if (isTmpSignIn || isRealSignIn) {
     return (
-      <div className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg shadow-sm">
+      <div className="flex items-center space-x-4 p-6 bg-slate-50 rounded-xl shadow-lg border border-slate-200">
         {authUser.photoURL && (
           <Image
             src={authUser.photoURL}
             alt="User profile"
             width={48}
             height={48}
-            className="rounded-full"
+            className="rounded-full ring-2 ring-slate-200"
           />
         )}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-800 truncate">
+          <p className="text-base font-semibold text-slate-800 truncate">
             {authUser.displayName}
           </p>
-          <p className="text-xs text-gray-500 truncate">{authUser.email}</p>
+          <p className="text-sm text-slate-600 truncate">{authUser.email}</p>
         </div>
         {!isRealSignIn &&
           <button
@@ -161,7 +161,7 @@ export function GoogleSignInButtonForRegister({authUser, myUser}) {
               await signOut();
               signInWithGoogleForRegister();
             }}
-            className="ml-auto px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors whitespace-nowrap"
+            className="ml-auto px-4 py-2 text-sm font-medium text-white bg-sky-600 rounded-lg hover:bg-sky-700 whitespace-nowrap shadow-md"
           >
             アカウントを切り替える
           </button>
@@ -171,14 +171,14 @@ export function GoogleSignInButtonForRegister({authUser, myUser}) {
   }
   else {
     return (
-      <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg shadow-inner text-center mb-6">
-        <p className="mb-4 text-gray-700 font-medium">
+      <div className="flex flex-col items-center justify-center p-8 bg-slate-50 rounded-xl shadow-lg border border-slate-200 text-center mb-8">
+        <p className="mb-6 text-slate-700 font-medium text-lg">
           まずは、Googleでサインインしてください。
         </p>
         <button
           onClick={signInWithGoogleForRegister}
           type="button"
-          className="flex items-center justify-center w-full rounded-lg font-semibold px-6 py-3 bg-sky-600 text-white hover:bg-sky-700 transition-colors duration-300 transform hover:scale-105 shadow-md"
+          className="flex items-center justify-center w-full rounded-xl font-semibold px-6 py-4 bg-sky-600 text-white hover:bg-sky-700 shadow-lg"
         >
           <Image
             src="/icons/google.svg"

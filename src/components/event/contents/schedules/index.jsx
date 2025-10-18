@@ -53,14 +53,14 @@ function ScheduleItem({
   }
 
   return (
-    <div className={`${!disabled ? "bg-white" : "bg-gray-100"} border border-gray-200 rounded-lg p-6 shadow-xl`}>
-      <div className="mb-2">
-        <h3 className={`text-xl sm:text-2xl font-extrabold ${!disabled ? "text-gray-900" : "text-gray-400"}`}>
+    <div className={`${!disabled ? "bg-white" : "bg-slate-50"} border border-slate-200 rounded-xl p-6 shadow-lg`}>
+      <div className="mb-4">
+        <h3 className={`text-xl sm:text-2xl font-extrabold ${!disabled ? "text-slate-900" : "text-slate-400"}`}>
           {schedule["title"]}
         </h3>
       </div>
 
-      <div className={!disabled ? "text-gray-700" : "text-gray-400"}>
+      <div className={!disabled ? "text-slate-700" : "text-slate-400"}>
         {(statuses && statuses.length > 0) && 
           <StatusBadgeArea 
             statuses={statuses}
@@ -70,14 +70,14 @@ function ScheduleItem({
         
         {schedule["description"] && (
           // UI部品に置き換え可能
-          <div className="mt-2">
+          <div className="mt-3">
             <p className="text-base leading-relaxed">
               {schedule["description"]}
             </p>
           </div>
         )}
 
-        <div className="mt-4 space-y-2">
+        <div className="mt-6 space-y-3">
           <TimeRange 
             timeRange={schedule["time_range"]}
             disabled={disabled}
@@ -99,7 +99,7 @@ function ScheduleItem({
         </div>
         
         {useForCheckForm &&
-          <div className="mt-4">
+          <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
             <Checkbox 
               name={getInputNameFromSchedule(schedule)}
               label={myParticipant 
@@ -125,12 +125,12 @@ export function Schedules({
     <div>
       {!useForCheckForm && (
         // UI部品に置き換え可能
-        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 border-b-2 border-blue-200 pb-2">
+        <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-8 border-b-2 border-sky-200 pb-3">
           スケジュール
         </h3>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {event["schedules"].map((schedule) => (
           <ScheduleItem 
             key={schedule["id"]}

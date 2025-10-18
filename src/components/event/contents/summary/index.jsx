@@ -25,14 +25,14 @@ export default function Summary({
   }
 
   return (
-    <div className={isItemPage ? "bg-gray-50 p-6 rounded-lg shadow-md" : ""}>
+    <div className={isItemPage ? "bg-slate-50 p-6 rounded-xl shadow-lg border border-slate-200" : ""}>
       {isItemPage &&
-        <div className="mb-4 border-b pb-2 border-gray-200">
-          <h3 className="font-bold text-xl text-gray-800">概要情報</h3>
+        <div className="mb-6 border-b pb-3 border-slate-200">
+          <h3 className="font-bold text-2xl text-slate-800">概要情報</h3>
         </div>
       }
 
-      <div className={isItemPage ? "space-y-4" : "space-y-2"}> {/* 各情報ブロック間のスペースを統一 */}
+      <div className={isItemPage ? "space-y-6" : "space-y-3"}> {/* 各情報ブロック間のスペースを統一 */}
 
         {(statuses && statuses.length > 0) && 
           <StatusBadgeArea 
