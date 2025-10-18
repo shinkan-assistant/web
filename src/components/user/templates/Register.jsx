@@ -217,7 +217,7 @@ export default function UserRegisterTemplate() {
 
   const loadedAuthUser = useLoadedAuthUser();
   if (!loadedAuthUser) return;
-  const authUser = loadedAuthUser;
+  const authUser = loadedAuthUser.get();
 
   const myUser = useMyUser();
   const methods = useForm({
